@@ -11,27 +11,36 @@ import android.view.MotionEvent
 import android.view.View
 
 
-class EqualizerView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
+class EqualizerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
+    View(context, attrs) {
 
-    private val paint: Paint = Paint()
-    private val r = Rect()
-    private val strokeWidth = 5F
+    private val viewBorderPaint: Paint = Paint()
+    private val columnsBorderPaint: Paint = Paint()
+    private val columnsValuePaint: Paint = Paint()
+    private val viewBorderRect = Rect()
+    private val columnsValueRect = Rect()
 
     private val columns: ArrayList<Rect> = arrayListOf(Rect(), Rect(), Rect(), Rect(), Rect())
     private val columnsValues: ArrayList<Int> = arrayListOf(0, 0, 0, 0, 0)
 
-    fun getColumnsValues(): ArrayList<Int>{
-        return columnsValues
-    }
-
-    private var columnsTop = 0
-    private var columnsBottom = 0
+    private var columnsCoordinateTop = 0
+    private var columnsCoordinateBottom = 0
     private var columnsWidth = 0
+    private var columnsHeight = 0
+    private var columnsTopBottomPadding = 0
 
     private var onEqualizerDataChangedListener: OnEqualizerDataChangedListener? = null
 
+    companion object {
+        private const val STROKE_WIDTH = 5F
+    }
+
     interface OnEqualizerDataChangedListener {
         fun onEqualizerDataChanged(values: ArrayList<Int>)
+    }
+
+    fun getColumnsValues(): ArrayList<Int> {
+        return columnsValues
     }
 
     fun setEqualizerDataChangedListener(listener: OnEqualizerDataChangedListener) {
@@ -73,9 +82,7 @@ class EqualizerView(context: Context, attrs: AttributeSet? = null) : View(contex
 
     private fun getTouchedColumn(x: Int, y: Int): Int? {
         for (i in 0..4) {
-            if (x >= columns[i].left && x <= columns[i].right &&
-                y >= columns[i].top && y <= columns[i].bottom
-            ) {
+            if (columns[i].contains(x, y)) {
                 return i
             }
         }
@@ -83,74 +90,78 @@ class EqualizerView(context: Context, attrs: AttributeSet? = null) : View(contex
     }
 
     private fun getTouchedValue(y: Int): Int {
-        return ((columnsBottom - y).toDouble() / (columnsBottom - columnsTop) * 100).toInt()
+        return ((columnsCoordinateBottom - y).toDouble() / (columnsCoordinateBottom - columnsCoordinateTop) * 100).toInt()
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        columnsWidth = width / 11
+        columnsTopBottomPadding = ((height * 0.1) / 2).toInt()
+        columnsHeight = height - (columnsTopBottomPadding * 2)
+        columnsCoordinateTop = height - columnsTopBottomPadding - columnsHeight
+        columnsCoordinateBottom = height - columnsTopBottomPadding
     }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        columnsWidth = width / 11
-        val columnTopBottomPadding = (height * 0.1) / 2
-        val columnHeight = height - (columnTopBottomPadding * 2)
-        columnsTop = (height - columnTopBottomPadding - columnHeight).toInt()
-        columnsBottom = (height - columnTopBottomPadding).toInt()
-
         drawViewBorder(canvas)
         drawColumns(canvas)
+
         for (i in 0..4) {
-            setColumnValue(canvas, i + 1, columnsValues[i])
+            setColumnValue(canvas, columnNumber = i + 1, columnsValues[i])
         }
     }
 
     private fun drawViewBorder(canvas: Canvas?) {
-        paint.color = Color.parseColor("#2F80ED")
-        paint.style = Paint.Style.STROKE
-        paint.strokeWidth = strokeWidth * 2
-        setRectAttrs(r, 0, 0, width, height)
-        canvas?.drawRect(r, paint)
+        viewBorderPaint.color = Color.parseColor("#2F80ED")
+        viewBorderPaint.style = Paint.Style.STROKE
+        viewBorderPaint.strokeWidth = Companion.STROKE_WIDTH * 2
+        setRectAttrs(viewBorderRect, 0, 0, width, height)
+        canvas?.drawRect(viewBorderRect, viewBorderPaint)
     }
 
     private fun drawColumns(canvas: Canvas?) {
-        paint.color = Color.parseColor("#333333")
-        paint.style = Paint.Style.STROKE
-        paint.strokeWidth = strokeWidth
+        columnsBorderPaint.color = Color.parseColor("#333333")
+        columnsBorderPaint.style = Paint.Style.STROKE
+        columnsBorderPaint.strokeWidth = Companion.STROKE_WIDTH
 
         for (i in 1..10 step 2) {
             val columnIndex = (i - 1) / 2
             setRectAttrs(
                 columns[columnIndex],
                 (columnsWidth * i),
-                columnsTop,
+                columnsCoordinateTop,
                 (columnsWidth * (i + 1)),
-                columnsBottom
+                columnsCoordinateBottom
             )
-            canvas?.drawRect(columns[columnIndex], paint)
+            canvas?.drawRect(columns[columnIndex], columnsBorderPaint)
         }
     }
 
     private fun setColumnValue(
         canvas: Canvas?, columnNumber: Int, value: Int
     ) {
-        val halfStrokeWidth = strokeWidth / 2
+        val halfStrokeWidth = Companion.STROKE_WIDTH / 2
         val columnIndex = (columnNumber * 2) - 1
-        val valueTop = (columnsBottom * (100 - value) + value * columnsTop) / 100
+        val valueTop = (columnsCoordinateBottom * (100 - value) + value * columnsCoordinateTop) / 100
 
-        paint.color = Color.parseColor("#2F80ED")
-        paint.style = Paint.Style.FILL
+        columnsValuePaint.color = Color.parseColor("#2F80ED")
+        columnsValuePaint.style = Paint.Style.FILL
         setRectAttrs(
-            r = r,
+            rect = columnsValueRect,
             left = ((columnsWidth * columnIndex) + halfStrokeWidth.toInt()),
             top = (valueTop + halfStrokeWidth).toInt(),
             right = (columnsWidth * (columnIndex + 1) - halfStrokeWidth).toInt(),
-            bottom = (columnsBottom - halfStrokeWidth).toInt()
+            bottom = (columnsCoordinateBottom - halfStrokeWidth).toInt()
         )
-        canvas?.drawRect(r, paint)
+        canvas?.drawRect(columnsValueRect, columnsValuePaint)
     }
 
-    private fun setRectAttrs(r: Rect, left: Int, top: Int, right: Int, bottom: Int) {
-        r.left = left
-        r.top = top
-        r.right = right
-        r.bottom = bottom
+    private fun setRectAttrs(rect: Rect, left: Int, top: Int, right: Int, bottom: Int) {
+        rect.left = left
+        rect.top = top
+        rect.right = right
+        rect.bottom = bottom
     }
 }
