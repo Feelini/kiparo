@@ -14,9 +14,23 @@ import android.view.View
 class EqualizerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     View(context, attrs) {
 
-    private val viewBorderPaint: Paint = Paint()
-    private val columnsBorderPaint: Paint = Paint()
-    private val columnsValuePaint: Paint = Paint()
+    private val viewBorderPaint: Paint = Paint().apply {
+        this.color = Color.parseColor("#2F80ED")
+        this.style = Paint.Style.STROKE
+        this.strokeWidth = STROKE_WIDTH * 2
+    }
+
+    private val columnsBorderPaint: Paint = Paint().apply {
+        this.color = Color.parseColor("#333333")
+        this.style = Paint.Style.STROKE
+        this.strokeWidth = STROKE_WIDTH
+    }
+
+    private val columnsValuePaint: Paint = Paint().apply {
+        this.color = Color.parseColor("#2F80ED")
+        this.style = Paint.Style.FILL
+    }
+
     private val viewBorderRect = Rect()
     private val columnsValueRect = Rect()
 
@@ -51,22 +65,15 @@ class EqualizerView @JvmOverloads constructor(context: Context, attrs: Attribute
     override fun onTouchEvent(event: MotionEvent): Boolean {
         super.onTouchEvent(event)
 
-        var x = event.x.toInt()
-        var y = event.y.toInt()
+        val x = event.x.toInt()
+        val y = event.y.toInt()
         val columnValue: Int
         var columnNumber: Int? = null
 
         when (event.action) {
-            MotionEvent.ACTION_DOWN ->
-                columnNumber = getTouchedColumn(x, y)
-            MotionEvent.ACTION_MOVE -> {
-                x = event.x.toInt()
-                y = event.y.toInt()
-                columnNumber = getTouchedColumn(x, y)
-            }
+            MotionEvent.ACTION_DOWN,
+            MotionEvent.ACTION_MOVE,
             MotionEvent.ACTION_UP -> {
-                x = event.x.toInt()
-                y = event.y.toInt()
                 columnNumber = getTouchedColumn(x, y)
             }
         }
@@ -81,7 +88,7 @@ class EqualizerView @JvmOverloads constructor(context: Context, attrs: Attribute
     }
 
     private fun getTouchedColumn(x: Int, y: Int): Int? {
-        for (i in 0..4) {
+        for (i in 0 until columns.size) {
             if (columns[i].contains(x, y)) {
                 return i
             }
@@ -114,27 +121,22 @@ class EqualizerView @JvmOverloads constructor(context: Context, attrs: Attribute
     }
 
     private fun drawViewBorder(canvas: Canvas?) {
-        viewBorderPaint.color = Color.parseColor("#2F80ED")
-        viewBorderPaint.style = Paint.Style.STROKE
-        viewBorderPaint.strokeWidth = Companion.STROKE_WIDTH * 2
-        setRectAttrs(viewBorderRect, 0, 0, width, height)
+        viewBorderRect.left = 0
+        viewBorderRect.top = 0
+        viewBorderRect.right = width
+        viewBorderRect.bottom = height
         canvas?.drawRect(viewBorderRect, viewBorderPaint)
     }
 
     private fun drawColumns(canvas: Canvas?) {
-        columnsBorderPaint.color = Color.parseColor("#333333")
-        columnsBorderPaint.style = Paint.Style.STROKE
-        columnsBorderPaint.strokeWidth = Companion.STROKE_WIDTH
+
 
         for (i in 1..10 step 2) {
             val columnIndex = (i - 1) / 2
-            setRectAttrs(
-                columns[columnIndex],
-                (columnsWidth * i),
-                columnsCoordinateTop,
-                (columnsWidth * (i + 1)),
-                columnsCoordinateBottom
-            )
+            columns[columnIndex].left = columnsWidth * i
+            columns[columnIndex].top = columnsCoordinateTop
+            columns[columnIndex].right = columnsWidth * (i + 1)
+            columns[columnIndex].bottom = columnsCoordinateBottom
             canvas?.drawRect(columns[columnIndex], columnsBorderPaint)
         }
     }
@@ -142,26 +144,16 @@ class EqualizerView @JvmOverloads constructor(context: Context, attrs: Attribute
     private fun setColumnValue(
         canvas: Canvas?, columnNumber: Int, value: Int
     ) {
-        val halfStrokeWidth = Companion.STROKE_WIDTH / 2
+        val halfStrokeWidth = STROKE_WIDTH / 2
         val columnIndex = (columnNumber * 2) - 1
-        val valueTop = (columnsCoordinateBottom * (100 - value) + value * columnsCoordinateTop) / 100
+        val valueTop =
+            (columnsCoordinateBottom * (100 - value) + value * columnsCoordinateTop) / 100
 
-        columnsValuePaint.color = Color.parseColor("#2F80ED")
-        columnsValuePaint.style = Paint.Style.FILL
-        setRectAttrs(
-            rect = columnsValueRect,
-            left = ((columnsWidth * columnIndex) + halfStrokeWidth.toInt()),
-            top = (valueTop + halfStrokeWidth).toInt(),
-            right = (columnsWidth * (columnIndex + 1) - halfStrokeWidth).toInt(),
-            bottom = (columnsCoordinateBottom - halfStrokeWidth).toInt()
-        )
+        columnsValueRect.left = (columnsWidth * columnIndex) + halfStrokeWidth.toInt()
+        columnsValueRect.top = (valueTop + halfStrokeWidth).toInt()
+        columnsValueRect.right = (columnsWidth * (columnIndex + 1) - halfStrokeWidth).toInt()
+        columnsValueRect.bottom = (columnsCoordinateBottom - halfStrokeWidth).toInt()
+
         canvas?.drawRect(columnsValueRect, columnsValuePaint)
-    }
-
-    private fun setRectAttrs(rect: Rect, left: Int, top: Int, right: Int, bottom: Int) {
-        rect.left = left
-        rect.top = top
-        rect.right = right
-        rect.bottom = bottom
     }
 }
