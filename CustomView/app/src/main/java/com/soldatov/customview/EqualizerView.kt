@@ -10,24 +10,29 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 
+const val colorBlue = "#2F80ED"
+const val colorGray = "#333333"
+const val STROKE_WIDTH = 5F
+const val topAndBottomPadding = 0.1
+
 
 class EqualizerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     View(context, attrs) {
 
     private val viewBorderPaint: Paint = Paint().apply {
-        this.color = Color.parseColor("#2F80ED")
+        this.color = Color.parseColor(colorBlue)
         this.style = Paint.Style.STROKE
         this.strokeWidth = STROKE_WIDTH * 2
     }
 
     private val columnsBorderPaint: Paint = Paint().apply {
-        this.color = Color.parseColor("#333333")
+        this.color = Color.parseColor(colorGray)
         this.style = Paint.Style.STROKE
         this.strokeWidth = STROKE_WIDTH
     }
 
     private val columnsValuePaint: Paint = Paint().apply {
-        this.color = Color.parseColor("#2F80ED")
+        this.color = Color.parseColor(colorBlue)
         this.style = Paint.Style.FILL
     }
 
@@ -44,10 +49,6 @@ class EqualizerView @JvmOverloads constructor(context: Context, attrs: Attribute
     private var columnsTopBottomPadding = 0
 
     private var onEqualizerDataChangedListener: OnEqualizerDataChangedListener? = null
-
-    companion object {
-        private const val STROKE_WIDTH = 5F
-    }
 
     interface OnEqualizerDataChangedListener {
         fun onEqualizerDataChanged(values: ArrayList<Int>)
@@ -102,8 +103,8 @@ class EqualizerView @JvmOverloads constructor(context: Context, attrs: Attribute
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        columnsWidth = width / 11
-        columnsTopBottomPadding = ((height * 0.1) / 2).toInt()
+        columnsWidth = width / ((columns.size * 2) + 1)
+        columnsTopBottomPadding = ((height * topAndBottomPadding) / 2).toInt()
         columnsHeight = height - (columnsTopBottomPadding * 2)
         columnsCoordinateTop = height - columnsTopBottomPadding - columnsHeight
         columnsCoordinateBottom = height - columnsTopBottomPadding
@@ -115,7 +116,7 @@ class EqualizerView @JvmOverloads constructor(context: Context, attrs: Attribute
         drawViewBorder(canvas)
         drawColumns(canvas)
 
-        for (i in 0..4) {
+        for (i in 0 until columnsValues.size) {
             setColumnValue(canvas, columnNumber = i + 1, columnsValues[i])
         }
     }
@@ -129,9 +130,7 @@ class EqualizerView @JvmOverloads constructor(context: Context, attrs: Attribute
     }
 
     private fun drawColumns(canvas: Canvas?) {
-
-
-        for (i in 1..10 step 2) {
+        for (i in 1..(columns.size * 2) step 2) {
             val columnIndex = (i - 1) / 2
             columns[columnIndex].left = columnsWidth * i
             columns[columnIndex].top = columnsCoordinateTop
@@ -141,9 +140,7 @@ class EqualizerView @JvmOverloads constructor(context: Context, attrs: Attribute
         }
     }
 
-    private fun setColumnValue(
-        canvas: Canvas?, columnNumber: Int, value: Int
-    ) {
+    private fun setColumnValue(canvas: Canvas?, columnNumber: Int, value: Int) {
         val halfStrokeWidth = STROKE_WIDTH / 2
         val columnIndex = (columnNumber * 2) - 1
         val valueTop =
