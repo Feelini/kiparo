@@ -47,6 +47,7 @@ class EqualizerView @JvmOverloads constructor(context: Context, attrs: Attribute
     private var columnsWidth = 0
     private var columnsHeight = 0
     private var columnsTopBottomPadding = 0
+    private var selectedColumn: Int? = null
 
     private var onEqualizerDataChangedListener: OnEqualizerDataChangedListener? = null
 
@@ -68,24 +69,27 @@ class EqualizerView @JvmOverloads constructor(context: Context, attrs: Attribute
 
         val x = event.x.toInt()
         val y = event.y.toInt()
-        val columnValue: Int
-        var columnNumber: Int? = null
 
         when (event.action) {
+            MotionEvent.ACTION_MOVE ->{
+                if (selectedColumn != null) {
+                    columnsValues[selectedColumn!!] = getTouchedValue(event.y.toInt())
+                    onEqualizerDataChangedListener?.onEqualizerDataChanged(columnsValues)
+                    invalidate()
+                }
+            }
             MotionEvent.ACTION_DOWN,
-            MotionEvent.ACTION_MOVE,
             MotionEvent.ACTION_UP -> {
-                columnNumber = getTouchedColumn(x, y)
+                selectedColumn = getTouchedColumn(x, y)
             }
         }
 
-        if (columnNumber != null) {
-            columnValue = getTouchedValue(event.y.toInt())
-            columnsValues[columnNumber] = columnValue
+        if (selectedColumn != null) {
+            columnsValues[selectedColumn!!] = getTouchedValue(event.y.toInt())
         }
         onEqualizerDataChangedListener?.onEqualizerDataChanged(columnsValues)
         invalidate()
-        return false
+        return true
     }
 
     private fun getTouchedColumn(x: Int, y: Int): Int? {
@@ -98,7 +102,12 @@ class EqualizerView @JvmOverloads constructor(context: Context, attrs: Attribute
     }
 
     private fun getTouchedValue(y: Int): Int {
-        return ((columnsCoordinateBottom - y).toDouble() / (columnsCoordinateBottom - columnsCoordinateTop) * 100).toInt()
+        val value = ((columnsCoordinateBottom - y).toDouble() / (columnsCoordinateBottom - columnsCoordinateTop) * 100).toInt()
+        return when {
+            value <= 0 -> 0
+            value >= 100 -> 100
+            else -> value
+        }
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
