@@ -10,29 +10,29 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 
-const val colorBlue = "#2F80ED"
-const val colorGray = "#333333"
+const val COLOR_BLUE = "#2F80ED"
+const val COLOR_GRAY = "#333333"
 const val STROKE_WIDTH = 5F
-const val topAndBottomPadding = 0.1
+const val TOP_AND_BOTTOM_PADDING = 0.1
 
 
 class EqualizerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     View(context, attrs) {
 
     private val viewBorderPaint: Paint = Paint().apply {
-        this.color = Color.parseColor(colorBlue)
+        this.color = Color.parseColor(COLOR_BLUE)
         this.style = Paint.Style.STROKE
         this.strokeWidth = STROKE_WIDTH * 2
     }
 
     private val columnsBorderPaint: Paint = Paint().apply {
-        this.color = Color.parseColor(colorGray)
+        this.color = Color.parseColor(COLOR_GRAY)
         this.style = Paint.Style.STROKE
         this.strokeWidth = STROKE_WIDTH
     }
 
     private val columnsValuePaint: Paint = Paint().apply {
-        this.color = Color.parseColor(colorBlue)
+        this.color = Color.parseColor(COLOR_BLUE)
         this.style = Paint.Style.FILL
     }
 
@@ -113,7 +113,7 @@ class EqualizerView @JvmOverloads constructor(context: Context, attrs: Attribute
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         columnsWidth = width / ((columns.size * 2) + 1)
-        columnsTopBottomPadding = ((height * topAndBottomPadding) / 2).toInt()
+        columnsTopBottomPadding = ((height * TOP_AND_BOTTOM_PADDING) / 2).toInt()
         columnsHeight = height - (columnsTopBottomPadding * 2)
         columnsCoordinateTop = height - columnsTopBottomPadding - columnsHeight
         columnsCoordinateBottom = height - columnsTopBottomPadding
