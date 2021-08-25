@@ -1,7 +1,7 @@
 package com.soldatov.covid.domain.models
 
 data class CovidInfo(
-    var lastCheckTimeMilli: String,
+    var lastCheckTimeMilli: Long,
     var lastCheckTimeText: String,
     var china: ChinaInfo
 )

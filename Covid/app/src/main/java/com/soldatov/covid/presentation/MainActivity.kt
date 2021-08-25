@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         bottomNavigationView = findViewById(R.id.bottomNavView)
         setupViewModel()
-        setupUI()
         setupObservers()
     }
 
@@ -39,7 +38,7 @@ class MainActivity : AppCompatActivity() {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
-                        resource.data?.let { covidInfo -> show(covidInfo) }
+                        resource.data?.let { covidInfo -> setupUI(covidInfo) }
                     }
                     Status.ERROR -> {
                         Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
@@ -49,18 +48,15 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun show(covidInfo: CovidInfo) {
-        println(covidInfo)
-    }
-
-    private fun setupUI() {
+    private fun setupUI(covidInfo: CovidInfo) {
         bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.map -> {
+                    addMapFragment()
                     true
                 }
                 R.id.info -> {
-                    addInfoFragment()
+                    addInfoFragment(covidInfo)
                     true
                 }
                 else -> false
@@ -68,9 +64,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun addInfoFragment(){
+    private fun addInfoFragment(covidInfo: CovidInfo){
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, InfoFragment())
+            .replace(R.id.fragment_container, InfoFragment(covidInfo))
+            .commit()
+    }
+
+    private fun addMapFragment(){
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, MapFragment())
             .commit()
     }
 }
