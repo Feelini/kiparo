@@ -1,27 +1,21 @@
 package com.soldatov.covid.presentation
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import com.soldatov.covid.domain.repository.CovidRepository
-import androidx.lifecycle.MutableLiveData
-import com.soldatov.covid.domain.models.CovidInfo
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
+import com.soldatov.covid.utils.Resource
+import kotlinx.coroutines.Dispatchers
+import java.lang.Exception
 
 
-class MainActivityViewModel(
-    application: Application,
-    private val repository: CovidRepository
-) : AndroidViewModel(application) {
+class MainActivityViewModel(private val covidRepository: CovidRepository) : ViewModel() {
 
-    private val covidInfoLiveData: MutableLiveData<CovidInfo>? = null
-
-    fun fetchCovidInfo() {
-        repository.getCovidInfo().thenAccept {
-            covidInfoLiveData?.postValue(it)
+    fun getCovidInfo() = liveData(Dispatchers.IO){
+        emit(Resource.loading(data = null))
+        try {
+            emit(Resource.success(data = covidRepository.getCovidInfo()))
+        } catch (exception: Exception){
+            emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
         }
-    }
-
-    fun getCovidInfo(): LiveData<CovidInfo>? {
-        return covidInfoLiveData
     }
 }

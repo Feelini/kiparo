@@ -1,18 +1,18 @@
-package com.soldatov.covid.presentation.utils
+package com.soldatov.covid.utils
 
-import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.soldatov.covid.data.api.ApiHelper
 import com.soldatov.covid.data.repository.CovidRepositoryImpl
 import com.soldatov.covid.presentation.MainActivityViewModel
 
 
-class ViewModelFactory(private val application: Application): ViewModelProvider.Factory {
+class ViewModelFactory(private val apiHelper: ApiHelper): ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MainActivityViewModel::class.java)) {
-            return MainActivityViewModel(application, CovidRepositoryImpl()) as T
+            return MainActivityViewModel(CovidRepositoryImpl(apiHelper)) as T
         }
-        return MainActivityViewModel(application, CovidRepositoryImpl()) as T
+        throw IllegalArgumentException("Unknown class name")
     }
 }

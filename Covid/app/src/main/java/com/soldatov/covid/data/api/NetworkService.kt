@@ -3,30 +3,16 @@ package com.soldatov.covid.data.api
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.Retrofit
 
-class NetworkService {
+object NetworkService {
 
-    private val BASE_URL = "https://api.kiparo.com/"
-    private var retrofit: Retrofit? = null
+    private const val BASE_URL = "https://api.kiparo.com/"
 
-    companion object{
-        private var instance: NetworkService? = null
-
-        fun getInstance(): NetworkService? {
-            if (instance == null) {
-                instance = NetworkService()
-            }
-            return instance
-        }
-    }
-
-    init {
-        retrofit = Retrofit.Builder()
+    private fun getRetrofit(): Retrofit {
+        return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
-    fun getJSONApi(): JSONPlaceHolderApi? {
-        return retrofit!!.create(JSONPlaceHolderApi::class.java)
-    }
+    val apiService: JSONPlaceHolderApi = getRetrofit().create(JSONPlaceHolderApi::class.java)
 }
