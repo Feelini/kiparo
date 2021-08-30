@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -118,7 +119,11 @@ public class MainActivity extends AppCompatActivity implements Callback {
                         startActivity(intent);
                     }
                 });
-                recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+                recyclerView.setLayoutManager(layoutManager);
+                DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                        layoutManager.getOrientation());
+                recyclerView.addItemDecoration(dividerItemDecoration);
                 recyclerView.setAdapter(adapter);
             }
         }, 0);
