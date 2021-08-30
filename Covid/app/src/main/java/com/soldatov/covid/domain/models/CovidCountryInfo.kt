@@ -1,10 +1,10 @@
 package com.soldatov.covid.domain.models
 
 data class CovidCountryInfo(
-    val country: String? = null,
-    val lat: String? = null,
-    val long: String? = null,
-    val confirmed: String? = null,
-    val deaths: String? = null,
-    val recovered: String? = null,
+    val country: String,
+    val lat: String,
+    val long: String,
+    val confirmed: String,
+    val deaths: String,
+    val recovered: String,
 )

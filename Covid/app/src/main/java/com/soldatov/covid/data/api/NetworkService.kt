@@ -14,5 +14,7 @@ object NetworkService {
             .build()
     }
 
-    val apiService: JSONPlaceHolderApi = getRetrofit().create(JSONPlaceHolderApi::class.java)
+    val apiService: JSONPlaceHolderApi by lazy {
+        getRetrofit().create(JSONPlaceHolderApi::class.java)
+    }
 }
