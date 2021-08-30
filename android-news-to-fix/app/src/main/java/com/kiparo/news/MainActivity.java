@@ -114,8 +114,11 @@ public class MainActivity extends AppCompatActivity implements Callback {
                     @Override
                     public void onItemClick(NewsEntity newsEntity) {
                         String title = newsEntity.getTitle();
+                        String storyURL = newsEntity.getArticleUrl();
+                        String summary = newsEntity.getSummary();
+                        String imageURL = newsEntity.getMediaEntity().get(0).getUrl();
                         Intent intent = new Intent(MainActivity.this, DetailViewActivity.class);
-                        intent.putExtra("title", title);
+                        intent.putExtra("detailNews", new DetailNewsEntity(title, storyURL, summary, imageURL));
                         startActivity(intent);
                     }
                 });
