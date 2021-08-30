@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.JokeAbout" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.JokeAbout" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -12,5 +12,22 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+    </style>
+
+    <style name="EditTextStyle">
+        <item name="android:background">@drawable/edit_text_bg</item>
+        <item name="android:padding">@dimen/edit_text_padding</item>
+        <item name="android:textColorHint">@color/black</item>
+        <item name="fontFamily">sans-serif-black</item>
+        <item name="android:inputType">text</item>
+        <item name="android:layout_marginTop">@dimen/edit_text_top_padding</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="RadioButtonStyle">
+        <item name="fontFamily">sans-serif-black</item>
+        <item name="android:paddingStart">@dimen/text_padding</item>
+        <item name="android:paddingEnd">@dimen/text_padding</item>
+        <item name="android:textSize">@dimen/radio_text_size</item>
     </style>
 </resources>
