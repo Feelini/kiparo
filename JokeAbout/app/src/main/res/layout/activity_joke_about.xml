@@ -7,7 +7,7 @@
     android:paddingStart="@dimen/radio_group_side_padding"
     android:paddingEnd="@dimen/radio_group_side_padding"
     android:paddingTop="@dimen/radio_group_top_padding"
-    tools:context=".MainActivity">
+    tools:context=".presentation.JokeAboutActivity">
 
     <RadioGroup
         android:id="@+id/radioGroup"
@@ -22,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/sec_30"
+            android:checked="true"
             style="@style/RadioButtonStyle"/>
 
         <RadioButton
