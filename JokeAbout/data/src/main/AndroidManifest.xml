@@ -1,2 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.soldatov.jokeabout.data"/>
+<manifest package="com.soldatov.jokeabout.data"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <receiver android:name=".service.AlarmReceiver" android:exported="true"/>
+    </application>
+</manifest>

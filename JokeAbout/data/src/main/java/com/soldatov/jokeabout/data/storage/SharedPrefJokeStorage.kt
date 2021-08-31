@@ -14,17 +14,17 @@ class SharedPrefJokeStorage(context: Context) : JokeStorage {
         context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
 
     override fun saveData(data: SharedPrefsData): Boolean {
-        sharedPreferences.edit().putInt(KEY_TIME, data.timeInSec).apply()
+        sharedPreferences.edit().putLong(KEY_TIME, data.timeInMilli).apply()
         sharedPreferences.edit().putString(KEY_FIRST_NAME, data.firstName).apply()
         sharedPreferences.edit().putString(KEY_LAST_NAME, data.lastName).apply()
         return true
     }
 
     override fun getData(): SharedPrefsData {
-        val timeInSec = sharedPreferences.getInt(KEY_TIME, 0)
+        val timeInSec = sharedPreferences.getLong(KEY_TIME, 0)
         val firstName = sharedPreferences.getString(KEY_FIRST_NAME, "") ?: ""
         val lastName = sharedPreferences.getString(KEY_LAST_NAME, "") ?: ""
 
-        return SharedPrefsData(timeInSec = timeInSec, firstName = firstName, lastName = lastName)
+        return SharedPrefsData(timeInMilli = timeInSec, firstName = firstName, lastName = lastName)
     }
 }

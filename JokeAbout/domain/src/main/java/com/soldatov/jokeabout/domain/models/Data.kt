@@ -1,7 +1,7 @@
 package com.soldatov.jokeabout.domain.models
 
 data class Data(
-    val timeInSec: Int,
+    val timeInMilli: Long,
     val firstName: String,
     val lastName: String
 )

@@ -5,4 +5,5 @@ import com.soldatov.jokeabout.domain.models.Data
 interface JokeRepository {
     fun saveData(data: Data): Boolean
     fun getData(): Data
+    fun startAlarm(repeatingTime: Long)
 }

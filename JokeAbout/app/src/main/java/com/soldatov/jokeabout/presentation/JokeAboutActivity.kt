@@ -22,6 +22,7 @@ class JokeAboutActivity : AppCompatActivity() {
         setContentView(R.layout.activity_joke_about)
 
         val saveDataUseCase = UseCaseProvider.provideSaveDataUseCase(this)
+        val startAlarmManagerUseCase = UseCaseProvider.provideStartAlarmManagerUseCase(this)
 
         radioGroup = findViewById(R.id.radioGroup)
         firstName = findViewById(R.id.first_name)
@@ -29,19 +30,21 @@ class JokeAboutActivity : AppCompatActivity() {
         save = findViewById(R.id.confirm_button)
 
         save.setOnClickListener {
-            val data = Data(getTimeInSec(), firstName.text.toString(), lastName.text.toString())
-            saveDataUseCase.execute(data)
+            val repeatingTime = getTimeInMilli()
+            val data = Data(repeatingTime, firstName.text.toString(), lastName.text.toString())
+            saveDataUseCase.execute(data = data)
+            startAlarmManagerUseCase.execute(repeatingTime = repeatingTime)
         }
     }
 
-    private fun getTimeInSec(): Int {
+    private fun getTimeInMilli(): Long {
         val radioButtonID: Int = radioGroup.checkedRadioButtonId
         val radioButton: View = radioGroup.findViewById(radioButtonID)
 
         return when (radioGroup.indexOfChild(radioButton)) {
-            0 -> 30
-            1 -> 60
-            else -> 3600
+            0 -> 30000
+            1 -> 60000
+            else -> 3600000
         }
     }
 }
