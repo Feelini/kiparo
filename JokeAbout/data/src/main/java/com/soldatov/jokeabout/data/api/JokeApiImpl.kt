@@ -13,6 +13,7 @@ class JokeApiImpl : JokeApi {
     override fun getJoke(jokeRequestData: JokeRequestData) {
         val request = buildUrl(jokeRequestData)
         httpClient.newCall(request).execute().use {
+            print(it.message)
             if (it.isSuccessful){
                 print(it.body)
             }
