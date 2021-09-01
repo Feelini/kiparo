@@ -33,4 +33,6 @@ android {
 
 dependencies {
     implementation project(path: ":domain")
+    implementation("com.squareup.okhttp3:okhttp:4.7.2")
+    implementation "androidx.work:work-runtime-ktx:2.5.0"
 }

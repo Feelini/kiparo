@@ -1,6 +1,6 @@
 package com.soldatov.jokeabout.data.repository
 
-import com.soldatov.jokeabout.data.service.JokeService
+import com.soldatov.jokeabout.data.service.alarmmanager.JokeService
 import com.soldatov.jokeabout.data.storage.JokeStorage
 import com.soldatov.jokeabout.data.storage.models.SharedPrefsData
 import com.soldatov.jokeabout.domain.models.Data

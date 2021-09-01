@@ -2,7 +2,7 @@ package com.soldatov.jokeabout.presentation.utils
 
 import android.content.Context
 import com.soldatov.jokeabout.data.repository.JokeRepositoryImpl
-import com.soldatov.jokeabout.data.service.JokeAlarmService
+import com.soldatov.jokeabout.data.service.alarmmanager.JokeAlarmService
 import com.soldatov.jokeabout.data.storage.SharedPrefJokeStorage
 import com.soldatov.jokeabout.domain.usecase.SaveDataUseCase
 import com.soldatov.jokeabout.domain.usecase.StartAlarmManagerUseCase

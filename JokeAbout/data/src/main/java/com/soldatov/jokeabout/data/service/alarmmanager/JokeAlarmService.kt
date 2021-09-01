@@ -1,4 +1,4 @@
-package com.soldatov.jokeabout.data.service
+package com.soldatov.jokeabout.data.service.alarmmanager
 
 import android.app.AlarmManager
 import android.app.PendingIntent
