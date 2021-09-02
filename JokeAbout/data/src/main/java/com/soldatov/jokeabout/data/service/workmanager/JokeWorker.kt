@@ -14,7 +14,6 @@ class JokeWorker(context: Context, workerParameters: WorkerParameters) :
     Worker(context, workerParameters) {
 
     override fun doWork(): Result {
-        Log.d("TAG", "do work")
         val jokeStorage = SharedPrefJokeStorage(applicationContext)
         val jokeService = JokeAlarmService(applicationContext)
         val jokeRepositoryImpl = JokeRepositoryImpl(jokeStorage, jokeService)
