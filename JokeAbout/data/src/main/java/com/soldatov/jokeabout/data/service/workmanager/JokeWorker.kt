@@ -20,7 +20,7 @@ class JokeWorker(context: Context, workerParameters: WorkerParameters) :
         val data = jokeRepositoryImpl.getData()
         val jokeRequestData = JokeRequestData(data.firstName, data.lastName)
         val jokeApiImpl = JokeApiImpl()
-        jokeApiImpl.getJoke(jokeRequestData)
+        jokeApiImpl.getJoke(applicationContext, jokeRequestData)
         return Result.success()
     }
 

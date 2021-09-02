@@ -20,7 +20,7 @@ class JokeJsonDeserializer {
         val categories = ArrayList<String>()
         val jsonCategories = jokeValueJson.getJSONArray("categories")
         if (jsonCategories.length() > 0) {
-            for (i in 0..jsonCategories.length()) {
+            for (i in 0 until jsonCategories.length()) {
                 categories.add(jsonCategories.getString(i))
             }
         }
