@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.soldatov.covid.R
@@ -32,17 +33,22 @@ class InfoFragment : Fragment() {
     private lateinit var viewContainer: ConstraintLayout
     private val infoListAdapter = InfoListAdapter()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel =
-            ViewModelProvider(this, ViewModelFactory())
-                .get(MainActivityViewModel::class.java)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_info, container, false)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel =
+            ViewModelProvider(activity as ViewModelStoreOwner, ViewModelFactory())
+                .get(MainActivityViewModel::class.java)
+
+        setupObservers()
+
+        infoListView.adapter = infoListAdapter
+        infoListView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -55,8 +61,6 @@ class InfoFragment : Fragment() {
         totalRecovered = view.findViewById(R.id.recovered_number)
         infoListView = view.findViewById(R.id.info_list)
         viewContainer = view.findViewById(R.id.content_layout)
-
-        setupObservers()
     }
 
     private fun setupObservers() {
@@ -89,7 +93,5 @@ class InfoFragment : Fragment() {
 
     private fun showInfoList(infoList: List<CovidCountryInfo>) {
         infoListAdapter.setCovidCountryInfo(infoList)
-        infoListView.adapter = infoListAdapter
-        infoListView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
     }
 }

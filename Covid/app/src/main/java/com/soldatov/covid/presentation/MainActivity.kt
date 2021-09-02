@@ -19,15 +19,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
-        addMapFragment()
+        replaceMapFragment()
         bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.map -> {
-                    addMapFragment()
+                    replaceMapFragment()
                     true
                 }
                 R.id.info -> {
-                    addInfoFragment()
+                    replaceInfoFragment()
                     true
                 }
                 else -> false
@@ -35,13 +35,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun addInfoFragment() {
+    private fun replaceInfoFragment() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, InfoFragment())
             .commit()
     }
 
-    private fun addMapFragment() {
+    private fun replaceMapFragment() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, MapFragment())
             .commit()

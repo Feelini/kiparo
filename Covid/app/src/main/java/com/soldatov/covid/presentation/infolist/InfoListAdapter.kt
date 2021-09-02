@@ -1,5 +1,6 @@
 package com.soldatov.covid.presentation.infolist
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +13,10 @@ class InfoListAdapter : RecyclerView.Adapter<InfoListAdapter.InfoListViewHolder>
 
     private var infoCountryList: List<CovidCountryInfo> = ArrayList()
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setCovidCountryInfo(infoList: List<CovidCountryInfo>) {
         infoCountryList = infoList
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InfoListViewHolder {

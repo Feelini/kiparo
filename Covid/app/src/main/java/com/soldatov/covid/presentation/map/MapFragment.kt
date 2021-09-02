@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -28,11 +29,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var preloader: ProgressBar
     private lateinit var covidInfo: CovidInfo
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         viewModel =
-            ViewModelProvider(this, ViewModelFactory())
+            ViewModelProvider(activity as ViewModelStoreOwner, ViewModelFactory())
                 .get(MainActivityViewModel::class.java)
+
+        setupObservers()
     }
 
     override fun onCreateView(
@@ -47,8 +50,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
         mapFragment = childFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
         preloader = view.findViewById(R.id.preloader)
-
-        setupObservers()
     }
 
     private fun setupObservers() {
