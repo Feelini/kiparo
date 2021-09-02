@@ -1,12 +1,12 @@
 package com.kiparo.news;
 
+import static com.kiparo.news.DetailViewActivity.DETAIL_NEWS;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -44,21 +44,6 @@ public class MainActivity extends AppCompatActivity implements Callback {
         recyclerView = findViewById(R.id.list);
         newsItemList = new ArrayList<>();
         loadResource(this);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void loadResource(final Callback callback) {
@@ -118,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements Callback {
                         String summary = newsEntity.getSummary();
                         String imageURL = newsEntity.getMediaEntity().get(0).getUrl();
                         Intent intent = new Intent(MainActivity.this, DetailViewActivity.class);
-                        intent.putExtra("detailNews", new DetailNewsEntity(title, storyURL, summary, imageURL));
+                        intent.putExtra(DETAIL_NEWS, new DetailNewsEntity(title, storyURL, summary, imageURL));
                         startActivity(intent);
                     }
                 });

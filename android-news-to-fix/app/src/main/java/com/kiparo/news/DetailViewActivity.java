@@ -12,15 +12,22 @@ import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.DraweeView;
 import com.facebook.imagepipeline.request.ImageRequest;
 
+import java.security.InvalidParameterException;
+
 public class DetailViewActivity extends Activity {
     private DetailNewsEntity detailNewsEntity;
+    public static final String DETAIL_NEWS = "detailNews";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        detailNewsEntity = getIntent().getParcelableExtra("detailNews");
+        detailNewsEntity = getIntent().getParcelableExtra(DETAIL_NEWS);
+
+        if (detailNewsEntity == null){
+            throw new InvalidParameterException("detailNews is required field");
+        }
 
         TextView titleView = (TextView) findViewById(R.id.title);
         DraweeView imageView = (DraweeView) findViewById(R.id.news_image);
