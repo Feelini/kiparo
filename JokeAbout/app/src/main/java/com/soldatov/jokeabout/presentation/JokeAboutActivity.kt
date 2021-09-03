@@ -7,12 +7,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioGroup
 import com.soldatov.jokeabout.R
-import com.soldatov.jokeabout.data.api.JokeApiImpl
 import com.soldatov.jokeabout.domain.models.Data
 import com.soldatov.jokeabout.presentation.utils.JokeNotification
 import com.soldatov.jokeabout.presentation.utils.UseCaseProvider
 
-class JokeAboutActivity : AppCompatActivity(), JokeApiImpl.OnGetJoke {
+class JokeAboutActivity : AppCompatActivity() {
 
     private lateinit var radioGroup: RadioGroup
     private lateinit var firstName: EditText
@@ -49,9 +48,5 @@ class JokeAboutActivity : AppCompatActivity(), JokeApiImpl.OnGetJoke {
             1 -> 60000
             else -> 3600000
         }
-    }
-
-    override fun onGetJoke(contentText: String) {
-        jokeNotification.showNotification(this, contentText)
     }
 }

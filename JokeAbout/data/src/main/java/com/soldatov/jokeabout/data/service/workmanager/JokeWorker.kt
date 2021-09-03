@@ -1,7 +1,6 @@
 package com.soldatov.jokeabout.data.service.workmanager
 
 import android.content.Context
-import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.soldatov.jokeabout.data.api.JokeApiImpl
@@ -20,7 +19,8 @@ class JokeWorker(context: Context, workerParameters: WorkerParameters) :
         val data = jokeRepositoryImpl.getData()
         val jokeRequestData = JokeRequestData(data.firstName, data.lastName)
         val jokeApiImpl = JokeApiImpl()
-        jokeApiImpl.getJoke(applicationContext, jokeRequestData)
+        val joke = jokeApiImpl.getJoke(applicationContext, jokeRequestData)
+        // FIXME здесь должна отправляться нотификация
         return Result.success()
     }
 
