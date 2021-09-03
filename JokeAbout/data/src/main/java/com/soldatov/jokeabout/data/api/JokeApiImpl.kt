@@ -8,8 +8,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 
 private const val BASE_URL = "http://api.icndb.com/jokes/random?"
-const val CHANNEL_ID = "uniqueId"
-const val NOTIFICATION_ID = 101
 
 class JokeApiImpl : JokeApi {
 

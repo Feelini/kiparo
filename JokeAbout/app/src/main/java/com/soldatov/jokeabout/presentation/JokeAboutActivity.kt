@@ -8,7 +8,6 @@ import android.widget.EditText
 import android.widget.RadioGroup
 import com.soldatov.jokeabout.R
 import com.soldatov.jokeabout.domain.models.Data
-import com.soldatov.jokeabout.presentation.utils.JokeNotification
 import com.soldatov.jokeabout.presentation.utils.UseCaseProvider
 
 class JokeAboutActivity : AppCompatActivity() {
@@ -17,7 +16,6 @@ class JokeAboutActivity : AppCompatActivity() {
     private lateinit var firstName: EditText
     private lateinit var lastName: EditText
     private lateinit var save: Button
-    private val jokeNotification = JokeNotification()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
