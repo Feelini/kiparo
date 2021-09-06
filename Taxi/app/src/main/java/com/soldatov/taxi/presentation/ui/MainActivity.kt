@@ -1,4 +1,4 @@
-package com.soldatov.taxi.presentation
+package com.soldatov.taxi.presentation.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mapView.onCreate(savedInstanceState)
 
         setupObservers()
+        replaceTaxiListFragment()
     }
 
     private fun setupObservers() {
@@ -41,7 +42,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             when (it){
                 is Result.Success -> {
                     taxiInfo = it.data
-                    Log.d("TAG", taxiInfo.toString())
                     mapView.getMapAsync(this)
                 }
                 is Result.Error -> {
@@ -52,6 +52,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             }
         })
+    }
+
+    private fun replaceTaxiListFragment(){
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.bottom_sheet, TaxiListFragment())
+            .commit()
     }
 
     override fun onResume() {
