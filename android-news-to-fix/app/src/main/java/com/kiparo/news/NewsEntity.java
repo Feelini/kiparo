@@ -16,8 +16,6 @@ public class NewsEntity {
     private String title;
     private String summary;
     private String articleUrl;
-    private String byline;
-    private String publishedDate;
     private List<MediaEntity> mediaEntityList;
 
     public NewsEntity(JSONObject jsonObject) {
@@ -26,8 +24,6 @@ public class NewsEntity {
             title = jsonObject.getString("title");
             summary = jsonObject.getString("abstract");
             articleUrl = jsonObject.getString("url");
-            byline = jsonObject.getString("byline");
-            publishedDate = jsonObject.getString("published_date");
             JSONArray mediaArray = jsonObject.getJSONArray("multimedia");
             for (int i = 0; i < mediaArray.length(); i++) {
                 JSONObject mediaObject = mediaArray.getJSONObject(i);
@@ -49,14 +45,6 @@ public class NewsEntity {
 
     public String getArticleUrl() {
         return articleUrl;
-    }
-
-    public String getByline() {
-        return byline;
-    }
-
-    public String getPublishedDate() {
-        return publishedDate;
     }
 
     public List<MediaEntity> getMediaEntity() {
