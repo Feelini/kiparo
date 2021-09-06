@@ -25,7 +25,7 @@ class JokeWorker(context: Context, workerParameters: WorkerParameters) :
         val data = jokeRepositoryImpl.getData()
         val jokeRequestData = JokeRequestData(data.firstName, data.lastName)
         val jokeApiImpl = JokeApiImpl()
-        val joke = jokeApiImpl.getJoke(applicationContext, jokeRequestData)
+        val joke = jokeApiImpl.getJoke(jokeRequestData)
         val jokeNotification = JokeNotification()
         if (joke != null) {
             jokeNotification.showNotification(applicationContext, joke.value.joke)

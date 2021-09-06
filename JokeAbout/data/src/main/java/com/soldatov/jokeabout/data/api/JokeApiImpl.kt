@@ -1,6 +1,5 @@
 package com.soldatov.jokeabout.data.api
 
-import android.content.Context
 import com.soldatov.jokeabout.data.api.deserializer.JokeJsonDeserializer
 import com.soldatov.jokeabout.data.api.models.Joke
 import com.soldatov.jokeabout.data.api.models.JokeRequestData
@@ -14,7 +13,7 @@ class JokeApiImpl : JokeApi {
     private val httpClient = OkHttpClient()
     private val deserializer = JokeJsonDeserializer()
 
-    override fun getJoke(context: Context, jokeRequestData: JokeRequestData): Joke? {
+    override fun getJoke(jokeRequestData: JokeRequestData): Joke? {
         val request = buildUrl(jokeRequestData)
         httpClient.newCall(request).execute().use {
             if (it.isSuccessful) {
