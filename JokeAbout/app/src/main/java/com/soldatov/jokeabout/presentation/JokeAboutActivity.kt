@@ -10,6 +10,10 @@ import com.soldatov.jokeabout.R
 import com.soldatov.jokeabout.domain.models.Data
 import com.soldatov.jokeabout.presentation.utils.UseCaseProvider
 
+private const val TIMEOUT_30_SEC: Long = 30000
+private const val TIMEOUT_1_MIN: Long = 60000
+private const val TIMEOUT_1_H: Long = 3600000
+
 class JokeAboutActivity : AppCompatActivity() {
 
     private lateinit var radioGroup: RadioGroup
@@ -42,9 +46,9 @@ class JokeAboutActivity : AppCompatActivity() {
         val radioButton: View = radioGroup.findViewById(radioButtonID)
 
         return when (radioGroup.indexOfChild(radioButton)) {
-            0 -> 30000
-            1 -> 60000
-            else -> 3600000
+            0 -> TIMEOUT_30_SEC
+            1 -> TIMEOUT_1_MIN
+            else -> TIMEOUT_1_H
         }
     }
 }
