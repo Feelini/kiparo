@@ -2,6 +2,7 @@ package com.soldatov.covid.presentation.map
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +18,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.soldatov.covid.R
-import com.soldatov.covid.domain.models.CovidInfo
+import com.soldatov.covid.domain.models.DomainCovidInfo
 import com.soldatov.covid.presentation.viewmodel.MainActivityViewModel
 import com.soldatov.covid.utils.Result
 import com.soldatov.covid.utils.ViewModelFactory
@@ -27,7 +28,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var mapFragment: SupportMapFragment
     private lateinit var viewModel: MainActivityViewModel
     private lateinit var preloader: ProgressBar
-    private lateinit var covidInfo: CovidInfo
+    private lateinit var covidInfo: DomainCovidInfo
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -72,7 +73,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(p0: GoogleMap) {
         preloader.visibility = View.INVISIBLE
-        covidInfo.china.data.forEach {
+        covidInfo.countryInfoList.forEach {
             val latLng = stringToLatLng(it.lat, it.long)
             val radius = it.confirmed.toDouble().div(100)
             latLng?.let {

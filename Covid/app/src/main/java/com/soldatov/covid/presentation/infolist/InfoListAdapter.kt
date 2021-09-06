@@ -7,14 +7,14 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.soldatov.covid.R
-import com.soldatov.covid.domain.models.CovidCountryInfo
+import com.soldatov.covid.domain.models.DomainCountryInfo
 
 class InfoListAdapter : RecyclerView.Adapter<InfoListAdapter.InfoListViewHolder>() {
 
-    private var infoCountryList: List<CovidCountryInfo> = ArrayList()
+    private var infoCountryList: List<DomainCountryInfo> = ArrayList()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setCovidCountryInfo(infoList: List<CovidCountryInfo>) {
+    fun setCovidCountryInfo(infoList: List<DomainCountryInfo>) {
         infoCountryList = infoList
         notifyDataSetChanged()
     }
@@ -39,7 +39,7 @@ class InfoListAdapter : RecyclerView.Adapter<InfoListAdapter.InfoListViewHolder>
         private val infoText: TextView = itemView.findViewById(R.id.item_text)
     ) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindData(covidCountryInfo: CovidCountryInfo) {
+        fun bindData(covidCountryInfo: DomainCountryInfo) {
             infoNumber.text = covidCountryInfo.confirmed
             infoText.text = covidCountryInfo.country
         }

@@ -7,7 +7,6 @@ import com.soldatov.covid.utils.Result
 import kotlinx.coroutines.Dispatchers
 import java.lang.Exception
 
-
 class MainActivityViewModel(private val getCovidInfoUseCase: GetCovidInfoUseCase) : ViewModel() {
 
     val covidInfo = liveData(Dispatchers.IO){

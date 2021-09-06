@@ -1,8 +1,9 @@
 package com.soldatov.covid.domain.models
 
-data class ChinaInfo(
+data class DomainCovidInfo(
+    val lastCheckTimeMilli: Long,
     val totalConfirmed: Int,
     val totalDeaths: Int,
     val totalRecovered: Int,
-    val data: ArrayList<CovidCountryInfo>
+    val countryInfoList: List<DomainCountryInfo>
 )

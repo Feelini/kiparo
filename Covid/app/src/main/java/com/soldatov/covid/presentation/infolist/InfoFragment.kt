@@ -14,8 +14,8 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.soldatov.covid.R
-import com.soldatov.covid.domain.models.CovidCountryInfo
-import com.soldatov.covid.domain.models.CovidInfo
+import com.soldatov.covid.domain.models.DomainCountryInfo
+import com.soldatov.covid.domain.models.DomainCovidInfo
 import com.soldatov.covid.presentation.utils.dateFormat
 import com.soldatov.covid.presentation.viewmodel.MainActivityViewModel
 import com.soldatov.covid.utils.Result
@@ -83,15 +83,15 @@ class InfoFragment : Fragment() {
         })
     }
 
-    private fun setupUI(covidInfo: CovidInfo) {
+    private fun setupUI(covidInfo: DomainCovidInfo) {
         lastUpdate.text = dateFormat(covidInfo.lastCheckTimeMilli)
-        totalConfirmed.text = covidInfo.china.totalConfirmed.toString()
-        totalDeath.text = covidInfo.china.totalDeaths.toString()
-        totalRecovered.text = covidInfo.china.totalRecovered.toString()
-        showInfoList(covidInfo.china.data)
+        totalConfirmed.text = covidInfo.totalConfirmed.toString()
+        totalDeath.text = covidInfo.totalDeaths.toString()
+        totalRecovered.text = covidInfo.totalRecovered.toString()
+        showInfoList(covidInfo.countryInfoList)
     }
 
-    private fun showInfoList(infoList: List<CovidCountryInfo>) {
+    private fun showInfoList(infoList: List<DomainCountryInfo>) {
         infoListAdapter.setCovidCountryInfo(infoList)
     }
 }

@@ -1,6 +1,6 @@
 package com.soldatov.covid.data.api
 
-import com.soldatov.covid.domain.models.CovidInfo
+import com.soldatov.covid.data.models.CovidInfo
 import retrofit2.http.GET
 import retrofit2.http.Headers
 
