@@ -33,13 +33,13 @@ class InfoListAdapter : RecyclerView.Adapter<InfoListAdapter.InfoListViewHolder>
         return infoCountryList.size
     }
 
-    class InfoListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private lateinit var infoNumber: TextView
-        private lateinit var infoText: TextView
+    class InfoListViewHolder(
+        itemView: View,
+        private val infoNumber: TextView = itemView.findViewById(R.id.item_number),
+        private val infoText: TextView = itemView.findViewById(R.id.item_text)
+    ) : RecyclerView.ViewHolder(itemView) {
 
         fun bindData(covidCountryInfo: CovidCountryInfo) {
-            infoNumber = itemView.findViewById(R.id.item_number)
-            infoText = itemView.findViewById(R.id.item_text)
             infoNumber.text = covidCountryInfo.confirmed
             infoText.text = covidCountryInfo.country
         }
