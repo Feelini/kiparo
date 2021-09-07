@@ -39,7 +39,7 @@ class TaxiListAdapter : RecyclerView.Adapter<TaxiListAdapter.TaxiListViewHolder>
     ) : RecyclerView.ViewHolder(itemView) {
 
         fun bindData(taxiInfo: DomainTaxiInfo) {
-            taxiName.text = taxiInfo.id.toString()
+            taxiName.text = "Taxi № ${taxiInfo.id}"
         }
     }
 }

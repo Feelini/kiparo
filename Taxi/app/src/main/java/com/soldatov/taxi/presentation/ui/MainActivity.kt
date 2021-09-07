@@ -2,7 +2,8 @@ package com.soldatov.taxi.presentation.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.View
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -23,6 +24,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var viewModel: MainActivityViewModel
     private lateinit var taxiInfo: List<DomainTaxiInfo>
     private lateinit var mapView: MapView
+    private lateinit var zoomInBtn: ImageButton
+    private lateinit var zoomOutBtn: ImageButton
+    private var map: GoogleMap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +35,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             .get(MainActivityViewModel::class.java)
 
         mapView = findViewById(R.id.map)
+        zoomInBtn = findViewById(R.id.zoom_in)
+        zoomOutBtn = findViewById(R.id.zoom_out)
+
         mapView.onCreate(savedInstanceState)
+        zoomInBtn.setOnClickListener {
+            map?.animateCamera(CameraUpdateFactory.zoomIn())
+        }
+        zoomOutBtn.setOnClickListener {
+            map?.animateCamera(CameraUpdateFactory.zoomOut())
+        }
 
         setupObservers()
         replaceTaxiListFragment()
@@ -81,14 +94,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(p0: GoogleMap) {
-        Log.d("TAG", "map")
+        map = p0
         val bounds = LatLngBounds.Builder()
         taxiInfo.forEach{
             val position = LatLng(it.lat, it.lon)
             p0.addMarker(MarkerOptions().position(position))
             bounds.include(position)
         }
-        p0.uiSettings.isZoomControlsEnabled = true
+        p0.uiSettings.isZoomControlsEnabled = false
         p0.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 300))
     }
 }
