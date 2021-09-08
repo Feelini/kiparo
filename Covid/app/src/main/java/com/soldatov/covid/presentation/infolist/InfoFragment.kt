@@ -9,8 +9,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.soldatov.covid.R
@@ -19,7 +17,7 @@ import com.soldatov.covid.domain.models.DomainCovidInfo
 import com.soldatov.covid.presentation.utils.dateFormat
 import com.soldatov.covid.presentation.viewmodel.MainActivityViewModel
 import com.soldatov.covid.utils.Result
-import com.soldatov.covid.utils.ViewModelFactory
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class InfoFragment : Fragment() {
 
@@ -28,10 +26,10 @@ class InfoFragment : Fragment() {
     private lateinit var totalDeath: TextView
     private lateinit var totalRecovered: TextView
     private lateinit var infoListView: RecyclerView
-    private lateinit var viewModel: MainActivityViewModel
     private lateinit var preloader: ProgressBar
     private lateinit var viewContainer: ConstraintLayout
     private val infoListAdapter = InfoListAdapter()
+    private val viewModel by sharedViewModel<MainActivityViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -41,9 +39,6 @@ class InfoFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel =
-            ViewModelProvider(activity as ViewModelStoreOwner, ViewModelFactory())
-                .get(MainActivityViewModel::class.java)
 
         setupObservers()
 

@@ -2,7 +2,6 @@ package com.soldatov.covid.presentation.map
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +9,6 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -21,20 +18,17 @@ import com.soldatov.covid.R
 import com.soldatov.covid.domain.models.DomainCovidInfo
 import com.soldatov.covid.presentation.viewmodel.MainActivityViewModel
 import com.soldatov.covid.utils.Result
-import com.soldatov.covid.utils.ViewModelFactory
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class MapFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var mapFragment: SupportMapFragment
-    private lateinit var viewModel: MainActivityViewModel
     private lateinit var preloader: ProgressBar
     private lateinit var covidInfo: DomainCovidInfo
+    private val viewModel by sharedViewModel<MainActivityViewModel>()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel =
-            ViewModelProvider(activity as ViewModelStoreOwner, ViewModelFactory())
-                .get(MainActivityViewModel::class.java)
 
         setupObservers()
     }
