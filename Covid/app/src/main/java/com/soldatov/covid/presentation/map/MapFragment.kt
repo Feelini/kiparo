@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -15,6 +14,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.soldatov.covid.R
+import com.soldatov.covid.databinding.FragmentMapBinding
 import com.soldatov.covid.domain.models.DomainCovidInfo
 import com.soldatov.covid.presentation.viewmodel.MainActivityViewModel
 import com.soldatov.covid.utils.Result
@@ -22,8 +22,10 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class MapFragment : Fragment(), OnMapReadyCallback {
 
+    private var _binding: FragmentMapBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var mapFragment: SupportMapFragment
-    private lateinit var preloader: ProgressBar
     private lateinit var covidInfo: DomainCovidInfo
     private val viewModel by sharedViewModel<MainActivityViewModel>()
 
@@ -38,13 +40,18 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_map, container, false)
+        _binding = FragmentMapBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mapFragment = childFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
-        preloader = view.findViewById(R.id.preloader)
     }
 
     private fun setupObservers() {
@@ -55,18 +62,18 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     mapFragment.getMapAsync(this)
                 }
                 is Result.Error -> {
-                    preloader.visibility = View.INVISIBLE
+                    binding.preloader.visibility = View.INVISIBLE
                     Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
                 }
                 Result.Loading -> {
-                    preloader.visibility = View.VISIBLE
+                    binding.preloader.visibility = View.VISIBLE
                 }
             }
         })
     }
 
     override fun onMapReady(p0: GoogleMap) {
-        preloader.visibility = View.INVISIBLE
+        binding.preloader.visibility = View.INVISIBLE
         covidInfo.countryInfoList.forEach {
             val latLng = stringToLatLng(it.lat, it.long)
             val radius = it.confirmed.toDouble().div(100)
