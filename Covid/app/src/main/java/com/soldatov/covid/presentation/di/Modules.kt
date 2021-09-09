@@ -9,9 +9,15 @@ import com.soldatov.covid.presentation.viewmodel.MainActivityViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-val appModule = module {
+val dataModule = module {
     single { ApiHelper(NetworkService.apiService) }
+}
+
+val domainModule = module {
     single<CovidRepository> { CovidRepositoryImpl(apiHelper = get()) }
     factory { GetCovidInfoUseCase(covidRepository = get()) }
+}
+
+val appModule = module {
     viewModel { MainActivityViewModel(getCovidInfoUseCase = get()) }
 }
