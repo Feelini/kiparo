@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="@dimen/radio_group_side_padding"
+    android:paddingEnd="@dimen/radio_group_side_padding"
+    android:paddingTop="@dimen/radio_group_top_padding"
+    tools:context=".presentation.JokeAboutActivity">
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RadioButton
+            android:id="@+id/radio_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sec_30"
+            android:checked="true"
+            style="@style/RadioButtonStyle"/>
+
+        <RadioButton
+            android:id="@+id/radio_2"
+            android:text="@string/min_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/RadioButtonStyle"/>
+
+        <RadioButton
+            android:id="@+id/radio_3"
+            android:text="@string/h_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/RadioButtonStyle"/>
+
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/first_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/first_name"
+        android:imeOptions="actionNext"
+        style="@style/EditTextStyle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/radioGroup" />
+
+    <EditText
+        android:id="@+id/last_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/last_name"
+        android:imeOptions="actionDone"
+        style="@style/EditTextStyle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/first_name"/>
+
+    <Button
+        android:id="@+id/confirm_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/button_margin_top"
+        android:padding="@dimen/button_text_padding"
+        android:text="@string/save"
+        android:textSize="@dimen/button_text_size"
+        android:backgroundTint="@color/blue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/last_name"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

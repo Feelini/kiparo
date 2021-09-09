@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.JokeAbout">
         <activity
-            android:name=".MainActivity"
+            android:name=".presentation.JokeAboutActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

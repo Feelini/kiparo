@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">JokeAbout</string>
+    <string name="sec_30">30 sec.</string>
+    <string name="min_1">1 min.</string>
+    <string name="h_1">1 h.</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="save">save</string>
 </resources>
