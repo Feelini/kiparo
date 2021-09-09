@@ -46,9 +46,6 @@ class InfoFragment : Fragment() {
                 .get(MainActivityViewModel::class.java)
 
         setupObservers()
-
-        infoListView.adapter = infoListAdapter
-        infoListView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,6 +58,9 @@ class InfoFragment : Fragment() {
         totalRecovered = view.findViewById(R.id.recovered_number)
         infoListView = view.findViewById(R.id.info_list)
         viewContainer = view.findViewById(R.id.content_layout)
+
+        infoListView.adapter = infoListAdapter
+        infoListView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
     }
 
     private fun setupObservers() {
