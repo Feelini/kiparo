@@ -11,7 +11,7 @@ import org.koin.dsl.module
 
 val appModule = module {
     single { ApiHelper(NetworkService.apiService) }
-    single<CovidRepository> { CovidRepositoryImpl(get()) }
-    factory { GetCovidInfoUseCase(get()) }
-    viewModel { MainActivityViewModel(get()) }
+    single<CovidRepository> { CovidRepositoryImpl(apiHelper = get()) }
+    factory { GetCovidInfoUseCase(covidRepository = get()) }
+    viewModel { MainActivityViewModel(getCovidInfoUseCase = get()) }
 }
