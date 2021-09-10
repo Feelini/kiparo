@@ -2,7 +2,6 @@ package com.soldatov.covid.presentation.map
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +27,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var mapFragment: SupportMapFragment
     private lateinit var viewModel: MainActivityViewModel
     private lateinit var preloader: ProgressBar
-    private lateinit var covidInfo: DomainCovidInfo
+    private var map: GoogleMap? = null
+    private var dataIsShow = false
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -50,6 +50,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mapFragment = childFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
+        mapFragment.getMapAsync(this)
         preloader = view.findViewById(R.id.preloader)
     }
 
@@ -57,8 +58,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         viewModel.covidInfo.observe(viewLifecycleOwner, {
             when (it) {
                 is Result.Success -> {
-                    covidInfo = it.data
-                    mapFragment.getMapAsync(this)
+                    if (map != null){
+                        preloader.visibility = View.INVISIBLE
+                        showCovidInfoOnMap(it.data)
+                        dataIsShow = true
+                    }
                 }
                 is Result.Error -> {
                     preloader.visibility = View.INVISIBLE
@@ -71,17 +75,27 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         })
     }
 
-    override fun onMapReady(p0: GoogleMap) {
-        preloader.visibility = View.INVISIBLE
-        covidInfo.countryInfoList.forEach {
+    private fun showCovidInfoOnMap(domainCovidInfo: DomainCovidInfo){
+        domainCovidInfo.countryInfoList.forEach {
             val latLng = stringToLatLng(it.lat, it.long)
             val radius = it.confirmed.toDouble().div(100)
             latLng?.let {
-                p0.addCircle(
+                map?.addCircle(
                     CircleOptions().center(latLng).radius(radius)
                         .fillColor(ContextCompat.getColor(requireContext(), R.color.red))
                         .strokeColor(Color.RED).strokeWidth(5f)
                 )
+            }
+        }
+    }
+
+    override fun onMapReady(p0: GoogleMap) {
+        preloader.visibility = View.INVISIBLE
+        map = p0
+        if (!dataIsShow){
+            val covidInfo = viewModel.getCovidInfo()
+            if (covidInfo != null) {
+                showCovidInfoOnMap(covidInfo)
             }
         }
     }
