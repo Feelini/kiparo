@@ -3,10 +3,18 @@ package com.soldatov.taxi.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.soldatov.data.utils.Result
+import com.soldatov.domain.models.DomainTaxiInfo
 import com.soldatov.domain.usecase.GetTaxiInfoUseCase
 import kotlinx.coroutines.Dispatchers
 
 class MainActivityViewModel(private val getTaxiInfoUseCase: GetTaxiInfoUseCase): ViewModel() {
+
+    fun getTaxiInfo(): List<DomainTaxiInfo>?{
+        return when (taxiInfo.value){
+            is Result.Success -> (taxiInfo.value as Result.Success).data
+            else -> null
+        }
+    }
 
     val taxiInfo = liveData(Dispatchers.IO) {
         emit(Result.Loading)

@@ -2,7 +2,8 @@ package com.soldatov.taxi.presentation.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -26,12 +27,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, TaxiListAdapter.On
 
     private lateinit var viewModel: MainActivityViewModel
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
-    private lateinit var taxiInfo: List<DomainTaxiInfo>
     private lateinit var mapView: MapView
     private lateinit var zoomInBtn: ImageButton
     private lateinit var zoomOutBtn: ImageButton
     private lateinit var preloader: ProgressBar
     private var map: GoogleMap? = null
+    private var dataIsShow = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +44,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, TaxiListAdapter.On
         setupUI()
 
         mapView.onCreate(savedInstanceState)
+        mapView.getMapAsync(this)
 
         setupObservers()
         replaceTaxiListFragment()
@@ -67,19 +69,31 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, TaxiListAdapter.On
         viewModel.taxiInfo.observe(this, {
             when (it){
                 is Result.Success -> {
-                    preloader.visibility = View.INVISIBLE
-                    taxiInfo = it.data
-                    mapView.getMapAsync(this)
+                    if (map != null) {
+                        preloader.visibility = INVISIBLE
+                        showTaxiInfoOnMap(it.data)
+                    }
                 }
                 is Result.Error -> {
-                    preloader.visibility = View.INVISIBLE
+                    preloader.visibility = INVISIBLE
                     Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
                 }
                 Result.Loading -> {
-                    preloader.visibility = View.VISIBLE
+                    preloader.visibility = VISIBLE
                 }
             }
         })
+    }
+
+    private fun showTaxiInfoOnMap(taxiInfoList: List<DomainTaxiInfo>){
+        val bounds = LatLngBounds.Builder()
+        taxiInfoList.forEach{
+            val position = LatLng(it.lat, it.lon)
+            map?.addMarker(MarkerOptions().position(position))
+            bounds.include(position)
+        }
+        map?.uiSettings?.isZoomControlsEnabled = false
+        map?.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 300))
     }
 
     private fun replaceTaxiListFragment(){
@@ -110,14 +124,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, TaxiListAdapter.On
 
     override fun onMapReady(p0: GoogleMap) {
         map = p0
-        val bounds = LatLngBounds.Builder()
-        taxiInfo.forEach{
-            val position = LatLng(it.lat, it.lon)
-            p0.addMarker(MarkerOptions().position(position))
-            bounds.include(position)
+        if (!dataIsShow){
+            preloader.visibility = INVISIBLE
+            val taxiInfo = viewModel.getTaxiInfo()
+            if (taxiInfo != null){
+                showTaxiInfoOnMap(taxiInfo)
+            }
         }
-        p0.uiSettings.isZoomControlsEnabled = false
-        p0.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 300))
     }
 
     override fun onTaxiClick(latLng: LatLng) {
