@@ -1,6 +1,5 @@
 package com.soldatov.taxi.presentation.ui
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,14 +21,6 @@ class TaxiListFragment : Fragment() {
     private lateinit var taxiList: RecyclerView
     private lateinit var viewModel: MainActivityViewModel
     private lateinit var taxiListAdapter: TaxiListAdapter
-    private lateinit var onTaxiClickListener: TaxiListAdapter.OnTaxiClickListener
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is TaxiListAdapter.OnTaxiClickListener){
-            onTaxiClickListener = context
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -44,7 +35,7 @@ class TaxiListFragment : Fragment() {
                 .get(MainActivityViewModel::class.java)
 
         setupObservers()
-        taxiListAdapter = TaxiListAdapter(onTaxiClickListener)
+        taxiListAdapter = TaxiListAdapter(viewModel)
         taxiList.adapter = taxiListAdapter
         taxiList.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
     }

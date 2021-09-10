@@ -23,7 +23,7 @@ import com.soldatov.taxi.R
 import com.soldatov.taxi.presentation.utils.ViewModelFactory
 import com.soldatov.taxi.presentation.viewmodel.MainActivityViewModel
 
-class MainActivity : AppCompatActivity(), OnMapReadyCallback, TaxiListAdapter.OnTaxiClickListener {
+class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var viewModel: MainActivityViewModel
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
@@ -83,6 +83,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, TaxiListAdapter.On
                 }
             }
         })
+
+        viewModel.getSelectedTaxi().observe(this, {
+            val position = LatLng(it.lat, it.lon)
+            map?.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15f))
+            map?.clear()
+            map?.addMarker(MarkerOptions().position(position))
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        })
     }
 
     private fun showTaxiInfoOnMap(taxiInfoList: List<DomainTaxiInfo>){
@@ -131,12 +139,5 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, TaxiListAdapter.On
                 showTaxiInfoOnMap(taxiInfo)
             }
         }
-    }
-
-    override fun onTaxiClick(latLng: LatLng) {
-        map?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
-        map?.clear()
-        map?.addMarker(MarkerOptions().position(latLng))
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 }

@@ -6,17 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.maps.model.LatLng
 import com.soldatov.domain.models.DomainTaxiInfo
 import com.soldatov.taxi.R
+import com.soldatov.taxi.presentation.viewmodel.MainActivityViewModel
 
-class TaxiListAdapter(private val onTaxiClickListener: OnTaxiClickListener) : RecyclerView.Adapter<TaxiListAdapter.TaxiListViewHolder>() {
+class TaxiListAdapter(private val viewModel: MainActivityViewModel) : RecyclerView.Adapter<TaxiListAdapter.TaxiListViewHolder>() {
 
     private var taxiList: List<DomainTaxiInfo> = ArrayList()
-
-    interface OnTaxiClickListener{
-        fun onTaxiClick(latLng: LatLng)
-    }
 
     @SuppressLint("NotifyDataSetChanged")
     fun setTaxiList(newTaxiList: List<DomainTaxiInfo>) {
@@ -31,7 +27,7 @@ class TaxiListAdapter(private val onTaxiClickListener: OnTaxiClickListener) : Re
     }
 
     override fun onBindViewHolder(holder: TaxiListViewHolder, position: Int) {
-        holder.bindData(taxiList[position], onTaxiClickListener)
+        holder.bindData(taxiList[position], viewModel)
     }
 
     override fun getItemCount(): Int {
@@ -43,9 +39,9 @@ class TaxiListAdapter(private val onTaxiClickListener: OnTaxiClickListener) : Re
         private val taxiName: TextView = itemView.findViewById(R.id.taxi_name)
     ) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindData(taxiInfo: DomainTaxiInfo, onTaxiClickListener: OnTaxiClickListener) {
+        fun bindData(taxiInfo: DomainTaxiInfo, viewModel: MainActivityViewModel) {
             taxiName.text = "Taxi № ${taxiInfo.id}"
-            itemView.setOnClickListener { onTaxiClickListener.onTaxiClick(LatLng(taxiInfo.lat, taxiInfo.lon)) }
+            itemView.setOnClickListener { viewModel.setSelectedTaxi(taxiInfo) }
         }
     }
 }
