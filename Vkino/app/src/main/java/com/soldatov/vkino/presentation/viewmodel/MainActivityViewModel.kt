@@ -1,28 +1,20 @@
 package com.soldatov.vkino.presentation.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.soldatov.domain.models.DomainTopSliderInfo
+import androidx.lifecycle.liveData
+import com.soldatov.data.api.Result
 import com.soldatov.domain.usecase.GetTopSliderUseCase
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import java.lang.Exception
 
 class MainActivityViewModel(private val getTopSliderUseCase: GetTopSliderUseCase): ViewModel() {
-    private val topSliderInfo: MutableLiveData<DomainTopSliderInfo> by lazy {
-        MutableLiveData<DomainTopSliderInfo>().also {
-            getTopSliderInfoFromRepo()
-        }
-    }
 
-    fun getTopSliderInfo(): LiveData<DomainTopSliderInfo>{
-        return topSliderInfo
-    }
-
-    private fun getTopSliderInfoFromRepo() {
-        viewModelScope.launch(Dispatchers.IO){
-            getTopSliderUseCase.execute()
+    val topSliderInfo = liveData(Dispatchers.IO){
+        emit(Result.Loading)
+        try {
+            emit(Result.Success(data = getTopSliderUseCase.execute()))
+        } catch (exception: Exception){
+            emit(Result.Error(message = exception.message ?: "Error Occurred"))
         }
     }
 }

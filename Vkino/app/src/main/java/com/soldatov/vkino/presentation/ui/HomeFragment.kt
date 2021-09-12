@@ -37,8 +37,8 @@ class HomeFragment: Fragment() {
     }
 
     private fun setupObservers() {
-        viewModel.getTopSliderInfo().observe(viewLifecycleOwner, {
-            Log.d("TAG", it.filmId.toString())
+        viewModel.topSliderInfo.observe(viewLifecycleOwner, {
+            Log.d("TAG", it.toString())
         })
     }
 }

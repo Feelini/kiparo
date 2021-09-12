@@ -1,19 +1,25 @@
 package com.soldatov.data.repository
 
-import android.util.Log
 import com.soldatov.data.api.PlaceHolderApi
-import com.soldatov.data.models.Response
+import com.soldatov.data.models.FilmData
 import com.soldatov.domain.models.DomainTopSliderInfo
 import com.soldatov.domain.repository.FilmsRepository
 
-class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi): FilmsRepository {
-    override suspend fun getTopSliderInfo(): DomainTopSliderInfo {
+class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRepository {
+    override suspend fun getTopSliderInfo(): List<DomainTopSliderInfo> {
         val topSliderInfo = placeHolderApi.getTopSliderInfo()
-        return topSliderInfo.toDomain()
+        return topSliderInfo.data.films.map { it.toDomain() }
     }
 
-    fun Response.toDomain(): DomainTopSliderInfo {
-        Log.d("TAG", this.toString())
-        return DomainTopSliderInfo(this.data.films[0].film_id)
+    private fun FilmData.toDomain(): DomainTopSliderInfo {
+        return DomainTopSliderInfo(
+            filmId = this.film_id,
+            genres = this.genres.map { it.name },
+            poster = this.poster,
+            ruTitle = this.ru_title,
+            engTitle = this.en_title,
+            origTitle = this.orig_title,
+            year = this.year
+        )
     }
 }

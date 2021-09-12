@@ -5,7 +5,7 @@ import com.soldatov.domain.repository.FilmsRepository
 
 class GetTopSliderUseCase(private val filmsRepository: FilmsRepository) {
 
-    suspend fun execute(): DomainTopSliderInfo{
+    suspend fun execute(): List<DomainTopSliderInfo>{
         return filmsRepository.getTopSliderInfo()
     }
 }
