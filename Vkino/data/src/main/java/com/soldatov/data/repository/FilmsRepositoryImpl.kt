@@ -16,10 +16,12 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
             filmId = this.film_id,
             genres = this.genres.map { it.name },
             poster = this.poster,
-            ruTitle = this.ru_title,
-            engTitle = this.en_title,
-            origTitle = this.orig_title,
+            title = getFilmName(this),
             year = this.year
         )
+    }
+
+    private fun getFilmName(filmData: FilmData): String? {
+        return filmData.ru_title ?: filmData.en_title ?: filmData.orig_title
     }
 }
