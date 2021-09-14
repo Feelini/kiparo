@@ -1,7 +1,9 @@
 package com.soldatov.covid.domain.models
 
+import java.util.*
+
 data class DomainCovidInfo(
-    val lastCheckTimeMilli: Long,
+    val lastCheckTime: Date,
     val totalConfirmed: Int,
     val totalDeaths: Int,
     val totalRecovered: Int,

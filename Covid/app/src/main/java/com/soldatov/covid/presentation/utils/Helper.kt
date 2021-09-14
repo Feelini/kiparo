@@ -2,9 +2,9 @@ package com.soldatov.covid.presentation.utils
 
 import android.annotation.SuppressLint
 import java.text.SimpleDateFormat
+import java.util.*
 
 @SuppressLint("SimpleDateFormat")
-fun dateFormat(timeMilli: Long): String {
-    val simpleDateFormat = SimpleDateFormat("dd MMM, yyyy")
-    return "last update " + simpleDateFormat.format(timeMilli)
+fun dateFormat(date: Date): String {
+    return "last update " + SimpleDateFormat("dd MMM, yyyy").format(date)
 }

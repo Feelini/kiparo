@@ -26,7 +26,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private val binding get() = _binding!!
 
     private lateinit var mapFragment: SupportMapFragment
-    private lateinit var covidInfo: DomainCovidInfo
+    private lateinit var preloader: ProgressBar
+    private var map: GoogleMap? = null
+    private var dataIsShow = false
     private val viewModel by sharedViewModel<MainActivityViewModel>()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -52,14 +54,19 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mapFragment = childFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+        preloader = view.findViewById(R.id.preloader)
     }
 
     private fun setupObservers() {
         viewModel.covidInfo.observe(viewLifecycleOwner, {
             when (it) {
                 is Result.Success -> {
-                    covidInfo = it.data
-                    mapFragment.getMapAsync(this)
+                    if (map != null){
+                        preloader.visibility = View.INVISIBLE
+                        showCovidInfoOnMap(it.data)
+                        dataIsShow = true
+                    }
                 }
                 is Result.Error -> {
                     binding.preloader.visibility = View.INVISIBLE
@@ -72,17 +79,27 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         })
     }
 
-    override fun onMapReady(p0: GoogleMap) {
-        binding.preloader.visibility = View.INVISIBLE
-        covidInfo.countryInfoList.forEach {
+    private fun showCovidInfoOnMap(domainCovidInfo: DomainCovidInfo){
+        domainCovidInfo.countryInfoList.forEach {
             val latLng = stringToLatLng(it.lat, it.long)
             val radius = it.confirmed.toDouble().div(100)
             latLng?.let {
-                p0.addCircle(
+                map?.addCircle(
                     CircleOptions().center(latLng).radius(radius)
                         .fillColor(ContextCompat.getColor(requireContext(), R.color.red))
                         .strokeColor(Color.RED).strokeWidth(5f)
                 )
+            }
+        }
+    }
+
+    override fun onMapReady(p0: GoogleMap) {
+        preloader.visibility = View.INVISIBLE
+        map = p0
+        if (!dataIsShow){
+            val covidInfo = viewModel.getCovidInfo()
+            if (covidInfo != null) {
+                showCovidInfoOnMap(covidInfo)
             }
         }
     }
