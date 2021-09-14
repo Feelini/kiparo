@@ -65,7 +65,7 @@ class InfoFragment : Fragment() {
     }
 
     private fun setupUI(covidInfo: DomainCovidInfo) {
-        binding.lastUpdate.text = dateFormat(covidInfo.lastCheckTimeMilli)
+        binding.lastUpdate.text = dateFormat(covidInfo.lastCheckTime)
         binding.confirmedNumber.text = covidInfo.totalConfirmed.toString()
         binding.totalDeathNumber.text = covidInfo.totalDeaths.toString()
         binding.recoveredNumber.text = covidInfo.totalRecovered.toString()
