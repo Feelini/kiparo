@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Taxi</string>
+    <string name="taxi_list">Taxi list</string>
+    <string name="zoom_in">Zoom in</string>
+    <string name="zoom_out">Zoom out</string>
 </resources>
