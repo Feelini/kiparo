@@ -6,4 +6,16 @@
     <string name="search">Поиск</string>
     <string name="filter">Фильтр</string>
     <string name="poster">Poster</string>
+    <string name="rating">Рейтинг:</string>
+    <string name="category">Категория:</string>
+    <string name="genre">Жанр:</string>
+    <string name="year">Год:</string>
+    <string name="quality">Качество:</string>
+    <string name="translation">Перевод:</string>
+    <string name="country">Страна:</string>
+    <string name="duration">Продолжительность:</string>
+    <string name="show_more">Показать еще</string>
+    <string name="actors">Актеры</string>
+    <string name="composer">Композитор</string>
+    <string name="director">Продюссер</string>
 </resources>

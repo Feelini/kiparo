@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.soldatov.data.api.Result
+import com.soldatov.data.api.TopSliderResult
 import com.soldatov.domain.models.DomainTopSliderInfo
 import com.soldatov.vkino.databinding.FragmentHomeBinding
 import com.soldatov.vkino.presentation.viewmodel.MainActivityViewModel
@@ -51,13 +51,13 @@ class HomeFragment : Fragment() {
     private fun setupObservers() {
         viewModel.topSliderInfo.observe(viewLifecycleOwner, {
             when (it) {
-                is Result.Success -> {
-                    setupUI(it.data as List<DomainTopSliderInfo>)
+                is TopSliderResult.Success -> {
+                    setupUI(it.data)
                 }
-                is Result.Error -> {
+                is TopSliderResult.Error -> {
 
                 }
-                Result.Loading -> {
+                TopSliderResult.Loading -> {
 
                 }
             }

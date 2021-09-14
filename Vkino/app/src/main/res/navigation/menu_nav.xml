@@ -30,6 +30,6 @@
         android:label="FilterFragment" />
     <fragment
         android:id="@+id/filmFragment"
-        android:name="com.soldatov.vkino.presentation.ui.FilmFragment"
+        android:name="com.soldatov.vkino.presentation.ui.film.FilmFragment"
         android:label="FilmFragment" />
 </navigation>

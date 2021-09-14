@@ -13,15 +13,37 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
 
     private fun FilmData.toDomain(): DomainTopSliderInfo {
         return DomainTopSliderInfo(
-            filmId = this.film_id,
-            genres = this.genres.map { it.name },
-            poster = this.poster,
+            filmId = film_id,
             title = getFilmName(this),
-            year = this.year
+            poster = poster,
+            rating = rating,
+            category = getCategoryName(cat_id),
+            genres = genres.map { it.name },
+            year = year,
+            qualities = qualities.map { it.name },
+            translations = translations.map { it.title },
+            countries = countries.map { it.name },
+            duration = duration,
+            actors = actors.map { it.name },
+            composers = composers.map { it.name },
+            directors = directors.map { it.name },
+            description = description,
+            iframeSrc = iframe_src,
+            trailer = trailer
         )
     }
 
     private fun getFilmName(filmData: FilmData): String? {
         return filmData.ru_title ?: filmData.en_title ?: filmData.orig_title
+    }
+
+    private fun getCategoryName(catId: Int): String{
+        return when(catId){
+            1 -> "Фильмы"
+            2 -> "Аниме"
+            3 -> "Сериалы"
+            4 -> "Сериалы аниме"
+            else -> "ТВ шоу"
+        }
     }
 }
