@@ -12,36 +12,39 @@ import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.DraweeView;
 import com.facebook.imagepipeline.request.ImageRequest;
 
+import java.security.InvalidParameterException;
+
 public class DetailViewActivity extends Activity {
-    private String storyURL = "";
+    private DetailNewsEntity detailNewsEntity;
+    public static final String DETAIL_NEWS = "detailNews";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        Bundle extras = getIntent().getExtras();
-        storyURL = extras.getString("storyURL");
-        String title = extras.getString("title");
-        String summary = extras.getString("summary");
-        String imageURL = extras.getString("imageURL");
+        detailNewsEntity = getIntent().getParcelableExtra(DETAIL_NEWS);
+
+        if (detailNewsEntity == null){
+            throw new InvalidParameterException("detailNews is required field");
+        }
 
         TextView titleView = (TextView) findViewById(R.id.title);
         DraweeView imageView = (DraweeView) findViewById(R.id.news_image);
         TextView summaryView = (TextView) findViewById(R.id.summary_content);
 
-        titleView.setText(title);
-        summaryView.setText(summary);
+        titleView.setText(detailNewsEntity.getTitle());
+        summaryView.setText(detailNewsEntity.getSummary());
 
         DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                .setImageRequest(ImageRequest.fromUri(Uri.parse(imageURL)))
+                .setImageRequest(ImageRequest.fromUri(Uri.parse(detailNewsEntity.getImageURL())))
                 .setOldController(imageView.getController()).build();
         imageView.setController(draweeController);
     }
 
     public void onFullStoryClicked(View view) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(storyURL));
+        intent.setData(Uri.parse(detailNewsEntity.getStoryURL()));
         startActivity(intent);
     }
 }

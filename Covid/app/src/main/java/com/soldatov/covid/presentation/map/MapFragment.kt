@@ -5,36 +5,34 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.soldatov.covid.R
+import com.soldatov.covid.databinding.FragmentMapBinding
 import com.soldatov.covid.domain.models.DomainCovidInfo
 import com.soldatov.covid.presentation.viewmodel.MainActivityViewModel
 import com.soldatov.covid.utils.Result
-import com.soldatov.covid.utils.ViewModelFactory
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class MapFragment : Fragment(), OnMapReadyCallback {
 
+    private var _binding: FragmentMapBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var mapFragment: SupportMapFragment
-    private lateinit var viewModel: MainActivityViewModel
     private lateinit var preloader: ProgressBar
     private var map: GoogleMap? = null
     private var dataIsShow = false
+    private val viewModel by sharedViewModel<MainActivityViewModel>()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel =
-            ViewModelProvider(activity as ViewModelStoreOwner, ViewModelFactory())
-                .get(MainActivityViewModel::class.java)
 
         setupObservers()
     }
@@ -44,7 +42,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_map, container, false)
+        _binding = FragmentMapBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -65,11 +69,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     }
                 }
                 is Result.Error -> {
-                    preloader.visibility = View.INVISIBLE
+                    binding.preloader.visibility = View.INVISIBLE
                     Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
                 }
                 Result.Loading -> {
-                    preloader.visibility = View.VISIBLE
+                    binding.preloader.visibility = View.VISIBLE
                 }
             }
         })
