@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
-import com.soldatov.domain.models.DomainTopSliderInfo
+import com.soldatov.domain.models.DomainFilmSliderInfo
 import com.soldatov.vkino.databinding.FragmentFilmBinding
 import com.soldatov.vkino.presentation.utils.Helper
 import com.soldatov.vkino.presentation.viewmodel.MainActivityViewModel
@@ -40,11 +40,11 @@ class FilmFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val filmId = arguments?.getLong(FILM_ID_KEY)
         if (filmId != null) {
-            setupUI(viewModel.getFilmById(filmId))
+            setupUI(viewModel.getTopSliderFilmById(filmId))
         }
     }
 
-    private fun setupUI(film: DomainTopSliderInfo?) {
+    private fun setupUI(film: DomainFilmSliderInfo?) {
         binding.filmName.text = getFilmTitle(film)
         Picasso.with(context).load(film?.poster).into(binding.filmPoster)
         if (film?.rating != null) {
@@ -108,7 +108,7 @@ class FilmFragment: Fragment() {
         }.attach()
     }
 
-    private fun getFilmTitle(film: DomainTopSliderInfo?): String{
+    private fun getFilmTitle(film: DomainFilmSliderInfo?): String{
         return if (film?.title != null){
             if (film.year != null){
                 "${film.title} (${film.year})"

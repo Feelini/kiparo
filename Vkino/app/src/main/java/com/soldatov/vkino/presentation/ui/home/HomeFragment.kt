@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.soldatov.data.api.TopSliderResult
-import com.soldatov.domain.models.DomainTopSliderInfo
+import com.soldatov.data.api.FilmsSliderResult
+import com.soldatov.domain.models.DomainFilmSliderInfo
 import com.soldatov.vkino.databinding.FragmentHomeBinding
 import com.soldatov.vkino.presentation.viewmodel.MainActivityViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -51,24 +51,24 @@ class HomeFragment : Fragment() {
     private fun setupObservers() {
         viewModel.topSliderInfo.observe(viewLifecycleOwner, {
             when (it) {
-                is TopSliderResult.Success -> {
+                is FilmsSliderResult.Success -> {
                     setupUI(it.data)
                 }
-                is TopSliderResult.Error -> {
+                is FilmsSliderResult.Error -> {
 
                 }
-                TopSliderResult.Loading -> {
+                FilmsSliderResult.Loading -> {
 
                 }
             }
         })
     }
 
-    private fun setupUI(topSliderInfo: List<DomainTopSliderInfo>) {
-        showTopSlider(topSliderInfo)
+    private fun setupUI(filmSliderInfo: List<DomainFilmSliderInfo>) {
+        showTopSlider(filmSliderInfo)
     }
 
-    private fun showTopSlider(topSliderInfo: List<DomainTopSliderInfo>) {
-        topSliderAdapter.setTopSliderInfo(topSliderInfo, findNavController())
+    private fun showTopSlider(filmSliderInfo: List<DomainFilmSliderInfo>) {
+        topSliderAdapter.setTopSliderInfo(filmSliderInfo, findNavController())
     }
 }

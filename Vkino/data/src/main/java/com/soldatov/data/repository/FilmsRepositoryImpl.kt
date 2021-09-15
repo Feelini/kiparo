@@ -2,17 +2,22 @@ package com.soldatov.data.repository
 
 import com.soldatov.data.api.PlaceHolderApi
 import com.soldatov.data.models.FilmData
-import com.soldatov.domain.models.DomainTopSliderInfo
+import com.soldatov.domain.models.DomainFilmSliderInfo
 import com.soldatov.domain.repository.FilmsRepository
 
 class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRepository {
-    override suspend fun getTopSliderInfo(): List<DomainTopSliderInfo> {
+    override suspend fun getTopSliderInfo(): List<DomainFilmSliderInfo> {
         val topSliderInfo = placeHolderApi.getTopSliderInfo()
         return topSliderInfo.data.films.map { it.toDomain() }
     }
 
-    private fun FilmData.toDomain(): DomainTopSliderInfo {
-        return DomainTopSliderInfo(
+    override suspend fun getSimilarFilmsInfo(filmId: Long): List<DomainFilmSliderInfo> {
+        val similarFilms = placeHolderApi.getSimilarFilmsInfo(filmId)
+        return similarFilms.data.films.map { it.toDomain() }
+    }
+
+    private fun FilmData.toDomain(): DomainFilmSliderInfo {
+        return DomainFilmSliderInfo(
             filmId = film_id,
             title = getFilmName(this),
             poster = poster,
