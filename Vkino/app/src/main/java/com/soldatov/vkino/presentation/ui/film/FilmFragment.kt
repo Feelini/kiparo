@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.google.android.material.tabs.TabLayoutMediator
 import com.soldatov.domain.models.DomainTopSliderInfo
 import com.soldatov.vkino.databinding.FragmentFilmBinding
 import com.soldatov.vkino.presentation.utils.Helper
@@ -19,6 +20,7 @@ class FilmFragment: Fragment() {
     private var _binding: FragmentFilmBinding? = null
     private val binding get() = _binding!!
     private val viewModel by sharedViewModel<MainActivityViewModel>()
+    private lateinit var viewPagerAdapter: ViewPagerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -91,6 +93,19 @@ class FilmFragment: Fragment() {
             val dialog = FilmMoreInfoDialogFragment(film)
             dialog.show(childFragmentManager, "Dialog")
         }
+
+        showTabs(film?.iframeSrc, film?.trailer)
+    }
+
+    private fun showTabs(iframeSrc: String?, iframeTrailer: String?){
+
+        val tabsTitle = listOf("Смотреть", "Трейлер")
+
+        viewPagerAdapter = ViewPagerAdapter(this, iframeSrc, iframeTrailer)
+        binding.viewPagerWatch.adapter = viewPagerAdapter
+        TabLayoutMediator(binding.tabWatch, binding.viewPagerWatch) {tab, position ->
+            tab.text = tabsTitle[position]
+        }.attach()
     }
 
     private fun getFilmTitle(film: DomainTopSliderInfo?): String{
