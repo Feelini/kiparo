@@ -15,7 +15,7 @@
     <string name="country">Страна:</string>
     <string name="duration">Продолжительность:</string>
     <string name="show_more">Показать еще</string>
-    <string name="actors">Актеры</string>
+    <string name="actors">Актер</string>
     <string name="composer">Композитор</string>
     <string name="director">Продюссер</string>
 </resources>

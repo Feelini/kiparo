@@ -45,28 +45,51 @@ class FilmFragment: Fragment() {
     private fun setupUI(film: DomainTopSliderInfo?) {
         binding.filmName.text = getFilmTitle(film)
         Picasso.with(context).load(film?.poster).into(binding.filmPoster)
-        binding.filmRatingValue.text = film?.rating.toString()
+        if (film?.rating != null) {
+            binding.filmRatingValue.text = film.rating.toString()
+        } else {
+            binding.filmRatingLayout.visibility = View.GONE
+        }
         binding.filmCategoryValue.text = film?.category
         if (film?.genres != null) {
             binding.filmGenreValue.text = Helper.listToString(film.genres)
+        } else {
+            binding.filmGenreLayout.visibility = View.GONE
         }
-        binding.filmYearValue.text = film?.year.toString()
+        if (film?.year != null) {
+            binding.filmYearValue.text = film.year.toString()
+        } else {
+            binding.filmYearLayout.visibility = View.GONE
+        }
         if (film?.qualities != null) {
             binding.filmQualityValue.text = Helper.listToString(film.qualities)
+        } else {
+            binding.filmQualityLayout.visibility = View.GONE
         }
         if (film?.translations != null) {
             binding.filmTranslationValue.text = Helper.listToString(film.translations)
+        } else {
+            binding.filmTranslationLayout.visibility = View.GONE
         }
         if (film?.countries != null){
             binding.filmCountryValue.text = Helper.listToString(film.countries)
+        } else {
+            binding.filmCountryLayout.visibility = View.GONE
         }
-        binding.filmDurationValue.text = film?.duration
-        binding.filmDescription.text = film?.description
+        if (film?.duration != null) {
+            binding.filmDurationValue.text = film.duration
+        } else {
+            binding.filmDurationLayout.visibility = View.GONE
+        }
+        if (film?.description != null) {
+            binding.filmDescription.text = film.description
+        } else {
+            binding.filmDescription.visibility = View.GONE
+        }
 
         binding.showMoreBtn.setOnClickListener {
             val dialog = FilmMoreInfoDialogFragment(film)
-            val dialogWindow = dialog.show(childFragmentManager, "Dialog")
-            dialogWindow
+            dialog.show(childFragmentManager, "Dialog")
         }
     }
 
