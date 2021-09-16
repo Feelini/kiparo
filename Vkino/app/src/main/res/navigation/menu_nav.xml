@@ -31,5 +31,9 @@
     <fragment
         android:id="@+id/filmFragment"
         android:name="com.soldatov.vkino.presentation.ui.film.FilmFragment"
-        android:label="FilmFragment" />
+        android:label="FilmFragment" >
+        <action
+            android:id="@+id/action_filmFragment_self"
+            app:destination="@id/filmFragment" />
+    </fragment>
 </navigation>

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.soldatov.data.api.FilmsSliderResult
 import com.soldatov.domain.models.DomainFilmSliderInfo
 import com.soldatov.vkino.databinding.FragmentHomeBinding
-import com.soldatov.vkino.presentation.viewmodel.MainActivityViewModel
+import com.soldatov.vkino.presentation.viewmodel.HomeFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class HomeFragment : Fragment() {
@@ -19,7 +19,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val topSliderAdapter = TopSliderAdapter()
-    private val viewModel by sharedViewModel<MainActivityViewModel>()
+    private val viewModel by sharedViewModel<HomeFragmentViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

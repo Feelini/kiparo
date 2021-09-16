@@ -5,22 +5,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayoutMediator
+import com.soldatov.data.api.FilmsSliderResult
 import com.soldatov.domain.models.DomainFilmSliderInfo
 import com.soldatov.vkino.databinding.FragmentFilmBinding
 import com.soldatov.vkino.presentation.utils.Helper
-import com.soldatov.vkino.presentation.viewmodel.MainActivityViewModel
+import com.soldatov.vkino.presentation.utils.Helper.getFilmTitle
+import com.soldatov.vkino.presentation.viewmodel.FilmFragmentViewModel
 import com.squareup.picasso.Picasso
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val FILM_ID_KEY = "filmIdKey"
 
-class FilmFragment: Fragment() {
+class FilmFragment : Fragment() {
 
     private var _binding: FragmentFilmBinding? = null
     private val binding get() = _binding!!
-    private val viewModel by sharedViewModel<MainActivityViewModel>()
+    private val viewModel by viewModel<FilmFragmentViewModel>()
     private lateinit var viewPagerAdapter: ViewPagerAdapter
+    private val similarFilmsAdapter = SimilarFilmsAdapter()
+    private var filmId: Long? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,12 +43,39 @@ class FilmFragment: Fragment() {
         _binding = null
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        setupObservers()
+    }
+
+    private fun setupObservers() {
+        filmId.let { filmId ->
+            viewModel.getSimilarFilms(filmId!!).observe(viewLifecycleOwner, {
+                when (it) {
+                    is FilmsSliderResult.Success -> {
+                        showSimilarFilmsList(it.data)
+                    }
+                    is FilmsSliderResult.Error -> {
+
+                    }
+                    FilmsSliderResult.Loading -> {
+
+                    }
+                }
+            })
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val filmId = arguments?.getLong(FILM_ID_KEY)
+        filmId = arguments?.getLong(FILM_ID_KEY)
         if (filmId != null) {
-            setupUI(viewModel.getTopSliderFilmById(filmId))
+            setupUI(viewModel.getFilmById(filmId!!))
         }
+        binding.similarFilms.adapter = similarFilmsAdapter
+        binding.similarFilms.layoutManager =
+            LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
     }
 
     private fun setupUI(film: DomainFilmSliderInfo?) {
@@ -73,7 +107,7 @@ class FilmFragment: Fragment() {
         } else {
             binding.filmTranslationLayout.visibility = View.GONE
         }
-        if (film?.countries != null){
+        if (film?.countries != null) {
             binding.filmCountryValue.text = Helper.listToString(film.countries)
         } else {
             binding.filmCountryLayout.visibility = View.GONE
@@ -97,22 +131,18 @@ class FilmFragment: Fragment() {
         showTabs(film?.iframeSrc, film?.trailer)
     }
 
-    private fun showTabs(iframeSrc: String?, iframeTrailer: String?){
+    private fun showSimilarFilmsList(filmsList: List<DomainFilmSliderInfo>) {
+        similarFilmsAdapter.setSimilarFilmsInfo(filmsList, findNavController())
+    }
+
+    private fun showTabs(iframeSrc: String?, iframeTrailer: String?) {
 
         val tabsTitle = listOf("Смотреть", "Трейлер")
 
         viewPagerAdapter = ViewPagerAdapter(this, iframeSrc, iframeTrailer)
         binding.viewPagerWatch.adapter = viewPagerAdapter
-        TabLayoutMediator(binding.tabWatch, binding.viewPagerWatch) {tab, position ->
+        TabLayoutMediator(binding.tabWatch, binding.viewPagerWatch) { tab, position ->
             tab.text = tabsTitle[position]
         }.attach()
-    }
-
-    private fun getFilmTitle(film: DomainFilmSliderInfo?): String{
-        return if (film?.title != null){
-            if (film.year != null){
-                "${film.title} (${film.year})"
-            } else film.title!!
-        } else ""
     }
 }

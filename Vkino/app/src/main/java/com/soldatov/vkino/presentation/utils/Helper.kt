@@ -1,5 +1,7 @@
 package com.soldatov.vkino.presentation.utils
 
+import com.soldatov.domain.models.DomainFilmSliderInfo
+
 object Helper {
 
     fun listToString(list: List<String>): String{
@@ -13,5 +15,13 @@ object Helper {
         } else {
             ""
         }
+    }
+
+    fun getFilmTitle(film: DomainFilmSliderInfo?): String{
+        return if (film?.title != null){
+            if (film.year != null){
+                "${film.title} (${film.year})"
+            } else film.title!!
+        } else ""
     }
 }
