@@ -16,6 +16,7 @@ import com.soldatov.vkino.presentation.utils.Helper
 import com.soldatov.vkino.presentation.utils.Helper.getFilmTitle
 import com.soldatov.vkino.presentation.viewmodel.FilmFragmentViewModel
 import com.squareup.picasso.Picasso
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val FILM_ID_KEY = "filmIdKey"
@@ -24,7 +25,7 @@ class FilmFragment : Fragment() {
 
     private var _binding: FragmentFilmBinding? = null
     private val binding get() = _binding!!
-    private val viewModel by viewModel<FilmFragmentViewModel>()
+    private val viewModel by sharedViewModel<FilmFragmentViewModel>()
     private lateinit var viewPagerAdapter: ViewPagerAdapter
     private val similarFilmsAdapter = SimilarFilmsAdapter()
     private var filmId: Long? = null
@@ -34,6 +35,7 @@ class FilmFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        filmId = arguments?.getLong(FILM_ID_KEY)
         _binding = FragmentFilmBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -64,15 +66,14 @@ class FilmFragment : Fragment() {
                     }
                 }
             })
+            viewModel.getFilmById(filmId).observe(viewLifecycleOwner, {
+                setupUI(it)
+            })
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        filmId = arguments?.getLong(FILM_ID_KEY)
-        if (filmId != null) {
-            setupUI(viewModel.getFilmById(filmId!!))
-        }
         binding.similarFilms.adapter = similarFilmsAdapter
         binding.similarFilms.layoutManager =
             LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
