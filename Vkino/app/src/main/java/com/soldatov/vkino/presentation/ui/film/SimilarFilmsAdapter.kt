@@ -45,7 +45,7 @@ class SimilarFilmsAdapter: RecyclerView.Adapter<SimilarFilmsAdapter.SimilarFilms
 
         fun bindData(filmSliderInfo: DomainFilmSliderInfo, navController: NavController){
             binding.filmName.text = getFilmTitle(filmSliderInfo)
-            Picasso.with(itemView.context).load("https://poster.vkino.fun/${filmSliderInfo.poster}").into(binding.poster)
+            Picasso.with(itemView.context).load(filmSliderInfo.poster).into(binding.poster)
             itemView.setOnClickListener{
                 navController.navigate(R.id.action_filmFragment_self,
                 bundleOf(FILM_ID_KEY to filmSliderInfo.filmId))
