@@ -21,16 +21,16 @@ class FilmMoreInfoDialogFragment(private val film: DomainFilmSliderInfo?): Dialo
         return activity?.let {
             _binding = DialogFilmMoreInfoBinding.inflate(layoutInflater)
             val builder = AlertDialog.Builder(it, R.style.CustomDialog)
-            if (film?.actors != null) {
-                if (film.actors.size > 1){
+            if (film?.actors?.isEmpty() == true) {
+                binding.filmActors.visibility = View.GONE
+                binding.filmActorsValue.visibility = View.GONE
+            } else {
+                if (film?.actors?.size!! > 1){
                     binding.filmActors.text = "Актеры"
                 }
                 binding.filmActorsValue.text = Helper.listToString(film.actors)
-            } else {
-                binding.filmActors.visibility = View.GONE
-                binding.filmActorsValue.visibility = View.GONE
             }
-            if (film?.composers != null) {
+            if (film.composers.isNotEmpty()) {
                 if (film.composers.size > 1){
                     binding.filmComposer.text = "Композиторы"
                 }
@@ -39,7 +39,7 @@ class FilmMoreInfoDialogFragment(private val film: DomainFilmSliderInfo?): Dialo
                 binding.filmComposer.visibility = View.GONE
                 binding.filmComposerValue.visibility = View.GONE
             }
-            if (film?.directors != null) {
+            if (film.directors.isNotEmpty()) {
                 if (film.directors.size > 1){
                     binding.filmDirector.text = "Продюссеры"
                 }
