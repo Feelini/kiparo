@@ -57,8 +57,8 @@ class FilmFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        filmId.let { filmId ->
-            viewModel.getSimilarFilms(filmId!!).observe(viewLifecycleOwner, {
+        filmId.let {
+            viewModel.similarFilms.observe(viewLifecycleOwner, {
                 when (it) {
                     is FilmsSliderResult.Success -> {
                         showSimilarFilmsList(it.data)

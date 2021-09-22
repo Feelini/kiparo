@@ -14,21 +14,22 @@ class FilmFragmentViewModel(
 ) : ViewModel() {
 
     private val filmId = MutableLiveData<Long>()
-    val filmById = Transformations.map(filmId) {
-        id -> getFilmByIdUseCase.execute(id)
+
+    val filmById = Transformations.map(filmId) { id ->
+        getFilmByIdUseCase.execute(id)
     }
 
-    fun setFilmId(filmIdNew: Long){
-        filmId.value = filmIdNew
-    }
-
-    fun getSimilarFilms(filmId: Long): LiveData<FilmsSliderResult> {
-        return liveData(Dispatchers.IO) {
+    val similarFilms = Transformations.switchMap(filmId) { id ->
+        liveData(Dispatchers.IO) {
             try {
-                emit(FilmsSliderResult.Success(data = getSimilarFilmsUseCase.execute(filmId = filmId)))
+                emit(FilmsSliderResult.Success(data = getSimilarFilmsUseCase.execute(filmId = id)))
             } catch (exception: Exception) {
                 emit(FilmsSliderResult.Error(message = exception.message ?: "Error Occurred"))
             }
         }
+    }
+
+    fun setFilmId(filmIdNew: Long) {
+        filmId.value = filmIdNew
     }
 }
