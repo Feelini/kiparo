@@ -20,7 +20,7 @@ import com.squareup.picasso.Picasso
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-const val FILM_ID_KEY = "filmIdKey"
+const val FILM_ID_KEY = "com.soldatov.vkino.presentation.ui.film.FILM_ID_KEY"
 
 class FilmFragment : Fragment() {
 
