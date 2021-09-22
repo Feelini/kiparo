@@ -41,6 +41,9 @@ class FilmFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         filmId = arguments?.getLong(FILM_ID_KEY)
+        if (filmId != null){
+            viewModel.setFilmId(filmId!!)
+        }
         binding = FragmentFilmBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -68,7 +71,7 @@ class FilmFragment : Fragment() {
                     }
                 }
             })
-            viewModel.getFilmById(filmId).observe(viewLifecycleOwner, {
+            viewModel.filmById.observe(viewLifecycleOwner, {
                 setupUI(it)
             })
         }

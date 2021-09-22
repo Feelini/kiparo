@@ -13,10 +13,13 @@ class FilmFragmentViewModel(
     private val getFilmByIdUseCase: GetFilmByIdUseCase
 ) : ViewModel() {
 
-    fun getFilmById(filmId: Long): LiveData<DomainFilmSliderInfo> {
-        return liveData {
-            emit(getFilmByIdUseCase.execute(filmId))
-        }
+    private val filmId = MutableLiveData<Long>()
+    val filmById = Transformations.map(filmId) {
+        id -> getFilmByIdUseCase.execute(id)
+    }
+
+    fun setFilmId(filmIdNew: Long){
+        filmId.value = filmIdNew
     }
 
     fun getSimilarFilms(filmId: Long): LiveData<FilmsSliderResult> {
