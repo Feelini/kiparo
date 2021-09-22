@@ -21,7 +21,7 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
         return lastSlider
     }
 
-    override fun getFilmById(filmId: Long): FilmSliderInfo {
+    override fun getById(filmId: Long): FilmSliderInfo {
         return lastSlider.filter { it.filmId == filmId }[0]
     }
 
