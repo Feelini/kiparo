@@ -29,14 +29,9 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        setupObservers()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupObservers()
         binding.topSlider.adapter = topSliderAdapter
         binding.topSlider.layoutManager =
             LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
