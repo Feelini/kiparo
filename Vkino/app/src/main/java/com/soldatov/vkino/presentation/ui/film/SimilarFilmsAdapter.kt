@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.soldatov.domain.models.DomainFilmSliderInfo
 import com.soldatov.vkino.R
 import com.soldatov.vkino.databinding.ItemSimilarFilmsBinding
-import com.soldatov.vkino.presentation.utils.Helper.getFilmTitle
+import com.soldatov.vkino.presentation.utils.getFilmTitle
 import com.squareup.picasso.Picasso
 
 class SimilarFilmsAdapter: RecyclerView.Adapter<SimilarFilmsAdapter.SimilarFilmsViewHolder>() {

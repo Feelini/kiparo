@@ -9,7 +9,7 @@ import androidx.fragment.app.DialogFragment
 import com.soldatov.domain.models.DomainFilmSliderInfo
 import com.soldatov.vkino.R
 import com.soldatov.vkino.databinding.DialogFilmMoreInfoBinding
-import com.soldatov.vkino.presentation.utils.Helper
+import com.soldatov.vkino.presentation.utils.listToString
 
 class FilmMoreInfoDialogFragment(private val film: DomainFilmSliderInfo?): DialogFragment() {
 
@@ -27,13 +27,13 @@ class FilmMoreInfoDialogFragment(private val film: DomainFilmSliderInfo?): Dialo
                 if (film?.actors?.size!! > 1){
                     binding.filmActors.text = "Актеры"
                 }
-                binding.filmActorsValue.text = Helper.listToString(film.actors)
+                binding.filmActorsValue.text = listToString(film.actors)
             }
             if (film.composers.isNotEmpty()) {
                 if (film.composers.size > 1){
                     binding.filmComposer.text = "Композиторы"
                 }
-                binding.filmComposerValue.text = Helper.listToString(film.composers)
+                binding.filmComposerValue.text = listToString(film.composers)
             } else {
                 binding.filmComposer.visibility = View.GONE
                 binding.filmComposerValue.visibility = View.GONE
@@ -42,7 +42,7 @@ class FilmMoreInfoDialogFragment(private val film: DomainFilmSliderInfo?): Dialo
                 if (film.directors.size > 1){
                     binding.filmDirector.text = "Продюссеры"
                 }
-                binding.filmDirectorValue.text = Helper.listToString(film.directors)
+                binding.filmDirectorValue.text = listToString(film.directors)
             } else {
                 binding.filmDirector.visibility = View.GONE
                 binding.filmDirectorValue.visibility = View.GONE

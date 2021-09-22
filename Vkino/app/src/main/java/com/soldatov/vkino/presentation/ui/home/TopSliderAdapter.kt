@@ -11,7 +11,7 @@ import com.soldatov.domain.models.DomainFilmSliderInfo
 import com.soldatov.vkino.R
 import com.soldatov.vkino.databinding.ItemTopSliderBinding
 import com.soldatov.vkino.presentation.ui.film.FILM_ID_KEY
-import com.soldatov.vkino.presentation.utils.Helper
+import com.soldatov.vkino.presentation.utils.listToString
 import com.squareup.picasso.Picasso
 
 class TopSliderAdapter: RecyclerView.Adapter<TopSliderAdapter.TopSliderViewHolder>() {
@@ -47,7 +47,7 @@ class TopSliderAdapter: RecyclerView.Adapter<TopSliderAdapter.TopSliderViewHolde
         fun bindData(filmSliderInfo: DomainFilmSliderInfo, navController: NavController){
             binding.name.text = filmSliderInfo.title
             binding.year.text = filmSliderInfo.year.toString()
-            binding.genres.text = Helper.listToString(filmSliderInfo.genres)
+            binding.genres.text = listToString(filmSliderInfo.genres)
             Picasso.with(itemView.context).load(filmSliderInfo.poster).into(binding.poster)
             itemView.setOnClickListener{
                 navController.navigate(R.id.action_homeFragment_to_filmFragment,

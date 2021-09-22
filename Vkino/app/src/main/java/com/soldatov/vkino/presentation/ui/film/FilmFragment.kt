@@ -13,8 +13,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.soldatov.data.api.FilmsSliderResult
 import com.soldatov.domain.models.DomainFilmSliderInfo
 import com.soldatov.vkino.databinding.FragmentFilmBinding
-import com.soldatov.vkino.presentation.utils.Helper
-import com.soldatov.vkino.presentation.utils.Helper.getFilmTitle
+import com.soldatov.vkino.presentation.utils.getFilmTitle
+import com.soldatov.vkino.presentation.utils.listToString
 import com.soldatov.vkino.presentation.viewmodel.FilmFragmentViewModel
 import com.squareup.picasso.Picasso
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -84,7 +84,7 @@ class FilmFragment : Fragment() {
         }
         binding.filmCategoryValue.text = film?.category
         if (film?.genres != null) {
-            binding.filmGenreValue.text = Helper.listToString(film.genres)
+            binding.filmGenreValue.text = listToString(film.genres)
         } else {
             binding.filmGenreLayout.visibility = View.GONE
         }
@@ -94,17 +94,17 @@ class FilmFragment : Fragment() {
             binding.filmYearLayout.visibility = View.GONE
         }
         if (film?.qualities != null) {
-            binding.filmQualityValue.text = Helper.listToString(film.qualities)
+            binding.filmQualityValue.text = listToString(film.qualities)
         } else {
             binding.filmQualityLayout.visibility = View.GONE
         }
         if (film?.translations != null) {
-            binding.filmTranslationValue.text = Helper.listToString(film.translations)
+            binding.filmTranslationValue.text = listToString(film.translations)
         } else {
             binding.filmTranslationLayout.visibility = View.GONE
         }
         if (film?.countries != null) {
-            binding.filmCountryValue.text = Helper.listToString(film.countries)
+            binding.filmCountryValue.text = listToString(film.countries)
         } else {
             binding.filmCountryLayout.visibility = View.GONE
         }
