@@ -23,8 +23,7 @@ const val FILM_ID_KEY = "filmIdKey"
 
 class FilmFragment : Fragment() {
 
-    private var _binding: FragmentFilmBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentFilmBinding
     private val viewModel by sharedViewModel<FilmFragmentViewModel>()
     private lateinit var viewPagerAdapter: ViewPagerAdapter
     private val similarFilmsAdapter = SimilarFilmsAdapter()
@@ -36,18 +35,12 @@ class FilmFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         filmId = arguments?.getLong(FILM_ID_KEY)
-        _binding = FragmentFilmBinding.inflate(inflater, container, false)
+        binding = FragmentFilmBinding.inflate(inflater, container, false)
         return binding.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         setupObservers()
     }
 

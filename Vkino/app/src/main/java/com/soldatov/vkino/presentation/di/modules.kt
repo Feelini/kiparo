@@ -11,9 +11,11 @@ import com.soldatov.vkino.presentation.viewmodel.HomeFragmentViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
+val dataModule = module {
+    single<FilmsRepository> { FilmsRepositoryImpl(NetworkService.apiService) }
+}
 
 val domainModule = module {
-    single<FilmsRepository> { FilmsRepositoryImpl(NetworkService.apiService) }
     factory { GetTopSliderUseCase(filmsRepository = get()) }
     factory { GetSimilarFilmsUseCase(filmsRepository = get()) }
     factory { GetFilmByIdUseCase(filmsRepository = get()) }

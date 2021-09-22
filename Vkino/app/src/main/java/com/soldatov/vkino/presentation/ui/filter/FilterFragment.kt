@@ -9,15 +9,14 @@ import com.soldatov.vkino.databinding.FragmentFilterBinding
 
 class FilterFragment: Fragment() {
 
-    private var _binding: FragmentFilterBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentFilterBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentFilterBinding.inflate(inflater, container, false)
+        binding = FragmentFilterBinding.inflate(inflater, container, false)
         return binding.root
     }
 }

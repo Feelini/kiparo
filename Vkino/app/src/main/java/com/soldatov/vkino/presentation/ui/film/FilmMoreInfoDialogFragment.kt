@@ -13,13 +13,12 @@ import com.soldatov.vkino.presentation.utils.Helper
 
 class FilmMoreInfoDialogFragment(private val film: DomainFilmSliderInfo?): DialogFragment() {
 
-    private var _binding: DialogFilmMoreInfoBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: DialogFilmMoreInfoBinding
 
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
-            _binding = DialogFilmMoreInfoBinding.inflate(layoutInflater)
+            binding = DialogFilmMoreInfoBinding.inflate(layoutInflater)
             val builder = AlertDialog.Builder(it, R.style.CustomDialog)
             if (film?.actors?.isEmpty() == true) {
                 binding.filmActors.visibility = View.GONE
@@ -51,10 +50,5 @@ class FilmMoreInfoDialogFragment(private val film: DomainFilmSliderInfo?): Dialo
             builder.setView(binding.root)
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 }

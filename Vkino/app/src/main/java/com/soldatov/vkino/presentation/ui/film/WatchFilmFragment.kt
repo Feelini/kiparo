@@ -13,21 +13,15 @@ const val IFRAME_SRC = "iframeSrc"
 
 class WatchFilmFragment : Fragment() {
 
-    private var _binding: FragmentWatchFilmBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentWatchFilmBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentWatchFilmBinding.inflate(inflater, container, false)
+        binding = FragmentWatchFilmBinding.inflate(inflater, container, false)
         return binding.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     @SuppressLint("SetJavaScriptEnabled")

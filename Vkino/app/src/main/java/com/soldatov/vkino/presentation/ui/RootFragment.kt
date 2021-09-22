@@ -12,21 +12,15 @@ import com.soldatov.vkino.databinding.FragmentRootBinding
 
 class RootFragment : Fragment(R.layout.fragment_root) {
 
-    private var _binding: FragmentRootBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentRootBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentRootBinding.inflate(inflater, container, false)
+        binding = FragmentRootBinding.inflate(inflater, container, false)
         return binding.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
