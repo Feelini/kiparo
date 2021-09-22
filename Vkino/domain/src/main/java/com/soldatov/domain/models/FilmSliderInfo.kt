@@ -1,6 +1,6 @@
 package com.soldatov.domain.models
 
-data class DomainFilmSliderInfo(
+data class FilmSliderInfo(
     val filmId: Long,
     val title: String?,
     val poster: String?,

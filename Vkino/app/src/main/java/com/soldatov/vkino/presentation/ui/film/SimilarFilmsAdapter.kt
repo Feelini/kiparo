@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
-import com.soldatov.domain.models.DomainFilmSliderInfo
+import com.soldatov.domain.models.FilmSliderInfo
 import com.soldatov.vkino.R
 import com.soldatov.vkino.databinding.ItemSimilarFilmsBinding
 import com.soldatov.vkino.presentation.utils.getFilmTitle
@@ -15,11 +15,11 @@ import com.squareup.picasso.Picasso
 
 class SimilarFilmsAdapter: RecyclerView.Adapter<SimilarFilmsAdapter.SimilarFilmsViewHolder>() {
 
-    private var filmsList: List<DomainFilmSliderInfo> = ArrayList()
+    private var filmsList: List<FilmSliderInfo> = ArrayList()
     private lateinit var navController: NavController
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setSimilarFilmsInfo(filmSliderList: List<DomainFilmSliderInfo>, gettingNavController: NavController){
+    fun setSimilarFilmsInfo(filmSliderList: List<FilmSliderInfo>, gettingNavController: NavController){
         filmsList = filmSliderList
         navController = gettingNavController
         notifyDataSetChanged()
@@ -43,7 +43,7 @@ class SimilarFilmsAdapter: RecyclerView.Adapter<SimilarFilmsAdapter.SimilarFilms
 
         private val binding = ItemSimilarFilmsBinding.bind(itemView)
 
-        fun bindData(filmSliderInfo: DomainFilmSliderInfo, navController: NavController){
+        fun bindData(filmSliderInfo: FilmSliderInfo, navController: NavController){
             binding.filmName.text = getFilmTitle(filmSliderInfo)
             Picasso.with(itemView.context).load(filmSliderInfo.poster).into(binding.poster)
             itemView.setOnClickListener{

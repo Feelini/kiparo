@@ -9,7 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.soldatov.data.api.FilmsSliderResult
-import com.soldatov.domain.models.DomainFilmSliderInfo
+import com.soldatov.domain.models.FilmSliderInfo
 import com.soldatov.vkino.databinding.FragmentHomeBinding
 import com.soldatov.vkino.presentation.viewmodel.HomeFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -53,11 +53,11 @@ class HomeFragment : Fragment() {
         })
     }
 
-    private fun setupUI(filmSliderInfo: List<DomainFilmSliderInfo>) {
+    private fun setupUI(filmSliderInfo: List<FilmSliderInfo>) {
         showTopSlider(filmSliderInfo)
     }
 
-    private fun showTopSlider(filmSliderInfo: List<DomainFilmSliderInfo>) {
+    private fun showTopSlider(filmSliderInfo: List<FilmSliderInfo>) {
         topSliderAdapter.setTopSliderInfo(filmSliderInfo, findNavController())
     }
 }

@@ -11,14 +11,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayoutMediator
 import com.soldatov.data.api.FilmsSliderResult
-import com.soldatov.domain.models.DomainFilmSliderInfo
+import com.soldatov.domain.models.FilmSliderInfo
 import com.soldatov.vkino.databinding.FragmentFilmBinding
 import com.soldatov.vkino.presentation.utils.getFilmTitle
 import com.soldatov.vkino.presentation.utils.listToString
 import com.soldatov.vkino.presentation.viewmodel.FilmFragmentViewModel
 import com.squareup.picasso.Picasso
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val FILM_ID_KEY = "com.soldatov.vkino.presentation.ui.film.FILM_ID_KEY"
 
@@ -77,7 +76,7 @@ class FilmFragment : Fragment() {
         }
     }
 
-    private fun setupUI(film: DomainFilmSliderInfo?) {
+    private fun setupUI(film: FilmSliderInfo?) {
         binding.filmName.text = getFilmTitle(film)
         Picasso.with(context).load(film?.poster).into(binding.filmPoster)
         if (film?.rating != null) {
@@ -130,7 +129,7 @@ class FilmFragment : Fragment() {
         showTabs(film?.iframeSrc, film?.trailer)
     }
 
-    private fun showSimilarFilmsList(filmsList: List<DomainFilmSliderInfo>) {
+    private fun showSimilarFilmsList(filmsList: List<FilmSliderInfo>) {
         similarFilmsAdapter.setSimilarFilmsInfo(filmsList, findNavController())
     }
 

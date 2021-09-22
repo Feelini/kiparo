@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
-import com.soldatov.domain.models.DomainFilmSliderInfo
+import com.soldatov.domain.models.FilmSliderInfo
 import com.soldatov.vkino.R
 import com.soldatov.vkino.databinding.ItemTopSliderBinding
 import com.soldatov.vkino.presentation.ui.film.FILM_ID_KEY
@@ -16,11 +16,11 @@ import com.squareup.picasso.Picasso
 
 class TopSliderAdapter: RecyclerView.Adapter<TopSliderAdapter.TopSliderViewHolder>() {
 
-    private var filmsList: List<DomainFilmSliderInfo> = ArrayList()
+    private var filmsList: List<FilmSliderInfo> = ArrayList()
     private lateinit var navController: NavController
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setTopSliderInfo(filmSliderList: List<DomainFilmSliderInfo>, gettingNavController: NavController){
+    fun setTopSliderInfo(filmSliderList: List<FilmSliderInfo>, gettingNavController: NavController){
         filmsList = filmSliderList
         navController = gettingNavController
         notifyDataSetChanged()
@@ -44,7 +44,7 @@ class TopSliderAdapter: RecyclerView.Adapter<TopSliderAdapter.TopSliderViewHolde
 
         private val binding = ItemTopSliderBinding.bind(itemView)
 
-        fun bindData(filmSliderInfo: DomainFilmSliderInfo, navController: NavController){
+        fun bindData(filmSliderInfo: FilmSliderInfo, navController: NavController){
             binding.name.text = filmSliderInfo.title
             binding.year.text = filmSliderInfo.year.toString()
             binding.genres.text = listToString(filmSliderInfo.genres)

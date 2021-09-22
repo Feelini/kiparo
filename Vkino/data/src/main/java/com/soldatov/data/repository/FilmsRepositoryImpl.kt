@@ -2,31 +2,31 @@ package com.soldatov.data.repository
 
 import com.soldatov.data.api.PlaceHolderApi
 import com.soldatov.data.models.FilmData
-import com.soldatov.domain.models.DomainFilmSliderInfo
+import com.soldatov.domain.models.FilmSliderInfo
 import com.soldatov.domain.repository.FilmsRepository
 
 class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRepository {
 
-    private lateinit var lastSlider: List<DomainFilmSliderInfo>
+    private lateinit var lastSlider: List<FilmSliderInfo>
 
-    override suspend fun getTopSliderInfo(): List<DomainFilmSliderInfo> {
+    override suspend fun getTopSliderInfo(): List<FilmSliderInfo> {
         val topSliderInfo = placeHolderApi.getTopSliderInfo()
         lastSlider = topSliderInfo.data.films.map { it.toDomain() }
         return lastSlider
     }
 
-    override suspend fun getSimilarFilmsInfo(filmId: Long): List<DomainFilmSliderInfo> {
+    override suspend fun getSimilarFilmsInfo(filmId: Long): List<FilmSliderInfo> {
         val similarFilms = placeHolderApi.getSimilarFilmsInfo(filmId)
         lastSlider = similarFilms.data.films.map { it.toDomain() }
         return lastSlider
     }
 
-    override fun getFilmById(filmId: Long): DomainFilmSliderInfo {
+    override fun getFilmById(filmId: Long): FilmSliderInfo {
         return lastSlider.filter { it.filmId == filmId }[0]
     }
 
-    private fun FilmData.toDomain(): DomainFilmSliderInfo {
-        return DomainFilmSliderInfo(
+    private fun FilmData.toDomain(): FilmSliderInfo {
+        return FilmSliderInfo(
             filmId = film_id,
             title = getFilmName(this),
             poster = poster,

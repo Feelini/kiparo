@@ -1,6 +1,6 @@
 package com.soldatov.vkino.presentation.utils
 
-import com.soldatov.domain.models.DomainFilmSliderInfo
+import com.soldatov.domain.models.FilmSliderInfo
 
 fun listToString(list: List<String>): String {
     var result = ""
@@ -15,7 +15,7 @@ fun listToString(list: List<String>): String {
     }
 }
 
-fun getFilmTitle(film: DomainFilmSliderInfo?): String {
+fun getFilmTitle(film: FilmSliderInfo?): String {
     return if (film?.title != null) {
         if (film.year != null) {
             "${film.title} (${film.year})"
