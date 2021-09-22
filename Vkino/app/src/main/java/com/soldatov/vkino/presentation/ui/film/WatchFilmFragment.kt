@@ -9,7 +9,7 @@ import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import com.soldatov.vkino.databinding.FragmentWatchFilmBinding
 
-const val IFRAME_SRC = "iframeSrc"
+const val IFRAME_SRC = "com.soldatov.vkino.presentation.ui.film.IFRAME_SRC"
 
 class WatchFilmFragment : Fragment() {
 

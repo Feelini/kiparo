@@ -45,9 +45,12 @@ class FilmFragment : Fragment() {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setupObservers()
+        binding.similarFilms.adapter = similarFilmsAdapter
+        binding.similarFilms.layoutManager =
+            LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
     }
 
     private fun setupObservers() {
@@ -69,13 +72,6 @@ class FilmFragment : Fragment() {
                 setupUI(it)
             })
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.similarFilms.adapter = similarFilmsAdapter
-        binding.similarFilms.layoutManager =
-            LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
     }
 
     private fun setupUI(film: DomainFilmSliderInfo?) {
