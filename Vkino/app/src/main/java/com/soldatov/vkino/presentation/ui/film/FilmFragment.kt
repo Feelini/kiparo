@@ -1,5 +1,6 @@
 package com.soldatov.vkino.presentation.ui.film
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,6 +29,11 @@ class FilmFragment : Fragment() {
     private lateinit var viewPagerAdapter: ViewPagerAdapter
     private val similarFilmsAdapter = SimilarFilmsAdapter()
     private var filmId: Long? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        viewPagerAdapter = ViewPagerAdapter(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -133,7 +139,7 @@ class FilmFragment : Fragment() {
 
         val tabsTitle = listOf("Смотреть", "Трейлер")
 
-        viewPagerAdapter = ViewPagerAdapter(this, iframeSrc, iframeTrailer)
+        viewPagerAdapter.setIframe(iframeSrc, iframeTrailer)
         binding.viewPagerWatch.adapter = viewPagerAdapter
         TabLayoutMediator(binding.tabWatch, binding.viewPagerWatch) { tab, position ->
             tab.text = tabsTitle[position]
