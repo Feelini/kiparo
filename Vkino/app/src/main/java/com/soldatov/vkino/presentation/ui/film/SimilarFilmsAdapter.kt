@@ -13,15 +13,22 @@ import com.soldatov.vkino.databinding.ItemSimilarFilmsBinding
 import com.soldatov.vkino.presentation.utils.getFilmTitle
 import com.squareup.picasso.Picasso
 
-class SimilarFilmsAdapter: RecyclerView.Adapter<SimilarFilmsAdapter.SimilarFilmsViewHolder>() {
+class SimilarFilmsAdapter : RecyclerView.Adapter<SimilarFilmsAdapter.SimilarFilmsViewHolder>() {
 
     private var filmsList: List<FilmSliderInfo> = ArrayList()
-    private lateinit var navController: NavController
+    private lateinit var onFilmClickListener: OnFilmClickListener
+
+    interface OnFilmClickListener {
+        fun onSimilarFilmClick(filmId: Long)
+    }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setSimilarFilmsInfo(filmSliderList: List<FilmSliderInfo>, gettingNavController: NavController){
+    fun setSimilarFilmsInfo(
+        filmSliderList: List<FilmSliderInfo>,
+        gettingOnFilmClickListener: OnFilmClickListener
+    ) {
         filmsList = filmSliderList
-        navController = gettingNavController
+        onFilmClickListener = gettingOnFilmClickListener
         notifyDataSetChanged()
     }
 
@@ -32,23 +39,22 @@ class SimilarFilmsAdapter: RecyclerView.Adapter<SimilarFilmsAdapter.SimilarFilms
     }
 
     override fun onBindViewHolder(holder: SimilarFilmsViewHolder, position: Int) {
-        holder.bindData(filmsList[position], navController)
+        holder.bindData(filmsList[position], onFilmClickListener)
     }
 
     override fun getItemCount(): Int {
         return filmsList.size
     }
 
-    class SimilarFilmsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+    class SimilarFilmsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val binding = ItemSimilarFilmsBinding.bind(itemView)
 
-        fun bindData(filmSliderInfo: FilmSliderInfo, navController: NavController){
+        fun bindData(filmSliderInfo: FilmSliderInfo, onFilmClickListener: OnFilmClickListener) {
             binding.filmName.text = getFilmTitle(filmSliderInfo)
             Picasso.with(itemView.context).load(filmSliderInfo.poster).into(binding.poster)
-            itemView.setOnClickListener{
-                navController.navigate(R.id.action_filmFragment_self,
-                bundleOf(FILM_ID_KEY to filmSliderInfo.filmId))
+            itemView.setOnClickListener {
+                onFilmClickListener.onSimilarFilmClick(filmSliderInfo.filmId)
             }
         }
     }

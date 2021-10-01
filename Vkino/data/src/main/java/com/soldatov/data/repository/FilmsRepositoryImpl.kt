@@ -28,8 +28,12 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
         return homePageFilms
     }
 
-    override fun getById(filmId: Long): FilmSliderInfo {
-        return lastSlider.filter { it.filmId == filmId }[0]
+    override fun getById(filmId: Long, mode: String): FilmSliderInfo {
+        return if(mode == "slider"){
+            lastSlider.filter { it.filmId == filmId }[0]
+        } else {
+            homePageFilms.filter { it.filmId == filmId }[0]
+        }
     }
 
     private fun FilmData.toDomain(): FilmSliderInfo {

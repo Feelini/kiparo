@@ -4,25 +4,28 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
-import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.soldatov.domain.models.FilmSliderInfo
-import com.soldatov.vkino.R
 import com.soldatov.vkino.databinding.ItemTopSliderBinding
-import com.soldatov.vkino.presentation.ui.film.FILM_ID_KEY
 import com.soldatov.vkino.presentation.utils.listToString
 import com.squareup.picasso.Picasso
 
-class TopSliderAdapter: RecyclerView.Adapter<TopSliderAdapter.TopSliderViewHolder>() {
+class TopSliderAdapter : RecyclerView.Adapter<TopSliderAdapter.TopSliderViewHolder>() {
 
     private var filmsList: List<FilmSliderInfo> = ArrayList()
-    private lateinit var navController: NavController
+    private lateinit var onFilmClickListener: OnFilmClickListener
+
+    interface OnFilmClickListener {
+        fun onSliderFilmClick(filmId: Long)
+    }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setTopSliderInfo(filmSliderList: List<FilmSliderInfo>, gettingNavController: NavController){
+    fun setTopSliderInfo(
+        filmSliderList: List<FilmSliderInfo>,
+        gettingOnFilmClickListener: OnFilmClickListener
+    ) {
         filmsList = filmSliderList
-        navController = gettingNavController
+        onFilmClickListener = gettingOnFilmClickListener
         notifyDataSetChanged()
     }
 
@@ -33,25 +36,24 @@ class TopSliderAdapter: RecyclerView.Adapter<TopSliderAdapter.TopSliderViewHolde
     }
 
     override fun onBindViewHolder(holder: TopSliderViewHolder, position: Int) {
-        holder.bindData(filmsList[position], navController)
+        holder.bindData(filmsList[position], onFilmClickListener)
     }
 
     override fun getItemCount(): Int {
         return filmsList.size
     }
 
-    class TopSliderViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+    class TopSliderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val binding = ItemTopSliderBinding.bind(itemView)
 
-        fun bindData(filmSliderInfo: FilmSliderInfo, navController: NavController){
+        fun bindData(filmSliderInfo: FilmSliderInfo, onFilmClickListener: OnFilmClickListener) {
             binding.name.text = filmSliderInfo.title
             binding.year.text = filmSliderInfo.year.toString()
             binding.genres.text = listToString(filmSliderInfo.genres)
             Picasso.with(itemView.context).load(filmSliderInfo.poster).into(binding.poster)
-            itemView.setOnClickListener{
-                navController.navigate(R.id.action_homeFragment_to_filmFragment,
-                bundleOf(FILM_ID_KEY to filmSliderInfo.filmId))
+            itemView.setOnClickListener {
+                onFilmClickListener.onSliderFilmClick(filmSliderInfo.filmId)
             }
         }
     }

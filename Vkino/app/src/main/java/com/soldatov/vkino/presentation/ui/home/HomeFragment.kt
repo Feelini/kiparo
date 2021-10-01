@@ -4,17 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.soldatov.data.api.FilmsSliderResult
 import com.soldatov.domain.models.FilmSliderInfo
+import com.soldatov.vkino.R
 import com.soldatov.vkino.databinding.FragmentHomeBinding
+import com.soldatov.vkino.presentation.ui.film.FILM_HOME_KEY
+import com.soldatov.vkino.presentation.ui.film.FILM_ID_KEY
+import com.soldatov.vkino.presentation.ui.film.FILM_SLIDER_KEY
 import com.soldatov.vkino.presentation.viewmodel.HomeFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), TopSliderAdapter.OnFilmClickListener, HomePageFilmsAdapter.OnFilmClickListener {
 
     private lateinit var binding: FragmentHomeBinding
     private val topSliderAdapter = TopSliderAdapter()
@@ -72,10 +77,22 @@ class HomeFragment : Fragment() {
     }
 
     private fun showTopSlider(filmSliderInfo: List<FilmSliderInfo>) {
-        topSliderAdapter.setTopSliderInfo(filmSliderInfo, findNavController())
+        topSliderAdapter.setTopSliderInfo(filmSliderInfo, this)
     }
 
     private fun showHomePageFilms(filmSliderInfo: List<FilmSliderInfo>) {
-        homePageFilmsAdapter.setHomePageFilms(filmSliderInfo, findNavController())
+        homePageFilmsAdapter.setHomePageFilms(filmSliderInfo, this)
+    }
+
+    override fun onSliderFilmClick(filmId: Long) {
+        findNavController().navigate(
+            R.id.action_homeFragment_to_filmFragment,
+            bundleOf(FILM_ID_KEY to filmId, FILM_SLIDER_KEY to true))
+    }
+
+    override fun onHomeFilmClick(filmId: Long) {
+        findNavController().navigate(
+            R.id.action_homeFragment_to_filmFragment,
+            bundleOf(FILM_ID_KEY to filmId, FILM_HOME_KEY to true))
     }
 }

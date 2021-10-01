@@ -14,8 +14,12 @@ class FilmFragmentViewModel(
 
     private val filmId = MutableLiveData<Long>()
 
-    val filmById = Transformations.map(filmId) { id ->
-        getFilmByIdUseCase.execute(id)
+    val sliderFilmById = Transformations.map(filmId) { id ->
+        getFilmByIdUseCase.execute(id, "slider")
+    }
+
+    val homeFilmById = Transformations.map(filmId) { id ->
+        getFilmByIdUseCase.execute(id, "home")
     }
 
     val similarFilms = Transformations.switchMap(filmId) { id ->

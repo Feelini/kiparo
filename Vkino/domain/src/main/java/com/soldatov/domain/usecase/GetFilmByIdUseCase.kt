@@ -5,7 +5,7 @@ import com.soldatov.domain.repository.FilmsRepository
 
 class GetFilmByIdUseCase(private val filmsRepository: FilmsRepository) {
 
-    fun execute(filmId: Long): FilmSliderInfo{
-        return filmsRepository.getById(filmId)
+    fun execute(filmId: Long, mode: String): FilmSliderInfo{
+        return filmsRepository.getById(filmId, mode)
     }
 }

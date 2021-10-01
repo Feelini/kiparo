@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayoutMediator
 import com.soldatov.data.api.FilmsSliderResult
 import com.soldatov.domain.models.FilmSliderInfo
+import com.soldatov.vkino.R
 import com.soldatov.vkino.databinding.FragmentFilmBinding
 import com.soldatov.vkino.presentation.utils.getFilmTitle
 import com.soldatov.vkino.presentation.utils.listToString
@@ -20,14 +22,18 @@ import com.squareup.picasso.Picasso
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 const val FILM_ID_KEY = "com.soldatov.vkino.presentation.ui.film.FILM_ID_KEY"
+const val FILM_HOME_KEY = "com.soldatov.vkino.presentation.ui.film.FILM_HOME_KEY"
+const val FILM_SLIDER_KEY = "com.soldatov.vkino.presentation.ui.film.FILM_SLIDER_KEY"
 
-class FilmFragment : Fragment() {
+class FilmFragment : Fragment(), SimilarFilmsAdapter.OnFilmClickListener {
 
     private lateinit var binding: FragmentFilmBinding
     private val viewModel by sharedViewModel<FilmFragmentViewModel>()
     private lateinit var viewPagerAdapter: ViewPagerAdapter
     private val similarFilmsAdapter = SimilarFilmsAdapter()
     private var filmId: Long? = null
+    private var filmHomeMode: Boolean? = false
+    private var filmSliderMode: Boolean? = false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -40,6 +46,8 @@ class FilmFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         filmId = arguments?.getLong(FILM_ID_KEY)
+        filmHomeMode = arguments?.getBoolean(FILM_HOME_KEY)
+        filmSliderMode = arguments?.getBoolean(FILM_SLIDER_KEY)
         if (filmId != null){
             viewModel.setFilmId(filmId!!)
         }
@@ -70,9 +78,15 @@ class FilmFragment : Fragment() {
                     }
                 }
             })
-            viewModel.filmById.observe(viewLifecycleOwner, {
-                setupUI(it)
-            })
+            if (filmHomeMode == true){
+                viewModel.homeFilmById.observe(viewLifecycleOwner, {
+                    setupUI(it)
+                })
+            } else {
+                viewModel.sliderFilmById.observe(viewLifecycleOwner, {
+                    setupUI(it)
+                })
+            }
         }
     }
 
@@ -130,7 +144,7 @@ class FilmFragment : Fragment() {
     }
 
     private fun showSimilarFilmsList(filmsList: List<FilmSliderInfo>) {
-        similarFilmsAdapter.setSimilarFilmsInfo(filmsList, findNavController())
+        similarFilmsAdapter.setSimilarFilmsInfo(filmsList, this)
     }
 
     private fun showTabs(iframeSrc: String?, iframeTrailer: String?) {
@@ -142,5 +156,12 @@ class FilmFragment : Fragment() {
         TabLayoutMediator(binding.tabWatch, binding.viewPagerWatch) { tab, position ->
             tab.text = tabsTitle[position]
         }.attach()
+    }
+
+    override fun onSimilarFilmClick(filmId: Long) {
+        findNavController().navigate(
+            R.id.action_filmFragment_self,
+            bundleOf(FILM_ID_KEY to filmId, FILM_SLIDER_KEY to true)
+        )
     }
 }
