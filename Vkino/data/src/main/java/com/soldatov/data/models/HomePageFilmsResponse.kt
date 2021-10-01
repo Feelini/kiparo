@@ -1,7 +1,7 @@
 package com.soldatov.data.models
 
-data class Response(
+data class HomePageFilmsResponse(
     val status: String,
     val error: ErrorData,
-    val data: TotalFilmsData
+    val data: HomePageTotalFilmsData
 )

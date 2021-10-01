@@ -24,7 +24,7 @@ data class FilmData(
     val countries: List<CountriesData>,
     val directors: List<DirectorData>,
     val genres: List<GenreData>,
-    val last_episode: List<LastEpisodeData>,
+//    val last_episode: LastEpisodeData?,
     val qualities: List<QualityData>,
 //    val reviews: List<>,
     val translations: List<TranslationData>,

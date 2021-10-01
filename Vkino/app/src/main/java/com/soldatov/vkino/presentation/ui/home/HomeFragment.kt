@@ -18,6 +18,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private val topSliderAdapter = TopSliderAdapter()
+    private val homePageFilmsAdapter = HomePageFilmsAdapter()
     private val viewModel by sharedViewModel<HomeFragmentViewModel>()
 
     override fun onCreateView(
@@ -35,13 +36,30 @@ class HomeFragment : Fragment() {
         binding.topSlider.adapter = topSliderAdapter
         binding.topSlider.layoutManager =
             LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+
+        binding.homePageFilms.adapter = homePageFilmsAdapter
+        binding.homePageFilms.layoutManager =
+            LinearLayoutManager(context, RecyclerView.VERTICAL, false)
     }
 
     private fun setupObservers() {
         viewModel.topSliderInfo.observe(viewLifecycleOwner, {
             when (it) {
                 is FilmsSliderResult.Success -> {
-                    setupUI(it.data)
+                    showTopSlider(it.data)
+                }
+                is FilmsSliderResult.Error -> {
+
+                }
+                FilmsSliderResult.Loading -> {
+
+                }
+            }
+        })
+        viewModel.homePageFilms.observe(viewLifecycleOwner, {
+            when (it) {
+                is FilmsSliderResult.Success -> {
+                    showHomePageFilms(it.data)
                 }
                 is FilmsSliderResult.Error -> {
 
@@ -53,11 +71,11 @@ class HomeFragment : Fragment() {
         })
     }
 
-    private fun setupUI(filmSliderInfo: List<FilmSliderInfo>) {
-        showTopSlider(filmSliderInfo)
-    }
-
     private fun showTopSlider(filmSliderInfo: List<FilmSliderInfo>) {
         topSliderAdapter.setTopSliderInfo(filmSliderInfo, findNavController())
+    }
+
+    private fun showHomePageFilms(filmSliderInfo: List<FilmSliderInfo>) {
+        homePageFilmsAdapter.setHomePageFilms(filmSliderInfo, findNavController())
     }
 }

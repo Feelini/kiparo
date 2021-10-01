@@ -8,6 +8,7 @@ import com.soldatov.domain.repository.FilmsRepository
 class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRepository {
 
     private lateinit var lastSlider: List<FilmSliderInfo>
+    private lateinit var homePageFilms: List<FilmSliderInfo>
 
     override suspend fun getTopSliderInfo(): List<FilmSliderInfo> {
         val topSliderInfo = placeHolderApi.getTopSliderInfo()
@@ -21,6 +22,12 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
         return lastSlider
     }
 
+    override suspend fun getHomePageFilms(): List<FilmSliderInfo> {
+        val homePageFilmsInfo = placeHolderApi.getHomePageFilms()
+        homePageFilms = homePageFilmsInfo.data.films.map { it.toDomain() }
+        return homePageFilms
+    }
+
     override fun getById(filmId: Long): FilmSliderInfo {
         return lastSlider.filter { it.filmId == filmId }[0]
     }
@@ -28,7 +35,7 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
     private fun FilmData.toDomain(): FilmSliderInfo {
         return FilmSliderInfo(
             filmId = film_id,
-            title = getFilmName(this),
+            title = getFilmName(this.ru_title, this.en_title, this.orig_title),
             poster = poster,
             rating = rating,
             category = getCategoryName(cat_id),
@@ -47,8 +54,8 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
         )
     }
 
-    private fun getFilmName(filmData: FilmData): String? {
-        return filmData.ru_title ?: filmData.en_title ?: filmData.orig_title
+    private fun getFilmName(ruTitle: String?, enTitle: String?, origTitle: String?): String? {
+        return ruTitle ?: enTitle ?: origTitle
     }
 
     private fun getCategoryName(catId: Int): String{
