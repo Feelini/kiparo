@@ -5,6 +5,9 @@ import com.soldatov.data.models.FilmData
 import com.soldatov.domain.models.FilmSliderInfo
 import com.soldatov.domain.repository.FilmsRepository
 
+const val MODE_SLIDER = "slider"
+const val MODE_HOME = "home"
+
 class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRepository {
 
     private lateinit var lastSlider: List<FilmSliderInfo>
@@ -29,7 +32,7 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
     }
 
     override fun getById(filmId: Long, mode: String): FilmSliderInfo {
-        return if(mode == "slider"){
+        return if(mode == MODE_SLIDER){
             lastSlider.filter { it.filmId == filmId }[0]
         } else {
             homePageFilms.filter { it.filmId == filmId }[0]

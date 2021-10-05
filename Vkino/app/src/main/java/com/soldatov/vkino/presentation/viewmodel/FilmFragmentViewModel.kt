@@ -2,6 +2,8 @@ package com.soldatov.vkino.presentation.viewmodel
 
 import androidx.lifecycle.*
 import com.soldatov.data.api.FilmsSliderResult
+import com.soldatov.data.repository.MODE_HOME
+import com.soldatov.data.repository.MODE_SLIDER
 import com.soldatov.domain.usecase.GetFilmByIdUseCase
 import com.soldatov.domain.usecase.GetSimilarFilmsUseCase
 import kotlinx.coroutines.Dispatchers
@@ -15,11 +17,11 @@ class FilmFragmentViewModel(
     private val filmId = MutableLiveData<Long>()
 
     val sliderFilmById = Transformations.map(filmId) { id ->
-        getFilmByIdUseCase.execute(id, "slider")
+        getFilmByIdUseCase.execute(id, MODE_SLIDER)
     }
 
     val homeFilmById = Transformations.map(filmId) { id ->
-        getFilmByIdUseCase.execute(id, "home")
+        getFilmByIdUseCase.execute(id, MODE_HOME)
     }
 
     val similarFilms = Transformations.switchMap(filmId) { id ->
