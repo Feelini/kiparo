@@ -27,10 +27,10 @@ class WatchFilmFragment : Fragment() {
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.takeIf { it.containsKey(IFRAME_SRC) }?.apply {
+        if (arguments?.containsKey(IFRAME_SRC) == true){
             val iframeLink = "<iframe style=\"transform: translate(-10px, -10px); " +
                     "width: calc(100% + 20px); height: calc(100% + 20px)\" " +
-                    "src=\"${getString(IFRAME_SRC)}\" frameborder=\"0\" id=\"onik-player\" " +
+                    "src=\"${arguments?.getString(IFRAME_SRC)}\" frameborder=\"0\" id=\"onik-player\" " +
                     "allowfullscreen=\"\"></iframe>"
             binding.filmOnlineView.settings.javaScriptEnabled = true
             binding.filmOnlineView.settings.allowFileAccess = true
