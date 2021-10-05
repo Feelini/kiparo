@@ -32,8 +32,8 @@ class FilmFragment : Fragment(), SimilarFilmsAdapter.OnFilmClickListener {
     private lateinit var viewPagerAdapter: ViewPagerAdapter
     private val similarFilmsAdapter = SimilarFilmsAdapter()
     private var filmId: Long? = null
-    private var filmHomeMode: Boolean? = false
-    private var filmSliderMode: Boolean? = false
+    private var filmHomeMode = false
+    private var filmSliderMode = false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -46,10 +46,12 @@ class FilmFragment : Fragment(), SimilarFilmsAdapter.OnFilmClickListener {
         savedInstanceState: Bundle?
     ): View? {
         filmId = arguments?.getLong(FILM_ID_KEY)
-        filmHomeMode = arguments?.getBoolean(FILM_HOME_KEY)
-        filmSliderMode = arguments?.getBoolean(FILM_SLIDER_KEY)
-        if (filmId != null){
-            viewModel.setFilmId(filmId!!)
+        filmHomeMode = arguments?.getBoolean(FILM_HOME_KEY) ?: false
+        filmSliderMode = arguments?.getBoolean(FILM_SLIDER_KEY) ?: false
+        filmId.let {
+            if (it != null){
+                viewModel.setFilmId(it)
+            }
         }
         binding = FragmentFilmBinding.inflate(inflater, container, false)
         return binding.root
