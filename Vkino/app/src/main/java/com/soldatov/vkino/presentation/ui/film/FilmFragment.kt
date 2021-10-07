@@ -106,46 +106,42 @@ class FilmFragment : Fragment(), SimilarFilmsAdapter.OnFilmClickListener {
         }
     }
 
-    private fun showFilmInfo(film: FilmSliderInfo?) {
+    private fun showFilmInfo(film: FilmSliderInfo) {
         binding.filmName.text = getFilmTitle(film)
-        Picasso.with(context).load(film?.poster).into(binding.filmPoster)
-        if (film?.rating != null) {
-            binding.filmRatingValue.text = film.rating.toString()
-        } else {
-            binding.filmRatingLayout.visibility = View.GONE
-        }
-        binding.filmCategoryValue.text = film?.category
-        if (film?.genres != null) {
+        Picasso.with(context).load(film.poster).into(binding.filmPoster)
+        binding.filmRatingValue.text = film.rating.toString()
+        binding.filmCategoryValue.text = film.category
+        if (film.genres.isNotEmpty()) {
             binding.filmGenreValue.text = listToString(film.genres)
         } else {
             binding.filmGenreLayout.visibility = View.GONE
         }
-        if (film?.year != null) {
+        if (film.year != null) {
             binding.filmYearValue.text = film.year.toString()
         } else {
             binding.filmYearLayout.visibility = View.GONE
         }
-        if (film?.qualities != null) {
+        if (film.qualities.isNotEmpty()) {
             binding.filmQualityValue.text = listToString(film.qualities)
         } else {
             binding.filmQualityLayout.visibility = View.GONE
         }
-        if (film?.translations != null) {
+        if (film.translations.isNotEmpty()) {
             binding.filmTranslationValue.text = listToString(film.translations)
         } else {
             binding.filmTranslationLayout.visibility = View.GONE
         }
-        if (film?.countries != null) {
+        if (film.countries.isNotEmpty()) {
             binding.filmCountryValue.text = listToString(film.countries)
         } else {
             binding.filmCountryLayout.visibility = View.GONE
         }
-        if (film?.duration != null) {
+        if (film.duration != "") {
             binding.filmDurationValue.text = film.duration
         } else {
             binding.filmDurationLayout.visibility = View.GONE
         }
-        if (film?.description != null) {
+        if (film.description != "") {
             binding.filmDescription.text = film.description
         } else {
             binding.filmDescription.visibility = View.GONE
@@ -156,7 +152,7 @@ class FilmFragment : Fragment(), SimilarFilmsAdapter.OnFilmClickListener {
             dialog.show(childFragmentManager, "Dialog")
         }
 
-        showTabs(film?.iframeSrc, film?.trailer)
+        showTabs(film.iframeSrc, film.trailer)
     }
 
     private fun showSimilarFilmsList(filmsList: List<FilmSliderInfo>) {

@@ -2,6 +2,7 @@ package com.soldatov.data.repository
 
 import com.soldatov.data.api.PlaceHolderApi
 import com.soldatov.data.models.FilmData
+import com.soldatov.data.models.TranslationData
 import com.soldatov.domain.models.FilmSliderInfo
 import com.soldatov.domain.repository.FilmsRepository
 import java.lang.Exception
@@ -49,26 +50,26 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
         return FilmSliderInfo(
             filmId = film_id,
             title = getFilmName(this.ru_title, this.en_title, this.orig_title),
-            poster = poster,
+            poster = poster ?: "",
             rating = rating,
             category = getCategoryName(cat_id),
             genres = genres.map { it.name },
             year = year,
             qualities = qualities.map { it.name },
-            translations = translations.map { it.title },
+            translations = getTranslations(translations),
             countries = countries.map { it.name },
-            duration = duration,
+            duration = duration ?: "",
             actors = actors.map { it.name },
             composers = composers.map { it.name },
             directors = directors.map { it.name },
-            description = description,
+            description = description ?: "",
             iframeSrc = iframe_src,
-            trailer = trailer
+            trailer = trailer ?: ""
         )
     }
 
-    private fun getFilmName(ruTitle: String?, enTitle: String?, origTitle: String?): String? {
-        return ruTitle ?: enTitle ?: origTitle
+    private fun getFilmName(ruTitle: String?, enTitle: String?, origTitle: String?): String {
+        return ruTitle ?: enTitle ?: origTitle ?: ""
     }
 
     private fun getCategoryName(catId: Int): String{
@@ -79,5 +80,15 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
             4 -> "Сериалы аниме"
             else -> "ТВ шоу"
         }
+    }
+
+    private fun getTranslations(translations: List<TranslationData>): List<String>{
+        val result = ArrayList<String>()
+        translations.forEach {
+            if (it.title != null){
+                result.add(it.title)
+            }
+        }
+        return result
     }
 }
