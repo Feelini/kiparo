@@ -75,17 +75,17 @@ class FilmFragment : Fragment(), SimilarFilmsAdapter.OnFilmClickListener {
             })
             if (filmHomeMode){
                 viewModel.homeFilmById.observe(viewLifecycleOwner, {
-                    setupUI(it)
+                    showFilmInfo(it)
                 })
             } else {
                 viewModel.sliderFilmById.observe(viewLifecycleOwner, {
-                    setupUI(it)
+                    showFilmInfo(it)
                 })
             }
         }
     }
 
-    private fun setupUI(film: FilmSliderInfo?) {
+    private fun showFilmInfo(film: FilmSliderInfo?) {
         binding.filmName.text = getFilmTitle(film)
         Picasso.with(context).load(film?.poster).into(binding.filmPoster)
         if (film?.rating != null) {
