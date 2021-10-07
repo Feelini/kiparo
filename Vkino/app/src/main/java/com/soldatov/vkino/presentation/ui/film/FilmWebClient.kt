@@ -4,6 +4,7 @@ import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.view.View
+import android.view.View.*
 import android.webkit.WebChromeClient
 import android.widget.FrameLayout
 
@@ -39,6 +40,11 @@ class FilmWebClient(private val activity: Activity): WebChromeClient() {
             customView,
             FrameLayout.LayoutParams(-1, -1)
         )
-        activity.window.decorView.systemUiVisibility = 3846
+        activity.window.decorView.systemUiVisibility = (SYSTEM_UI_FLAG_HIDE_NAVIGATION and
+                SYSTEM_UI_FLAG_FULLSCREEN and
+                SYSTEM_UI_FLAG_LAYOUT_STABLE and
+                SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION and
+                SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN and
+                SYSTEM_UI_FLAG_IMMERSIVE)
     }
 }
