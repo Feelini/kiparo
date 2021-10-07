@@ -9,11 +9,21 @@ import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import com.soldatov.vkino.databinding.FragmentWatchTrailerBinding
 
-const val IFRAME_TRAILER = "com.soldatov.vkino.presentation.ui.film.IFRAME_TRAILER"
+private const val IFRAME_TRAILER = "com.soldatov.vkino.presentation.ui.film.IFRAME_TRAILER"
 
 class WatchTrailerFragment : Fragment() {
 
     private lateinit var binding: FragmentWatchTrailerBinding
+
+    companion object{
+        fun create(iframeTrailer: String?): WatchTrailerFragment{
+            val fragment = WatchTrailerFragment()
+            fragment.arguments = Bundle().apply {
+                putString(IFRAME_TRAILER, iframeTrailer)
+            }
+            return fragment
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

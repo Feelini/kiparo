@@ -1,6 +1,5 @@
 package com.soldatov.vkino.presentation.ui.film
 
-import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
@@ -28,21 +27,9 @@ class ViewPagerAdapter(fragment: Fragment): FragmentStateAdapter(fragment) {
 
     override fun createFragment(position: Int): Fragment {
         return if (position == 0) {
-            val fragment = WatchFilmFragment()
-            if (iframeSrc != null) {
-                fragment.arguments = Bundle().apply {
-                    putString(IFRAME_SRC, iframeSrc)
-                }
-            }
-            fragment
+            WatchFilmFragment.create(iframeSrc)
         } else {
-            val fragment = WatchTrailerFragment()
-            if (iframeTrailer != null) {
-                fragment.arguments = Bundle().apply {
-                    putString(IFRAME_TRAILER, iframeTrailer)
-                }
-            }
-            fragment
+            WatchTrailerFragment.create(iframeTrailer)
         }
     }
 

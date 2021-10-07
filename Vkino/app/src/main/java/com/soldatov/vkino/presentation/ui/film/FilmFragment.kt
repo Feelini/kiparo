@@ -1,6 +1,5 @@
 package com.soldatov.vkino.presentation.ui.film
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -29,16 +28,10 @@ class FilmFragment : Fragment(), SimilarFilmsAdapter.OnFilmClickListener {
 
     private lateinit var binding: FragmentFilmBinding
     private val viewModel by sharedViewModel<FilmFragmentViewModel>()
-    private lateinit var viewPagerAdapter: ViewPagerAdapter
     private val similarFilmsAdapter = SimilarFilmsAdapter()
     private var filmId: Long? = null
     private var filmHomeMode = false
     private var filmSliderMode = false
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        viewPagerAdapter = ViewPagerAdapter(this)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -80,7 +73,7 @@ class FilmFragment : Fragment(), SimilarFilmsAdapter.OnFilmClickListener {
                     }
                 }
             })
-            if (filmHomeMode == true){
+            if (filmHomeMode){
                 viewModel.homeFilmById.observe(viewLifecycleOwner, {
                     setupUI(it)
                 })
@@ -152,6 +145,7 @@ class FilmFragment : Fragment(), SimilarFilmsAdapter.OnFilmClickListener {
     private fun showTabs(iframeSrc: String?, iframeTrailer: String?) {
 
         val tabsTitle = listOf("Смотреть", "Трейлер")
+        val viewPagerAdapter = ViewPagerAdapter(this)
 
         viewPagerAdapter.setIframe(iframeSrc, iframeTrailer)
         binding.viewPagerWatch.adapter = viewPagerAdapter
