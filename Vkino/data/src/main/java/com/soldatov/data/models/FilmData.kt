@@ -16,6 +16,7 @@ data class FilmData(
     val budget: String?,
     val rating_kinopoisk: Double?,
     val rating_imdb: Double?,
+    val rating: Double,
     val updated: String?,
     val created: String?,
     val year: Int?,
@@ -24,13 +25,12 @@ data class FilmData(
     val countries: List<CountriesData>,
     val directors: List<DirectorData>,
     val genres: List<GenreData>,
-//    val last_episode: LastEpisodeData?,
+    val last_episode: LastEpisodeData,
     val qualities: List<QualityData>,
 //    val reviews: List<>,
     val translations: List<TranslationData>,
     val imdb_id: String?,
     val kinopoisk_id: String?,
     val videocdn_id: String?,
-    val rating: Double?,
     val views: Int
 )
