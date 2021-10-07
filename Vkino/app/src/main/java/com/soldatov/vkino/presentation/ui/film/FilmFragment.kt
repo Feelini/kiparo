@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayoutMediator
+import com.soldatov.data.api.FilmResult
 import com.soldatov.data.api.FilmsSliderResult
 import com.soldatov.domain.models.FilmSliderInfo
 import com.soldatov.vkino.R
@@ -75,11 +76,31 @@ class FilmFragment : Fragment(), SimilarFilmsAdapter.OnFilmClickListener {
             })
             if (filmHomeMode){
                 viewModel.homeFilmById.observe(viewLifecycleOwner, {
-                    showFilmInfo(it)
+                    when (it) {
+                        is FilmResult.Success -> {
+                            showFilmInfo(it.data)
+                        }
+                        is FilmResult.Error -> {
+
+                        }
+                        FilmResult.Loading -> {
+
+                        }
+                    }
                 })
             } else {
                 viewModel.sliderFilmById.observe(viewLifecycleOwner, {
-                    showFilmInfo(it)
+                    when (it) {
+                        is FilmResult.Success -> {
+                            showFilmInfo(it.data)
+                        }
+                        is FilmResult.Error -> {
+
+                        }
+                        FilmResult.Loading -> {
+
+                        }
+                    }
                 })
             }
         }

@@ -1,6 +1,7 @@
 package com.soldatov.vkino.presentation.viewmodel
 
 import androidx.lifecycle.*
+import com.soldatov.data.api.FilmResult
 import com.soldatov.data.api.FilmsSliderResult
 import com.soldatov.data.repository.MODE_HOME
 import com.soldatov.data.repository.MODE_SLIDER
@@ -16,12 +17,24 @@ class FilmFragmentViewModel(
 
     private val filmId = MutableLiveData<Long>()
 
-    val sliderFilmById = Transformations.map(filmId) { id ->
-        getFilmByIdUseCase.execute(id, MODE_SLIDER)
+    val sliderFilmById = Transformations.switchMap(filmId) { id ->
+        liveData(Dispatchers.IO) {
+            try {
+                emit(FilmResult.Success(data = getFilmByIdUseCase.execute(filmId = id, MODE_SLIDER)))
+            } catch (exception: Exception) {
+                emit(FilmResult.Error(message = exception.message ?: "Error Occurred"))
+            }
+        }
     }
 
-    val homeFilmById = Transformations.map(filmId) { id ->
-        getFilmByIdUseCase.execute(id, MODE_HOME)
+    val homeFilmById = Transformations.switchMap(filmId) { id ->
+        liveData(Dispatchers.IO) {
+            try {
+                emit(FilmResult.Success(data = getFilmByIdUseCase.execute(filmId = id, MODE_HOME)))
+            } catch (exception: Exception) {
+                emit(FilmResult.Error(message = exception.message ?: "Error Occurred"))
+            }
+        }
     }
 
     val similarFilms = Transformations.switchMap(filmId) { id ->

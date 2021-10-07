@@ -4,6 +4,7 @@ import com.soldatov.data.api.PlaceHolderApi
 import com.soldatov.data.models.FilmData
 import com.soldatov.domain.models.FilmSliderInfo
 import com.soldatov.domain.repository.FilmsRepository
+import java.lang.Exception
 
 const val MODE_SLIDER = "slider"
 const val MODE_HOME = "home"
@@ -31,11 +32,16 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
         return homePageFilms
     }
 
-    override fun getById(filmId: Long, mode: String): FilmSliderInfo {
-        return if(mode == MODE_SLIDER){
-            lastSlider.filter { it.filmId == filmId }[0]
-        } else {
-            homePageFilms.filter { it.filmId == filmId }[0]
+    override suspend fun getById(filmId: Long, mode: String): FilmSliderInfo {
+        return try {
+            if (mode == MODE_SLIDER){
+                lastSlider.filter { it.filmId == filmId }[0]
+            } else {
+                homePageFilms.filter { it.filmId == filmId }[0]
+            }
+        } catch (e: Exception){
+            val filmInfo = placeHolderApi.getFilmById(filmId)
+            filmInfo.data.toDomain()
         }
     }
 
