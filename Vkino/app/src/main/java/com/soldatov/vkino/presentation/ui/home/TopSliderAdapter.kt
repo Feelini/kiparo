@@ -5,14 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.soldatov.domain.models.FilmSliderInfo
+import com.soldatov.domain.models.FilmInfo
 import com.soldatov.vkino.databinding.ItemTopSliderBinding
 import com.soldatov.vkino.presentation.utils.listToString
 import com.squareup.picasso.Picasso
 
 class TopSliderAdapter : RecyclerView.Adapter<TopSliderAdapter.TopSliderViewHolder>() {
 
-    private var filmsList: List<FilmSliderInfo> = ArrayList()
+    private var filmsList: List<FilmInfo> = ArrayList()
     private lateinit var onFilmClickListener: OnFilmClickListener
 
     interface OnFilmClickListener {
@@ -21,10 +21,10 @@ class TopSliderAdapter : RecyclerView.Adapter<TopSliderAdapter.TopSliderViewHold
 
     @SuppressLint("NotifyDataSetChanged")
     fun setTopSliderInfo(
-        filmSliderList: List<FilmSliderInfo>,
+        filmList: List<FilmInfo>,
         gettingOnFilmClickListener: OnFilmClickListener
     ) {
-        filmsList = filmSliderList
+        filmsList = filmList
         onFilmClickListener = gettingOnFilmClickListener
         notifyDataSetChanged()
     }
@@ -47,13 +47,13 @@ class TopSliderAdapter : RecyclerView.Adapter<TopSliderAdapter.TopSliderViewHold
 
         private val binding = ItemTopSliderBinding.bind(itemView)
 
-        fun bindData(filmSliderInfo: FilmSliderInfo, onFilmClickListener: OnFilmClickListener) {
-            binding.name.text = filmSliderInfo.title
-            binding.year.text = filmSliderInfo.year.toString()
-            binding.genres.text = listToString(filmSliderInfo.genres)
-            Picasso.with(itemView.context).load(filmSliderInfo.poster).into(binding.poster)
+        fun bindData(filmInfo: FilmInfo, onFilmClickListener: OnFilmClickListener) {
+            binding.name.text = filmInfo.title
+            binding.year.text = filmInfo.year.toString()
+            binding.genres.text = listToString(filmInfo.genres)
+            Picasso.with(itemView.context).load(filmInfo.poster).into(binding.poster)
             itemView.setOnClickListener {
-                onFilmClickListener.onSliderFilmClick(filmSliderInfo.filmId)
+                onFilmClickListener.onSliderFilmClick(filmInfo.filmId)
             }
         }
     }

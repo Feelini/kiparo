@@ -4,18 +4,15 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
-import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
-import com.soldatov.domain.models.FilmSliderInfo
-import com.soldatov.vkino.R
+import com.soldatov.domain.models.FilmInfo
 import com.soldatov.vkino.databinding.ItemSimilarFilmsBinding
 import com.soldatov.vkino.presentation.utils.getFilmTitle
 import com.squareup.picasso.Picasso
 
 class SimilarFilmsAdapter : RecyclerView.Adapter<SimilarFilmsAdapter.SimilarFilmsViewHolder>() {
 
-    private var filmsList: List<FilmSliderInfo> = ArrayList()
+    private var filmsList: List<FilmInfo> = ArrayList()
     private lateinit var onFilmClickListener: OnFilmClickListener
 
     interface OnFilmClickListener {
@@ -24,10 +21,10 @@ class SimilarFilmsAdapter : RecyclerView.Adapter<SimilarFilmsAdapter.SimilarFilm
 
     @SuppressLint("NotifyDataSetChanged")
     fun setSimilarFilmsInfo(
-        filmSliderList: List<FilmSliderInfo>,
+        filmList: List<FilmInfo>,
         gettingOnFilmClickListener: OnFilmClickListener
     ) {
-        filmsList = filmSliderList
+        filmsList = filmList
         onFilmClickListener = gettingOnFilmClickListener
         notifyDataSetChanged()
     }
@@ -50,11 +47,11 @@ class SimilarFilmsAdapter : RecyclerView.Adapter<SimilarFilmsAdapter.SimilarFilm
 
         private val binding = ItemSimilarFilmsBinding.bind(itemView)
 
-        fun bindData(filmSliderInfo: FilmSliderInfo, onFilmClickListener: OnFilmClickListener) {
-            binding.filmName.text = getFilmTitle(filmSliderInfo)
-            Picasso.with(itemView.context).load(filmSliderInfo.poster).into(binding.poster)
+        fun bindData(filmInfo: FilmInfo, onFilmClickListener: OnFilmClickListener) {
+            binding.filmName.text = getFilmTitle(filmInfo)
+            Picasso.with(itemView.context).load(filmInfo.poster).into(binding.poster)
             itemView.setOnClickListener {
-                onFilmClickListener.onSimilarFilmClick(filmSliderInfo.filmId)
+                onFilmClickListener.onSimilarFilmClick(filmInfo.filmId)
             }
         }
     }

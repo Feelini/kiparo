@@ -6,12 +6,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import com.soldatov.domain.models.FilmSliderInfo
+import com.soldatov.domain.models.FilmInfo
 import com.soldatov.vkino.R
 import com.soldatov.vkino.databinding.DialogFilmMoreInfoBinding
 import com.soldatov.vkino.presentation.utils.listToString
 
-class FilmMoreInfoDialogFragment(private val film: FilmSliderInfo?) : DialogFragment() {
+class FilmMoreInfoDialogFragment(private val film: FilmInfo?) : DialogFragment() {
 
     private lateinit var binding: DialogFilmMoreInfoBinding
 

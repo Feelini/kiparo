@@ -1,4 +1,4 @@
-package com.soldatov.vkino.presentation.ui.home
+package com.soldatov.vkino.presentation.ui.search
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -11,17 +11,17 @@ import com.soldatov.vkino.presentation.utils.getFilmTitle
 import com.soldatov.vkino.presentation.utils.listToString
 import com.squareup.picasso.Picasso
 
-class HomePageFilmsAdapter : RecyclerView.Adapter<HomePageFilmsAdapter.HomePageFilmsViewHolder>() {
+class SearchFilmsAdapter : RecyclerView.Adapter<SearchFilmsAdapter.SearchFilmsViewHolder>() {
 
     private var filmsList: List<FilmInfo> = ArrayList()
     private lateinit var onFilmClickListener: OnFilmClickListener
 
     interface OnFilmClickListener {
-        fun onHomeFilmClick(filmId: Long)
+        fun onSearchFilmClick(filmId: Long)
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setHomePageFilms(
+    fun setSearchFilms(
         filmList: List<FilmInfo>,
         gettingOnFilmClickListener: OnFilmClickListener
     ) {
@@ -30,13 +30,13 @@ class HomePageFilmsAdapter : RecyclerView.Adapter<HomePageFilmsAdapter.HomePageF
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomePageFilmsViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchFilmsViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemHomePageFilmBinding.inflate(inflater, parent, false)
-        return HomePageFilmsViewHolder(binding.root)
+        return SearchFilmsViewHolder(binding.root)
     }
 
-    override fun onBindViewHolder(holder: HomePageFilmsViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SearchFilmsViewHolder, position: Int) {
         holder.bindData(filmsList[position], onFilmClickListener)
     }
 
@@ -44,7 +44,7 @@ class HomePageFilmsAdapter : RecyclerView.Adapter<HomePageFilmsAdapter.HomePageF
         return filmsList.size
     }
 
-    class HomePageFilmsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class SearchFilmsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val binding = ItemHomePageFilmBinding.bind(itemView)
 
@@ -56,7 +56,7 @@ class HomePageFilmsAdapter : RecyclerView.Adapter<HomePageFilmsAdapter.HomePageF
             binding.filmDescription.text = filmInfo.description
             Picasso.with(itemView.context).load(filmInfo.poster).into(binding.filmPoster)
             itemView.setOnClickListener {
-                onFilmClickListener.onHomeFilmClick(filmInfo.filmId)
+                onFilmClickListener.onSearchFilmClick(filmInfo.filmId)
             }
         }
     }

@@ -1,10 +1,8 @@
 package com.soldatov.vkino.presentation.viewmodel
 
 import androidx.lifecycle.*
-import com.soldatov.data.api.FilmResult
-import com.soldatov.data.api.FilmsSliderResult
-import com.soldatov.data.repository.MODE_HOME
-import com.soldatov.data.repository.MODE_SLIDER
+import com.soldatov.data.api.request_status.FilmResult
+import com.soldatov.data.api.request_status.FilmsSliderResult
 import com.soldatov.domain.usecase.GetFilmByIdUseCase
 import com.soldatov.domain.usecase.GetSimilarFilmsUseCase
 import kotlinx.coroutines.Dispatchers
@@ -16,21 +14,12 @@ class FilmFragmentViewModel(
 ) : ViewModel() {
 
     private val filmId = MutableLiveData<Long>()
+    private val filmMode = MutableLiveData("")
 
-    val sliderFilmById = Transformations.switchMap(filmId) { id ->
+    val filmById = Transformations.switchMap(filmId) { id ->
         liveData(Dispatchers.IO) {
             try {
-                emit(FilmResult.Success(data = getFilmByIdUseCase.execute(filmId = id, MODE_SLIDER)))
-            } catch (exception: Exception) {
-                emit(FilmResult.Error(message = exception.message ?: "Error Occurred"))
-            }
-        }
-    }
-
-    val homeFilmById = Transformations.switchMap(filmId) { id ->
-        liveData(Dispatchers.IO) {
-            try {
-                emit(FilmResult.Success(data = getFilmByIdUseCase.execute(filmId = id, MODE_HOME)))
+                emit(FilmResult.Success(data = getFilmByIdUseCase.execute(filmId = id, filmMode.value!!)))
             } catch (exception: Exception) {
                 emit(FilmResult.Error(message = exception.message ?: "Error Occurred"))
             }
@@ -49,5 +38,9 @@ class FilmFragmentViewModel(
 
     fun setFilmId(filmIdNew: Long) {
         filmId.value = filmIdNew
+    }
+
+    fun setFilmMode(filmModeNew: String){
+        filmMode.value = filmModeNew
     }
 }

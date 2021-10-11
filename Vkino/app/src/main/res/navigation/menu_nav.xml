@@ -23,7 +23,11 @@
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.soldatov.vkino.presentation.ui.search.SearchFragment"
-        android:label="SearchFragment" />
+        android:label="SearchFragment" >
+        <action
+            android:id="@+id/action_searchFragment_to_filmFragment"
+            app:destination="@id/filmFragment" />
+    </fragment>
     <fragment
         android:id="@+id/filterFragment"
         android:name="com.soldatov.vkino.presentation.ui.filter.FilterFragment"

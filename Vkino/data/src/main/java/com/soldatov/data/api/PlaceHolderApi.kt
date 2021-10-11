@@ -2,6 +2,7 @@ package com.soldatov.data.api
 
 import com.soldatov.data.models.FilmResponse
 import com.soldatov.data.models.HomePageFilmsResponse
+import com.soldatov.data.models.SearchResponse
 import com.soldatov.data.models.SliderResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -16,4 +17,6 @@ interface PlaceHolderApi {
     suspend fun getHomePageFilms(): HomePageFilmsResponse
     @GET("films/similar")
     suspend fun getSimilarFilmsInfo(@Query("film_id") filmId: Long): SliderResponse
+    @GET("films/filter")
+    suspend fun getSearchFilmsInfo(@Query("search") searchQuery: String): SearchResponse
 }

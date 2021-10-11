@@ -1,10 +1,12 @@
 package com.soldatov.domain.repository
 
-import com.soldatov.domain.models.FilmSliderInfo
+import com.soldatov.domain.models.FilmInfo
+import com.soldatov.domain.models.SearchData
 
 interface FilmsRepository {
-    suspend fun getTopSliderInfo(): List<FilmSliderInfo>
-    suspend fun getHomePageFilms(): List<FilmSliderInfo>
-    suspend fun getSimilarFilmsInfo(filmId: Long): List<FilmSliderInfo>
-    suspend fun getById(filmId: Long, mode: String): FilmSliderInfo
+    suspend fun getTopSliderInfo(): List<FilmInfo>
+    suspend fun getHomePageFilms(): List<FilmInfo>
+    suspend fun getSimilarFilmsInfo(filmId: Long): List<FilmInfo>
+    suspend fun getById(filmId: Long, mode: String): FilmInfo
+    suspend fun getSearchFilms(searchQuery: String): SearchData
 }
