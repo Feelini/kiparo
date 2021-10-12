@@ -17,4 +17,13 @@
     <style name="CustomDialog" parent="Theme.AppCompat.Dialog.Alert">
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
+
+    <style name="AppSearchView" parent="Widget.AppCompat.SearchView" >
+        <!-- Query Text Color -->
+        <item name="android:textColorPrimary">@color/white</item>
+        <!-- Hint Color -->
+        <item name="android:textColorHint">@color/gray</item>
+        <!-- Icon Color -->
+        <item name="android:tint">@color/white</item>
+    </style>
 </resources>

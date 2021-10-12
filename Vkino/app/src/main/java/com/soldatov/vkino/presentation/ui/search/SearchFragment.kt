@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -44,18 +45,23 @@ class SearchFragment : Fragment(), SearchFilmsAdapter.OnFilmClickListener {
         binding.searchFilmsList.layoutManager =
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
-        binding.searchValue.setText(viewModel.getSearchQuery())
+        binding.searchValue.setQuery(viewModel.getSearchQuery(), false)
 
-        binding.searchValue.setOnEditorActionListener { v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                viewModel.setSearchQuery(binding.searchValue.text.toString())
-                binding.preloadLayout.visibility = View.VISIBLE
-                false
-            } else {
-                false
+        binding.searchValue.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextChange(newText: String): Boolean {
+                return false
             }
-        }
+
+            override fun onQueryTextSubmit(query: String): Boolean {
+                binding.searchValue.clearFocus()
+                viewModel.setSearchQuery(binding.searchValue.query.toString())
+                binding.preloadLayout.visibility = View.VISIBLE
+                return false
+            }
+        })
     }
+
+
 
     @SuppressLint("SetTextI18n")
     private fun setupObservers() {
