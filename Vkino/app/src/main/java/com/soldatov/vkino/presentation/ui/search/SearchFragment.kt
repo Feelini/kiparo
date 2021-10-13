@@ -27,6 +27,7 @@ class SearchFragment : Fragment(), SearchFilmsAdapter.OnFilmClickListener {
     private lateinit var binding: FragmentSearchBinding
     private val searchFilmsAdapter = SearchFilmsAdapter()
     private val viewModel by sharedViewModel<SearchFragmentViewModel>()
+    private var loading = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,25 +43,41 @@ class SearchFragment : Fragment(), SearchFilmsAdapter.OnFilmClickListener {
         setupObservers()
 
         binding.searchFilmsList.adapter = searchFilmsAdapter
-        binding.searchFilmsList.layoutManager =
-            LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        val layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        binding.searchFilmsList.layoutManager = layoutManager
 
         binding.searchValue.setQuery(viewModel.getSearchQuery(), false)
 
-        binding.searchValue.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+        binding.searchValue.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String): Boolean {
                 return false
             }
 
             override fun onQueryTextSubmit(query: String): Boolean {
                 binding.searchValue.clearFocus()
-                viewModel.setSearchQuery(binding.searchValue.query.toString())
+                val searchQuery = binding.searchValue.query.toString()
+                viewModel.setSearchQuery(searchQuery)
+                searchFilmsAdapter.setSearchFilms(emptyList(), this@SearchFragment)
                 binding.preloadLayout.visibility = View.VISIBLE
                 return false
             }
         })
-    }
 
+        binding.searchFilmsList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy > 0) {
+                    val visibleItemCount = layoutManager.childCount
+                    val totalItemCount = layoutManager.itemCount
+                    val pastVisibleItems = layoutManager.findFirstVisibleItemPosition()
+
+                    if (loading && ((visibleItemCount + pastVisibleItems) >= totalItemCount)) {
+                        loading = false
+                        viewModel.nextPage()
+                    }
+                }
+            }
+        })
+    }
 
 
     @SuppressLint("SetTextI18n")
@@ -69,7 +86,14 @@ class SearchFragment : Fragment(), SearchFilmsAdapter.OnFilmClickListener {
             when (it) {
                 is SearchResult.Success -> {
                     showSearchFilms(it.data.films)
-                    binding.searchResultText.text = "По Вашему запросу найдено: ${it.data.totalResults}"
+                    if (it.data.films.size == it.data.totalResults){
+                        searchFilmsAdapter.removeProgress()
+                    } else {
+                        searchFilmsAdapter.addProgress()
+                    }
+                    loading = true
+                    binding.searchResultText.text =
+                        "По Вашему запросу найдено: ${it.data.totalResults}"
                     binding.preloadLayout.visibility = View.INVISIBLE
                 }
                 is FilmsSliderResult.Error -> {

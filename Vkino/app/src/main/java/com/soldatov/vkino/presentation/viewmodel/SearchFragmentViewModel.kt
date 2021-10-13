@@ -5,7 +5,6 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.soldatov.data.api.request_status.FilmResult
-import com.soldatov.data.api.request_status.FilmsSliderResult
 import com.soldatov.data.api.request_status.SearchResult
 import com.soldatov.domain.usecase.GetSearchFilmsUseCase
 import kotlinx.coroutines.Dispatchers
@@ -14,59 +13,64 @@ import java.util.*
 
 class SearchFragmentViewModel(
     private val getSearchFilmsUseCase: GetSearchFilmsUseCase
-): ViewModel()  {
+) : ViewModel() {
 
     private val searchParams = MutableLiveData<SearchParams>()
 
     val searchFilms = Transformations.switchMap(searchParams) { params ->
         liveData(Dispatchers.IO) {
             try {
-                emit(SearchResult.Success(data = getSearchFilmsUseCase.execute(params.getSearchQuery())))
+                emit(
+                    SearchResult.Success(
+                        data = getSearchFilmsUseCase.execute(
+                            params.getSearchQuery(),
+                            params.getPage()
+                        )
+                    )
+                )
             } catch (exception: Exception) {
                 emit(FilmResult.Error(message = exception.message ?: "Error Occurred"))
             }
         }
     }
 
-    fun setSearchQuery(query: String){
-        val update = SearchParams()
-        update.setSearchQuery(query)
+    fun setSearchQuery(query: String) {
+        val update = SearchParams(query)
         if (Objects.equals(searchParams.value, update)) {
             return
         }
-        searchParams.setValue(update)
+        searchParams.value = update
     }
 
-    fun getSearchQuery(): String{
-        return if (searchParams.value != null){
+    fun getSearchQuery(): String {
+        return if (searchParams.value != null) {
             searchParams.value!!.getSearchQuery()
         } else {
             ""
         }
     }
 
-    private class SearchParams{
-        private var searchQuery: String? = null
+    fun nextPage(){
+        val update = searchParams.value
+        update?.nextPage()
+
+        searchParams.value = update
+    }
+
+    private class SearchParams(
+        private var searchQuery: String,
         private var page: Int = 1
-
-        fun setSearchQuery(newQuery: String){
-            searchQuery = newQuery
+    ) {
+        fun getSearchQuery(): String {
+            return searchQuery
         }
 
-        fun getSearchQuery(): String{
-            return if (searchQuery != null){
-                searchQuery!!
-            } else {
-                ""
-            }
-        }
-
-        fun setPage(newPage: Int){
-            page = newPage
-        }
-
-        fun getPage(): Int{
+        fun getPage(): Int {
             return page
+        }
+
+        fun nextPage(){
+            page += 1
         }
     }
 }

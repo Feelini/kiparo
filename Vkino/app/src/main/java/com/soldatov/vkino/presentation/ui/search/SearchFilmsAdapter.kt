@@ -7,14 +7,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.soldatov.domain.models.FilmInfo
 import com.soldatov.vkino.databinding.ItemHomePageFilmBinding
+import com.soldatov.vkino.databinding.ItemProgressBarBinding
 import com.soldatov.vkino.presentation.utils.getFilmTitle
 import com.soldatov.vkino.presentation.utils.listToString
 import com.squareup.picasso.Picasso
 
-class SearchFilmsAdapter : RecyclerView.Adapter<SearchFilmsAdapter.SearchFilmsViewHolder>() {
+class SearchFilmsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var filmsList: List<FilmInfo> = ArrayList()
     private lateinit var onFilmClickListener: OnFilmClickListener
+    private val VIEW_ITEM = 1
+    private val VIEW_PROG = 0
+    private var isProgress = true
 
     interface OnFilmClickListener {
         fun onSearchFilmClick(filmId: Long)
@@ -30,18 +34,45 @@ class SearchFilmsAdapter : RecyclerView.Adapter<SearchFilmsAdapter.SearchFilmsVi
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchFilmsViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val binding = ItemHomePageFilmBinding.inflate(inflater, parent, false)
-        return SearchFilmsViewHolder(binding.root)
+    fun addProgress(){
+        isProgress = true
     }
 
-    override fun onBindViewHolder(holder: SearchFilmsViewHolder, position: Int) {
-        holder.bindData(filmsList[position], onFilmClickListener)
+    fun removeProgress(){
+        isProgress = false
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (position == filmsList.size) VIEW_PROG else VIEW_ITEM
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val viewHolder: RecyclerView.ViewHolder
+        val inflater = LayoutInflater.from(parent.context)
+        viewHolder = if (viewType == VIEW_ITEM){
+            val binding = ItemHomePageFilmBinding.inflate(inflater, parent, false)
+            SearchFilmsViewHolder(binding.root)
+        } else {
+            val binding = ItemProgressBarBinding.inflate(inflater, parent, false)
+            ProgressBarViewHolder(binding.root)
+        }
+        return viewHolder
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is SearchFilmsViewHolder){
+            holder.bindData(filmsList[position], onFilmClickListener)
+        } else {
+            (holder as ProgressBarViewHolder).bindData()
+        }
     }
 
     override fun getItemCount(): Int {
-        return filmsList.size
+        return if (isProgress){
+            if (filmsList.isEmpty()) 0 else filmsList.size + 1
+        } else {
+            filmsList.size
+        }
     }
 
     class SearchFilmsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -58,6 +89,14 @@ class SearchFilmsAdapter : RecyclerView.Adapter<SearchFilmsAdapter.SearchFilmsVi
             itemView.setOnClickListener {
                 onFilmClickListener.onSearchFilmClick(filmInfo.filmId)
             }
+        }
+    }
+
+    class ProgressBarViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+        private val binding = ItemProgressBarBinding.bind(itemView)
+
+        fun bindData(){
+            binding.progress.isIndeterminate = true
         }
     }
 }

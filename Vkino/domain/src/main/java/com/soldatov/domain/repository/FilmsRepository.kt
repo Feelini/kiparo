@@ -8,5 +8,5 @@ interface FilmsRepository {
     suspend fun getHomePageFilms(): List<FilmInfo>
     suspend fun getSimilarFilmsInfo(filmId: Long): List<FilmInfo>
     suspend fun getById(filmId: Long, mode: String): FilmInfo
-    suspend fun getSearchFilms(searchQuery: String): SearchData
+    suspend fun getSearchFilms(searchQuery: String, page: Int): SearchData
 }
