@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -13,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.soldatov.data.api.request_status.FilmsSliderResult
-import com.soldatov.data.api.request_status.SearchResult
+import com.soldatov.data.api.request_status.FilmsResult
 import com.soldatov.data.repository.FILM_SEARCH_MODE
 import com.soldatov.domain.models.FilmInfo
 import com.soldatov.vkino.R
@@ -84,7 +83,7 @@ class SearchFragment : Fragment(), SearchFilmsAdapter.OnFilmClickListener {
     private fun setupObservers() {
         viewModel.searchFilms.observe(viewLifecycleOwner, {
             when (it) {
-                is SearchResult.Success -> {
+                is FilmsResult.Success -> {
                     showSearchFilms(it.data.films)
                     if (it.data.films.size == it.data.totalResults){
                         searchFilmsAdapter.removeProgress()

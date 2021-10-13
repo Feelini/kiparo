@@ -5,7 +5,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.soldatov.data.api.request_status.FilmResult
-import com.soldatov.data.api.request_status.SearchResult
+import com.soldatov.data.api.request_status.FilmsResult
 import com.soldatov.domain.usecase.GetSearchFilmsUseCase
 import kotlinx.coroutines.Dispatchers
 import java.lang.Exception
@@ -21,7 +21,7 @@ class SearchFragmentViewModel(
         liveData(Dispatchers.IO) {
             try {
                 emit(
-                    SearchResult.Success(
+                    FilmsResult.Success(
                         data = getSearchFilmsUseCase.execute(
                             params.getSearchQuery(),
                             params.getPage()
@@ -54,7 +54,7 @@ class SearchFragmentViewModel(
         val update = searchParams.value
         update?.nextPage()
 
-        searchParams.value = update
+        searchParams.value = update!!
     }
 
     private class SearchParams(

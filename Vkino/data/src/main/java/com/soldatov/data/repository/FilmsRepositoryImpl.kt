@@ -2,7 +2,7 @@ package com.soldatov.data.repository
 
 import com.soldatov.data.api.PlaceHolderApi
 import com.soldatov.domain.models.FilmInfo
-import com.soldatov.domain.models.SearchData
+import com.soldatov.domain.models.FilmsList
 import com.soldatov.domain.repository.FilmsRepository
 import java.lang.Exception
 
@@ -13,7 +13,7 @@ const val FILM_SEARCH_MODE = "com.soldatov.vkino.data.repository.FILM_SEARCH_MOD
 class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRepository {
 
     private lateinit var lastSlider: List<FilmInfo>
-    private lateinit var homePageFilms: List<FilmInfo>
+    private var homePageFilms = ArrayList<FilmInfo>()
     private var searchFilms = ArrayList<FilmInfo>()
 
     override suspend fun getTopSliderInfo(): List<FilmInfo> {
@@ -28,10 +28,14 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
         return lastSlider
     }
 
-    override suspend fun getHomePageFilms(): List<FilmInfo> {
-        val homePageFilmsInfo = placeHolderApi.getHomePageFilms()
-        homePageFilms = homePageFilmsInfo.data.films.map { it.toDomain() }
-        return homePageFilms
+    override suspend fun getHomePageFilms(page: Int): FilmsList {
+        val homePageFilmsInfo = placeHolderApi.getHomePageFilms(page)
+        if (page == 1){
+            homePageFilms = homePageFilmsInfo.data.films.map { it.toDomain() } as ArrayList<FilmInfo>
+        } else {
+            homePageFilms.addAll(homePageFilmsInfo.data.films.map { it.toDomain() })
+        }
+        return FilmsList(homePageFilmsInfo.data.totalRows, homePageFilms)
     }
 
     override suspend fun getById(filmId: Long, mode: String): FilmInfo {
@@ -53,13 +57,13 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
         }
     }
 
-    override suspend fun getSearchFilms(searchQuery: String, page: Int): SearchData {
+    override suspend fun getSearchFilms(searchQuery: String, page: Int): FilmsList {
         val searchFilmsInfo = placeHolderApi.getSearchFilmsInfo(searchQuery, page)
         if (page == 1){
             searchFilms = searchFilmsInfo.data.films.map { it.toDomain() } as ArrayList<FilmInfo>
         } else {
             searchFilms.addAll(searchFilmsInfo.data.films.map { it.toDomain() })
         }
-        return SearchData(searchFilmsInfo.data.totalRows, searchFilms)
+        return FilmsList(searchFilmsInfo.data.totalRows, searchFilms)
     }
 }
