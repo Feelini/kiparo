@@ -34,7 +34,7 @@ fun FilmData.toDomain(): FilmInfo {
 fun TotalGenresData.toDomain(): GenresList{
     return GenresList(
         hasMore = hasMore,
-        genres = items.map { Genre(it.id, it.name) }
+        genres = items.map { Genre(it.id, it.name, false) }
     )
 }
 

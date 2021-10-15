@@ -1,16 +1,15 @@
 package com.soldatov.vkino.presentation.ui.filter
 
 import android.os.Bundle
-import android.util.Log
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.soldatov.data.api.request_status.YearsResult
 import com.soldatov.domain.models.Years
+import com.soldatov.vkino.R
 import com.soldatov.vkino.databinding.FragmentFilterBinding
 import com.soldatov.vkino.presentation.ui.home.HomeFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -105,6 +104,10 @@ class FilterFragment : Fragment() {
         binding.yearRange.addOnChangeListener { slider, value, fromUser ->
             binding.editYearFrom.setText(slider.values[0].toInt().toString())
             binding.editYearTo.setText(slider.values[1].toInt().toString())
+        }
+
+        binding.genre.setOnClickListener {
+            findNavController().navigate(R.id.action_filterFragment_to_chooseGenreFragment)
         }
     }
 
