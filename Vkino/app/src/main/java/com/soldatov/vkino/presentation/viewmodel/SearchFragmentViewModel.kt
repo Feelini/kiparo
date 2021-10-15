@@ -6,13 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.soldatov.data.api.request_status.FilmResult
 import com.soldatov.data.api.request_status.FilmsResult
-import com.soldatov.domain.usecase.GetSearchFilmsUseCase
+import com.soldatov.domain.usecase.GetFilmsForSearchUseCase
 import kotlinx.coroutines.Dispatchers
 import java.lang.Exception
 import java.util.*
 
 class SearchFragmentViewModel(
-    private val getSearchFilmsUseCase: GetSearchFilmsUseCase
+    private val getFilmsForSearchUseCase: GetFilmsForSearchUseCase
 ) : ViewModel() {
 
     private val searchParams = MutableLiveData<SearchParams>()
@@ -22,7 +22,7 @@ class SearchFragmentViewModel(
             try {
                 emit(
                     FilmsResult.Success(
-                        data = getSearchFilmsUseCase.execute(
+                        data = getFilmsForSearchUseCase.execute(
                             params.getSearchQuery(),
                             params.getPage()
                         )

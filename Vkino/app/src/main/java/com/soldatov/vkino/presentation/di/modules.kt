@@ -19,7 +19,7 @@ val domainModule = module {
     factory { GetSimilarFilmsUseCase(filmsRepository = get()) }
     factory { GetFilmByIdUseCase(filmsRepository = get()) }
     factory { GetHomeFilmsUseCase(filmsRepository = get()) }
-    factory { GetSearchFilmsUseCase(filmsRepository = get()) }
+    factory { GetFilmsForSearchUseCase(filmsRepository = get()) }
 }
 
 val appModule = module {
