@@ -12,26 +12,29 @@ const val FILM_SEARCH_MODE = "com.soldatov.vkino.data.repository.FILM_SEARCH_MOD
 
 class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRepository {
 
-    private lateinit var lastSlider: List<FilmInfo>
-    private var homePageFilms = ArrayList<FilmInfo>()
-    private var searchFilms = ArrayList<FilmInfo>()
+    private val lastSlider = ArrayList<FilmInfo>()
+    private val homePageFilms = ArrayList<FilmInfo>()
+    private val searchFilms = ArrayList<FilmInfo>()
 
     override suspend fun getTopSliderInfo(): List<FilmInfo> {
         val topSliderInfo = placeHolderApi.getTopSliderInfo()
-        lastSlider = topSliderInfo.data.films.map { it.toDomain() }
+        lastSlider.clear()
+        lastSlider.addAll(topSliderInfo.data.films.map { it.toDomain() })
         return lastSlider
     }
 
     override suspend fun getSimilarFilmsInfo(filmId: Long): List<FilmInfo> {
         val similarFilms = placeHolderApi.getSimilarFilmsInfo(filmId)
-        lastSlider = similarFilms.data.films.map { it.toDomain() }
+        lastSlider.clear()
+        lastSlider.addAll(similarFilms.data.films.map { it.toDomain() })
         return lastSlider
     }
 
     override suspend fun getHomePageFilms(page: Int): FilmsList {
         val homePageFilmsInfo = placeHolderApi.getHomePageFilms(page)
         if (page == 1){
-            homePageFilms = homePageFilmsInfo.data.films.map { it.toDomain() } as ArrayList<FilmInfo>
+            homePageFilms.clear()
+            homePageFilms.addAll(homePageFilmsInfo.data.films.map { it.toDomain() })
         } else {
             homePageFilms.addAll(homePageFilmsInfo.data.films.map { it.toDomain() })
         }
@@ -60,7 +63,8 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
     override suspend fun getSearchFilms(searchQuery: String, page: Int): FilmsList {
         val searchFilmsInfo = placeHolderApi.getSearchFilmsInfo(searchQuery, page)
         if (page == 1){
-            searchFilms = searchFilmsInfo.data.films.map { it.toDomain() } as ArrayList<FilmInfo>
+            searchFilms.clear()
+            searchFilms.addAll(searchFilmsInfo.data.films.map { it.toDomain() })
         } else {
             searchFilms.addAll(searchFilmsInfo.data.films.map { it.toDomain() })
         }
