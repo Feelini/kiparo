@@ -1,4 +1,4 @@
-package com.soldatov.vkino.presentation.viewmodel
+package com.soldatov.vkino.presentation.ui.search
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations

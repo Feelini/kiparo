@@ -18,7 +18,6 @@ import com.soldatov.domain.models.FilmInfo
 import com.soldatov.vkino.R
 import com.soldatov.vkino.databinding.FragmentSearchBinding
 import com.soldatov.vkino.presentation.ui.film.*
-import com.soldatov.vkino.presentation.viewmodel.SearchFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class SearchFragment : Fragment(), SearchFilmsAdapter.OnFilmClickListener {

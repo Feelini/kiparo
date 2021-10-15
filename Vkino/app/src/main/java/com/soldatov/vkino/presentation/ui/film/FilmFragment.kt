@@ -18,7 +18,6 @@ import com.soldatov.vkino.R
 import com.soldatov.vkino.databinding.FragmentFilmBinding
 import com.soldatov.vkino.presentation.utils.getFilmTitle
 import com.soldatov.vkino.presentation.utils.listToString
-import com.soldatov.vkino.presentation.viewmodel.FilmFragmentViewModel
 import com.squareup.picasso.Picasso
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 

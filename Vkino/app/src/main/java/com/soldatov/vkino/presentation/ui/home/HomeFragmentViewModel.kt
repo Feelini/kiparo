@@ -1,4 +1,4 @@
-package com.soldatov.vkino.presentation.viewmodel
+package com.soldatov.vkino.presentation.ui.home
 
 import androidx.lifecycle.*
 import com.soldatov.data.api.request_status.FilmsResult

@@ -4,9 +4,9 @@ import com.soldatov.data.api.NetworkService
 import com.soldatov.data.repository.FilmsRepositoryImpl
 import com.soldatov.domain.repository.FilmsRepository
 import com.soldatov.domain.usecase.*
-import com.soldatov.vkino.presentation.viewmodel.FilmFragmentViewModel
-import com.soldatov.vkino.presentation.viewmodel.HomeFragmentViewModel
-import com.soldatov.vkino.presentation.viewmodel.SearchFragmentViewModel
+import com.soldatov.vkino.presentation.ui.film.FilmFragmentViewModel
+import com.soldatov.vkino.presentation.ui.home.HomeFragmentViewModel
+import com.soldatov.vkino.presentation.ui.search.SearchFragmentViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -23,7 +23,7 @@ val domainModule = module {
 }
 
 val appModule = module {
-    viewModel {HomeFragmentViewModel(getTopSliderUseCase = get(), getHomeFilmsUseCase = get())}
-    viewModel {FilmFragmentViewModel(getSimilarFilmsUseCase = get(), getFilmByIdUseCase = get())}
-    viewModel {SearchFragmentViewModel(getSearchFilmsUseCase = get())}
+    viewModel { HomeFragmentViewModel(getTopSliderUseCase = get(), getHomeFilmsUseCase = get()) }
+    viewModel { FilmFragmentViewModel(getSimilarFilmsUseCase = get(), getFilmByIdUseCase = get()) }
+    viewModel { SearchFragmentViewModel(getSearchFilmsUseCase = get()) }
 }

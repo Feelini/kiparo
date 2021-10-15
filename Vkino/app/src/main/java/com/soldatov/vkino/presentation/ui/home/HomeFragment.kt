@@ -20,7 +20,6 @@ import com.soldatov.vkino.R
 import com.soldatov.vkino.databinding.FragmentHomeBinding
 import com.soldatov.vkino.presentation.ui.film.FILM_ID_KEY
 import com.soldatov.vkino.presentation.ui.film.FILM_MODE_KEY
-import com.soldatov.vkino.presentation.viewmodel.HomeFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class HomeFragment : Fragment(), TopSliderAdapter.OnFilmClickListener,
