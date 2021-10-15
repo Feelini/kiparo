@@ -25,5 +25,5 @@ val domainModule = module {
 val appModule = module {
     viewModel { HomeFragmentViewModel(getTopSliderUseCase = get(), getHomeFilmsUseCase = get()) }
     viewModel { FilmFragmentViewModel(getSimilarFilmsUseCase = get(), getFilmByIdUseCase = get()) }
-    viewModel { SearchFragmentViewModel(getSearchFilmsUseCase = get()) }
+    viewModel { SearchFragmentViewModel(getFilmsForSearchUseCase = get()) }
 }

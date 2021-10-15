@@ -78,12 +78,12 @@ class HomeFragment : Fragment(), TopSliderAdapter.OnFilmClickListener,
             when (it) {
                 is FilmsResult.Success -> {
                     showHomePageFilms(it.data.films)
-                    if (it.data.films.size == it.data.totalResults) {
+                    if (!it.data.hasMore) {
                         homePageFilmsAdapter.removeProgress()
                     } else {
                         homePageFilmsAdapter.addProgress()
+                        loading = true
                     }
-                    loading = true
                 }
                 is FilmsResult.Error -> {
 

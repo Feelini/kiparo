@@ -38,7 +38,8 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
         } else {
             homePageFilms.addAll(homePageFilmsInfo.data.films.map { it.toDomain() })
         }
-        return FilmsList(homePageFilmsInfo.data.totalRows, homePageFilms)
+        val hasMore = (homePageFilms.size != homePageFilmsInfo.data.totalRows)
+        return FilmsList(homePageFilmsInfo.data.totalRows, homePageFilms, hasMore)
     }
 
     override suspend fun getById(filmId: Long, mode: String): FilmInfo {
@@ -68,6 +69,7 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
         } else {
             searchFilms.addAll(searchFilmsInfo.data.films.map { it.toDomain() })
         }
-        return FilmsList(searchFilmsInfo.data.totalRows, searchFilms)
+        val hasMore = (searchFilms.size != searchFilmsInfo.data.totalRows)
+        return FilmsList(searchFilmsInfo.data.totalRows, searchFilms, hasMore)
     }
 }

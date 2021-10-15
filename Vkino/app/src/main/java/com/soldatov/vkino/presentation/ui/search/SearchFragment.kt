@@ -84,12 +84,12 @@ class SearchFragment : Fragment(), SearchFilmsAdapter.OnFilmClickListener {
             when (it) {
                 is FilmsResult.Success -> {
                     showSearchFilms(it.data.films)
-                    if (it.data.films.size == it.data.totalResults){
+                    if (!it.data.hasMore){
                         searchFilmsAdapter.removeProgress()
                     } else {
                         searchFilmsAdapter.addProgress()
+                        loading = true
                     }
-                    loading = true
                     binding.searchResultText.text =
                         "По Вашему запросу найдено: ${it.data.totalResults}"
                     binding.preloadLayout.visibility = View.INVISIBLE
