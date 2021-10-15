@@ -3,6 +3,8 @@ package com.soldatov.data.repository
 import com.soldatov.data.api.PlaceHolderApi
 import com.soldatov.domain.models.FilmInfo
 import com.soldatov.domain.models.FilmsList
+import com.soldatov.domain.models.GenresList
+import com.soldatov.domain.models.Years
 import com.soldatov.domain.repository.FilmsRepository
 import java.lang.Exception
 
@@ -71,5 +73,13 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
         }
         val hasMore = (searchFilms.size != searchFilmsInfo.data.totalRows)
         return FilmsList(searchFilmsInfo.data.totalRows, searchFilms, hasMore)
+    }
+
+    override suspend fun getGenres(): GenresList {
+        return placeHolderApi.getGenres().data.toDomain()
+    }
+
+    override suspend fun getYears(): Years {
+        return placeHolderApi.getYears().data.toDomain()
     }
 }

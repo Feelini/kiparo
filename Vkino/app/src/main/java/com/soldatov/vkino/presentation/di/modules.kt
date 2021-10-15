@@ -4,7 +4,10 @@ import com.soldatov.data.api.NetworkService
 import com.soldatov.data.repository.FilmsRepositoryImpl
 import com.soldatov.domain.repository.FilmsRepository
 import com.soldatov.domain.usecase.*
+import com.soldatov.domain.usecase.filter.GetGenresUseCase
+import com.soldatov.domain.usecase.filter.GetYearsUseCase
 import com.soldatov.vkino.presentation.ui.film.FilmFragmentViewModel
+import com.soldatov.vkino.presentation.ui.filter.FilterFragmentViewModel
 import com.soldatov.vkino.presentation.ui.home.HomeFragmentViewModel
 import com.soldatov.vkino.presentation.ui.search.SearchFragmentViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -20,10 +23,13 @@ val domainModule = module {
     factory { GetFilmByIdUseCase(filmsRepository = get()) }
     factory { GetHomeFilmsUseCase(filmsRepository = get()) }
     factory { GetFilmsForSearchUseCase(filmsRepository = get()) }
+    factory { GetGenresUseCase(filmsRepository = get()) }
+    factory { GetYearsUseCase(filmsRepository = get()) }
 }
 
 val appModule = module {
     viewModel { HomeFragmentViewModel(getTopSliderUseCase = get(), getHomeFilmsUseCase = get()) }
     viewModel { FilmFragmentViewModel(getSimilarFilmsUseCase = get(), getFilmByIdUseCase = get()) }
     viewModel { SearchFragmentViewModel(getFilmsForSearchUseCase = get()) }
+    viewModel { FilterFragmentViewModel(getGenresUseCase = get(), getYearsUseCase = get()) }
 }

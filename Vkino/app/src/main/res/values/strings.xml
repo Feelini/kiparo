@@ -20,4 +20,12 @@
     <string name="director">Продюссер</string>
     <string name="similar_films">Похожие фильмы</string>
     <string name="searching">Идет поиск</string>
+    <string name="choose_category">Выбрать категорию</string>
+    <string name="choose_genre">Выбрать жанр</string>
+    <string name="choose_country">Выбрать страну</string>
+    <string name="choose_actor">Выбрать актера</string>
+    <string name="choose_quality">Выбрать качество</string>
+    <string name="clear">Сбросить</string>
+    <string name="submit">Применить</string>
+    <integer name="min_year_id">1</integer>
 </resources>

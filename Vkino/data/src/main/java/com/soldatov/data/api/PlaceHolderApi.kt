@@ -1,9 +1,6 @@
 package com.soldatov.data.api
 
-import com.soldatov.data.models.FilmResponse
-import com.soldatov.data.models.HomePageFilmsResponse
-import com.soldatov.data.models.SearchResponse
-import com.soldatov.data.models.SliderResponse
+import com.soldatov.data.models.*
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -26,4 +23,10 @@ interface PlaceHolderApi {
         @Query("search") searchQuery: String,
         @Query("page") page: Int
     ): SearchResponse
+
+    @GET("filter/genres")
+    suspend fun getGenres(): GenresResponse
+
+    @GET("filter/year")
+    suspend fun getYears(): YearResponse
 }

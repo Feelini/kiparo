@@ -1,8 +1,13 @@
 package com.soldatov.data.repository
 
 import com.soldatov.data.models.FilmData
+import com.soldatov.data.models.TotalGenresData
 import com.soldatov.data.models.TranslationData
+import com.soldatov.data.models.YearData
 import com.soldatov.domain.models.FilmInfo
+import com.soldatov.domain.models.Genre
+import com.soldatov.domain.models.GenresList
+import com.soldatov.domain.models.Years
 
 fun FilmData.toDomain(): FilmInfo {
     return FilmInfo(
@@ -23,6 +28,20 @@ fun FilmData.toDomain(): FilmInfo {
         description = description ?: "",
         iframeSrc = iframe_src,
         trailer = trailer ?: ""
+    )
+}
+
+fun TotalGenresData.toDomain(): GenresList{
+    return GenresList(
+        hasMore = hasMore,
+        genres = items.map { Genre(it.id, it.name) }
+    )
+}
+
+fun YearData.toDomain(): Years{
+    return Years(
+        min = min,
+        max = max
     )
 }
 
