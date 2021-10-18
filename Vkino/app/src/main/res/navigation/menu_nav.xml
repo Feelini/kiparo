@@ -35,6 +35,9 @@
         <action
             android:id="@+id/action_filterFragment_to_chooseGenreFragment"
             app:destination="@id/chooseGenreFragment" />
+        <action
+            android:id="@+id/action_filterFragment_to_chooseCategoryFragment"
+            app:destination="@id/chooseCategoryFragment" />
     </fragment>
     <fragment
         android:id="@+id/filmFragment"
@@ -48,4 +51,8 @@
         android:id="@+id/chooseGenreFragment"
         android:name="com.soldatov.vkino.presentation.ui.filter.ChooseGenreFragment"
         android:label="ChooseGenreFragment" />
+    <fragment
+        android:id="@+id/chooseCategoryFragment"
+        android:name="com.soldatov.vkino.presentation.ui.filter.ChooseCategoryFragment"
+        android:label="ChooseCategoryFragment" />
 </navigation>

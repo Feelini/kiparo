@@ -9,7 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.soldatov.data.api.request_status.YearsResult
+import com.soldatov.domain.models.Category
+import com.soldatov.domain.models.result.YearsResult
 import com.soldatov.domain.models.Genre
 import com.soldatov.domain.models.Years
 import com.soldatov.vkino.R
@@ -17,10 +18,12 @@ import com.soldatov.vkino.databinding.FragmentFilterBinding
 import com.soldatov.vkino.presentation.ui.home.HomeFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class FilterFragment : Fragment(), ChosenGenresListAdapter.OnRemoveChosenGenreListener {
+class FilterFragment : Fragment(), ChosenGenresListAdapter.OnRemoveChosenGenreListener,
+    ChosenCategoryListAdapter.OnRemoveChosenCategoryListener {
 
     private lateinit var binding: FragmentFilterBinding
     private val chosenGenresListAdapter = ChosenGenresListAdapter()
+    private val chosenCategoriesListAdapter = ChosenCategoryListAdapter()
     private val homeFragmentViewModel by sharedViewModel<HomeFragmentViewModel>()
     private val filterFragmentViewModel by sharedViewModel<FilterFragmentViewModel>()
 
@@ -114,9 +117,16 @@ class FilterFragment : Fragment(), ChosenGenresListAdapter.OnRemoveChosenGenreLi
         binding.genre.setOnClickListener {
             findNavController().navigate(R.id.action_filterFragment_to_chooseGenreFragment)
         }
+        binding.category.setOnClickListener {
+            findNavController().navigate(R.id.action_filterFragment_to_chooseCategoryFragment)
+        }
 
         binding.chosenGenresList.adapter = chosenGenresListAdapter
         binding.chosenGenresList.layoutManager =
+            LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+
+        binding.chosenCategoriesList.adapter = chosenCategoriesListAdapter
+        binding.chosenCategoriesList.layoutManager =
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)
     }
 
@@ -131,6 +141,9 @@ class FilterFragment : Fragment(), ChosenGenresListAdapter.OnRemoveChosenGenreLi
         filterFragmentViewModel.chosenGenres.observe(viewLifecycleOwner, {
             showChosenGenresList(it)
         })
+        filterFragmentViewModel.chosenCategories.observe(viewLifecycleOwner, {
+            showChosenCategoriesList(it)
+        })
     }
 
     private fun showYears(years: Years) {
@@ -144,7 +157,7 @@ class FilterFragment : Fragment(), ChosenGenresListAdapter.OnRemoveChosenGenreLi
     }
 
     private fun showChosenGenresList(genres: List<Genre>) {
-        if (genres.isEmpty()){
+        if (genres.isEmpty()) {
             binding.chosenGenresLayout.visibility = View.GONE
         } else {
             binding.chosenGenresLayout.visibility = View.VISIBLE
@@ -152,7 +165,20 @@ class FilterFragment : Fragment(), ChosenGenresListAdapter.OnRemoveChosenGenreLi
         }
     }
 
+    private fun showChosenCategoriesList(categories: List<Category>) {
+        if (categories.isEmpty()) {
+            binding.chosenCategoriesLayout.visibility = View.GONE
+        } else {
+            binding.chosenCategoriesLayout.visibility = View.VISIBLE
+            chosenCategoriesListAdapter.setChosenCategoriesInfo(categories, this)
+        }
+    }
+
     override fun onRemoveChosenGenre(genre: Genre) {
         filterFragmentViewModel.removeChosenGenre(genre)
+    }
+
+    override fun onRemoveChosenCategory(category: Category) {
+        filterFragmentViewModel.removeChosenCategories(category)
     }
 }

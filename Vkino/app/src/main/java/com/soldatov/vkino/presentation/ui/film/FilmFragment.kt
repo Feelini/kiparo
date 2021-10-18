@@ -10,8 +10,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayoutMediator
-import com.soldatov.data.api.request_status.FilmResult
-import com.soldatov.data.api.request_status.FilmsSliderResult
+import com.soldatov.domain.models.result.FilmResult
+import com.soldatov.domain.models.result.FilmsSliderResult
 import com.soldatov.data.repository.FILM_SLIDER_MODE
 import com.soldatov.domain.models.FilmInfo
 import com.soldatov.vkino.R

@@ -4,6 +4,7 @@ import com.soldatov.data.api.NetworkService
 import com.soldatov.data.repository.FilmsRepositoryImpl
 import com.soldatov.domain.repository.FilmsRepository
 import com.soldatov.domain.usecase.*
+import com.soldatov.domain.usecase.filter.GetCategoriesUseCase
 import com.soldatov.domain.usecase.filter.GetGenresUseCase
 import com.soldatov.domain.usecase.filter.GetYearsUseCase
 import com.soldatov.vkino.presentation.ui.film.FilmFragmentViewModel
@@ -25,11 +26,18 @@ val domainModule = module {
     factory { GetFilmsForSearchUseCase(filmsRepository = get()) }
     factory { GetGenresUseCase(filmsRepository = get()) }
     factory { GetYearsUseCase(filmsRepository = get()) }
+    factory { GetCategoriesUseCase(filmsRepository = get()) }
 }
 
 val appModule = module {
     viewModel { HomeFragmentViewModel(getTopSliderUseCase = get(), getHomeFilmsUseCase = get()) }
     viewModel { FilmFragmentViewModel(getSimilarFilmsUseCase = get(), getFilmByIdUseCase = get()) }
     viewModel { SearchFragmentViewModel(getFilmsForSearchUseCase = get()) }
-    viewModel { FilterFragmentViewModel(getGenresUseCase = get(), getYearsUseCase = get()) }
+    viewModel {
+        FilterFragmentViewModel(
+            getGenresUseCase = get(),
+            getYearsUseCase = get(),
+            getCategoriesUseCase = get()
+        )
+    }
 }

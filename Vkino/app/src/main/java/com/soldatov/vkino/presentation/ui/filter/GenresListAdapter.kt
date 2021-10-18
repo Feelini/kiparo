@@ -8,7 +8,7 @@ import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.soldatov.domain.models.Genre
-import com.soldatov.vkino.databinding.ItemGenresListBinding
+import com.soldatov.vkino.databinding.ItemFilterListBinding
 
 class GenresListAdapter: RecyclerView.Adapter<GenresListAdapter.GenresListViewHolder>(), Filterable {
 
@@ -28,7 +28,7 @@ class GenresListAdapter: RecyclerView.Adapter<GenresListAdapter.GenresListViewHo
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GenresListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = ItemGenresListBinding.inflate(inflater, parent, false)
+        val binding = ItemFilterListBinding.inflate(inflater, parent, false)
         return GenresListViewHolder(binding.root)
     }
 
@@ -42,7 +42,7 @@ class GenresListAdapter: RecyclerView.Adapter<GenresListAdapter.GenresListViewHo
 
     class GenresListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
 
-        private val binding = ItemGenresListBinding.bind(itemView)
+        private val binding = ItemFilterListBinding.bind(itemView)
 
         fun bindData(genreFilter: Genre, genres: List<Genre>){
             binding.genreTitle.text = genreFilter.name

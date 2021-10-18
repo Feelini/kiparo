@@ -1,9 +1,6 @@
 package com.soldatov.domain.repository
 
-import com.soldatov.domain.models.FilmInfo
-import com.soldatov.domain.models.FilmsList
-import com.soldatov.domain.models.GenresList
-import com.soldatov.domain.models.Years
+import com.soldatov.domain.models.*
 
 interface FilmsRepository {
     suspend fun getTopSliderInfo(): List<FilmInfo>
@@ -12,5 +9,6 @@ interface FilmsRepository {
     suspend fun getById(filmId: Long, mode: String): FilmInfo
     suspend fun getSearchFilms(searchQuery: String, page: Int): FilmsList
     suspend fun getGenres(): GenresList
+    suspend fun getCategories(): List<Category>
     suspend fun getYears(): Years
 }

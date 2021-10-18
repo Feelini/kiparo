@@ -1,8 +1,8 @@
 package com.soldatov.vkino.presentation.ui.film
 
 import androidx.lifecycle.*
-import com.soldatov.data.api.request_status.FilmResult
-import com.soldatov.data.api.request_status.FilmsSliderResult
+import com.soldatov.domain.models.result.FilmResult
+import com.soldatov.domain.models.result.FilmsSliderResult
 import com.soldatov.domain.usecase.GetFilmByIdUseCase
 import com.soldatov.domain.usecase.GetSimilarFilmsUseCase
 import kotlinx.coroutines.Dispatchers

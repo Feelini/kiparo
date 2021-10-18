@@ -11,8 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.soldatov.data.api.request_status.FilmsSliderResult
-import com.soldatov.data.api.request_status.FilmsResult
+import com.soldatov.domain.models.result.FilmsSliderResult
+import com.soldatov.domain.models.result.FilmsResult
 import com.soldatov.data.repository.FILM_SEARCH_MODE
 import com.soldatov.domain.models.FilmInfo
 import com.soldatov.vkino.R

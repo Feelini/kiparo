@@ -1,13 +1,11 @@
 package com.soldatov.data.repository
 
-import com.soldatov.data.models.FilmData
-import com.soldatov.data.models.TotalGenresData
-import com.soldatov.data.models.TranslationData
-import com.soldatov.data.models.YearData
-import com.soldatov.domain.models.FilmInfo
-import com.soldatov.domain.models.Genre
-import com.soldatov.domain.models.GenresList
-import com.soldatov.domain.models.Years
+import com.soldatov.data.models.film.FilmData
+import com.soldatov.data.models.filter.TotalGenresData
+import com.soldatov.data.models.film.TranslationData
+import com.soldatov.data.models.film.YearData
+import com.soldatov.data.models.filter.TotalCategoriesData
+import com.soldatov.domain.models.*
 
 fun FilmData.toDomain(): FilmInfo {
     return FilmInfo(
@@ -36,6 +34,10 @@ fun TotalGenresData.toDomain(): GenresList{
         hasMore = hasMore,
         genres = items.map { Genre(it.ID, it.name, false) }
     )
+}
+
+fun TotalCategoriesData.toDomain(): List<Category>{
+    return items.map { Category(it.ID, it.namePlural, false) }
 }
 
 fun YearData.toDomain(): Years{

@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.soldatov.data.api.request_status.GenresResult
+import com.soldatov.domain.models.result.GenresResult
 import com.soldatov.domain.models.GenresList
 import com.soldatov.vkino.databinding.FragmentChooseGenreBinding
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -33,9 +33,6 @@ class ChooseGenreFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.genresList.adapter = genresListAdapter
-        binding.genresList.layoutManager =
-            LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-
         binding.genresList.layoutManager =
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 

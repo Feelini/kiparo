@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
-import com.soldatov.data.api.request_status.FilmResult
-import com.soldatov.data.api.request_status.FilmsResult
+import com.soldatov.domain.models.result.FilmResult
+import com.soldatov.domain.models.result.FilmsResult
 import com.soldatov.domain.usecase.GetFilmsForSearchUseCase
 import kotlinx.coroutines.Dispatchers
 import java.lang.Exception
