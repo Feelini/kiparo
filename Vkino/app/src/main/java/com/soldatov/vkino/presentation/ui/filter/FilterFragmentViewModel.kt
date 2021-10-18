@@ -23,6 +23,7 @@ class FilterFragmentViewModel(
 
     val chosenGenres = MutableLiveData<ArrayList<Genre>>(arrayListOf())
     val chosenCategories = MutableLiveData<ArrayList<Category>>(arrayListOf())
+    val chosenYears = MutableLiveData<Years>()
 
     val genres = liveData(Dispatchers.IO) {
         emit(GenresResult.Loading)
@@ -81,5 +82,13 @@ class FilterFragmentViewModel(
         val currentCategories = chosenCategories.value
         currentCategories?.remove(category)
         chosenCategories.postValue(currentCategories ?: arrayListOf())
+    }
+
+    fun setChosenYears(years: Years){
+        chosenYears.value = years
+    }
+
+    fun getChosenYears(): Years{
+        return chosenYears.value ?: (years.value as YearsResult.Success).data
     }
 }

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.slider.RangeSlider
 import com.soldatov.domain.models.Category
 import com.soldatov.domain.models.result.YearsResult
 import com.soldatov.domain.models.Genre
@@ -17,6 +18,7 @@ import com.soldatov.vkino.R
 import com.soldatov.vkino.databinding.FragmentFilterBinding
 import com.soldatov.vkino.presentation.ui.home.HomeFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.time.Year
 
 class FilterFragment : Fragment(), ChosenGenresListAdapter.OnRemoveChosenGenreListener,
     ChosenCategoryListAdapter.OnRemoveChosenCategoryListener {
@@ -114,6 +116,18 @@ class FilterFragment : Fragment(), ChosenGenresListAdapter.OnRemoveChosenGenreLi
             binding.editYearTo.setText(slider.values[1].toInt().toString())
         }
 
+        binding.yearRange.addOnSliderTouchListener(object : RangeSlider.OnSliderTouchListener{
+            override fun onStartTrackingTouch(slider: RangeSlider) {
+
+            }
+
+            override fun onStopTrackingTouch(slider: RangeSlider) {
+                val chosenYears = Years(slider.values[0].toInt(), slider.values[1].toInt())
+                filterFragmentViewModel.setChosenYears(chosenYears)
+            }
+
+        })
+
         binding.genre.setOnClickListener {
             findNavController().navigate(R.id.action_filterFragment_to_chooseGenreFragment)
         }
@@ -144,6 +158,9 @@ class FilterFragment : Fragment(), ChosenGenresListAdapter.OnRemoveChosenGenreLi
         filterFragmentViewModel.chosenCategories.observe(viewLifecycleOwner, {
             showChosenCategoriesList(it)
         })
+        filterFragmentViewModel.chosenYears.observe(viewLifecycleOwner, {
+            setChosenYears(it)
+        })
     }
 
     private fun showYears(years: Years) {
@@ -172,6 +189,13 @@ class FilterFragment : Fragment(), ChosenGenresListAdapter.OnRemoveChosenGenreLi
             binding.chosenCategoriesLayout.visibility = View.VISIBLE
             chosenCategoriesListAdapter.setChosenCategoriesInfo(categories, this)
         }
+    }
+
+    private fun setChosenYears(years: Years){
+        binding.editYearFrom.setText(years.min.toString())
+        binding.editYearTo.setText(years.max.toString())
+
+        binding.yearRange.values = listOf(years.min.toFloat(), years.max.toFloat())
     }
 
     override fun onRemoveChosenGenre(genre: Genre) {
