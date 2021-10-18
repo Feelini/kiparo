@@ -1,7 +1,7 @@
 package com.soldatov.data.models
 
 data class GenreData(
-    val id: Long,
+    val ID: Long,
     val name: String,
     val slug: String
 )

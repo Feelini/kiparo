@@ -4,18 +4,26 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.soldatov.domain.models.Genre
 import com.soldatov.vkino.databinding.ItemGenresListBinding
 
-class GenresListAdapter: RecyclerView.Adapter<GenresListAdapter.GenresListViewHolder>() {
+class GenresListAdapter: RecyclerView.Adapter<GenresListAdapter.GenresListViewHolder>(), Filterable {
 
     private var genresList: List<Genre> = ArrayList()
+    private var genresFilterList: ArrayList<Genre> = ArrayList()
 
     @SuppressLint("NotifyDataSetChanged")
     fun setGenresInfo(newGenres: List<Genre>){
         genresList = newGenres
+        genresFilterList.addAll(newGenres)
         notifyDataSetChanged()
+    }
+
+    fun getChosenGenres(): List<Genre>{
+        return genresList.filter { it.isChecked }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GenresListViewHolder {
@@ -25,28 +33,58 @@ class GenresListAdapter: RecyclerView.Adapter<GenresListAdapter.GenresListViewHo
     }
 
     override fun onBindViewHolder(holder: GenresListViewHolder, position: Int) {
-        holder.bindData(genresList[position])
+        holder.bindData(genresFilterList[position], genresList)
     }
 
     override fun getItemCount(): Int {
-        return genresList.size
+        return genresFilterList.size
     }
 
     class GenresListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
 
         private val binding = ItemGenresListBinding.bind(itemView)
 
-        fun bindData(genre: Genre){
-            binding.genreTitle.text = genre.name
-            binding.checkbox.isChecked = genre.isChecked
+        fun bindData(genreFilter: Genre, genres: List<Genre>){
+            binding.genreTitle.text = genreFilter.name
+            binding.checkbox.isChecked = genreFilter.isChecked
             itemView.setOnClickListener {
-                if (genre.isChecked){
-                    genre.isChecked = false
+                if (genreFilter.isChecked){
+                    genres.filter { it.id == genreFilter.id }.map { it.isChecked = false }
+                    genreFilter.isChecked = false
                     binding.checkbox.isChecked = false
                 } else {
-                    genre.isChecked = true
+                    genres.filter { it.id == genreFilter.id }.map { it.isChecked = true }
+                    genreFilter.isChecked = true
                     binding.checkbox.isChecked = true
                 }
+            }
+        }
+    }
+
+    override fun getFilter(): Filter {
+        return object : Filter(){
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                val charSearch = constraint.toString()
+                genresFilterList = if (charSearch.isEmpty()) {
+                    genresList as ArrayList<Genre>
+                } else {
+                    val resultList = ArrayList<Genre>()
+                    for (row in genresList) {
+                        if (row.name.lowercase().contains(charSearch.lowercase())) {
+                            resultList.add(row)
+                        }
+                    }
+                    resultList
+                }
+                val filterResults = FilterResults()
+                filterResults.values = genresFilterList
+                return filterResults
+            }
+
+            @SuppressLint("NotifyDataSetChanged")
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                genresFilterList = results?.values as ArrayList<Genre>
+                notifyDataSetChanged()
             }
         }
     }

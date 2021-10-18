@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.soldatov.data.api.request_status.GenresResult
@@ -34,6 +36,27 @@ class ChooseGenreFragment : Fragment() {
         binding.genresList.layoutManager =
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
+        binding.genresList.layoutManager =
+            LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+
+        binding.submit.setOnClickListener {
+            val chosenGenres = genresListAdapter.getChosenGenres()
+            viewModel.setChosenGenres(chosenGenres)
+            findNavController().popBackStack()
+        }
+
+        binding.searchGenre.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                binding.searchGenre.clearFocus()
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                genresListAdapter.filter.filter(newText)
+                return true
+            }
+        })
+
         setupObservers()
     }
 
@@ -48,6 +71,10 @@ class ChooseGenreFragment : Fragment() {
     }
 
     private fun showGenresList(genres: GenresList) {
+        val chosenGenres = viewModel.getChosenGenres()
+        genres.genres.forEach{
+            it.isChecked = chosenGenres.contains(it)
+        }
         genresListAdapter.setGenresInfo(genres.genres)
     }
 }

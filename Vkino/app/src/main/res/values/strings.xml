@@ -27,5 +27,7 @@
     <string name="choose_quality">Выбрать качество</string>
     <string name="clear">Сбросить</string>
     <string name="submit">Применить</string>
+    <string name="categoryName">Категории</string>
+    <string name="genreName">Жанры</string>
     <integer name="min_year_id">1</integer>
 </resources>

@@ -7,16 +7,20 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.soldatov.data.api.request_status.YearsResult
+import com.soldatov.domain.models.Genre
 import com.soldatov.domain.models.Years
 import com.soldatov.vkino.R
 import com.soldatov.vkino.databinding.FragmentFilterBinding
 import com.soldatov.vkino.presentation.ui.home.HomeFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class FilterFragment : Fragment() {
+class FilterFragment : Fragment(), ChosenGenresListAdapter.OnRemoveChosenGenreListener {
 
     private lateinit var binding: FragmentFilterBinding
+    private val chosenGenresListAdapter = ChosenGenresListAdapter()
     private val homeFragmentViewModel by sharedViewModel<HomeFragmentViewModel>()
     private val filterFragmentViewModel by sharedViewModel<FilterFragmentViewModel>()
 
@@ -68,7 +72,7 @@ class FilterFragment : Fragment() {
         }
 
         binding.editYearTo.setOnEditorActionListener { v, actionId, event ->
-            when (actionId){
+            when (actionId) {
                 EditorInfo.IME_ACTION_DONE -> {
                     val years = filterFragmentViewModel.getYears()
                     val currentMinYearString = binding.editYearFrom.text.toString()
@@ -95,7 +99,8 @@ class FilterFragment : Fragment() {
                     }
                     binding.editYearTo.clearFocus()
                     false
-                } else -> {
+                }
+                else -> {
                     false
                 }
             }
@@ -109,6 +114,10 @@ class FilterFragment : Fragment() {
         binding.genre.setOnClickListener {
             findNavController().navigate(R.id.action_filterFragment_to_chooseGenreFragment)
         }
+
+        binding.chosenGenresList.adapter = chosenGenresListAdapter
+        binding.chosenGenresList.layoutManager =
+            LinearLayoutManager(context, RecyclerView.VERTICAL, false)
     }
 
     private fun setupObservers() {
@@ -118,6 +127,9 @@ class FilterFragment : Fragment() {
                     showYears(it.data)
                 }
             }
+        })
+        filterFragmentViewModel.chosenGenres.observe(viewLifecycleOwner, {
+            showChosenGenresList(it)
         })
     }
 
@@ -129,5 +141,18 @@ class FilterFragment : Fragment() {
         binding.yearRange.valueTo = years.max.toFloat()
         binding.yearRange.stepSize = 1f
         binding.yearRange.values = listOf(years.min.toFloat(), years.max.toFloat())
+    }
+
+    private fun showChosenGenresList(genres: List<Genre>) {
+        if (genres.isEmpty()){
+            binding.chosenGenresLayout.visibility = View.GONE
+        } else {
+            binding.chosenGenresLayout.visibility = View.VISIBLE
+            chosenGenresListAdapter.setChosenGenresInfo(genres, this)
+        }
+    }
+
+    override fun onRemoveChosenGenre(genre: Genre) {
+        filterFragmentViewModel.removeChosenGenre(genre)
     }
 }
