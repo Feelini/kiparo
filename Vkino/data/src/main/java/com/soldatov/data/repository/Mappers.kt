@@ -5,6 +5,7 @@ import com.soldatov.data.models.filter.TotalGenresData
 import com.soldatov.data.models.film.TranslationData
 import com.soldatov.data.models.film.YearData
 import com.soldatov.data.models.filter.TotalCategoriesData
+import com.soldatov.data.models.filter.TotalCountiesData
 import com.soldatov.domain.models.*
 
 fun FilmData.toDomain(): FilmInfo {
@@ -44,6 +45,13 @@ fun YearData.toDomain(): Years{
     return Years(
         min = min,
         max = max
+    )
+}
+
+fun TotalCountiesData.toDomain(): CountriesList{
+    return CountriesList(
+        hasMore = hasMore,
+        countries = items.map { Country(it.ID, it.name) }
     )
 }
 

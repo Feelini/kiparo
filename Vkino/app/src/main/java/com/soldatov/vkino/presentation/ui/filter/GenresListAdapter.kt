@@ -45,7 +45,7 @@ class GenresListAdapter: RecyclerView.Adapter<GenresListAdapter.GenresListViewHo
         private val binding = ItemFilterListBinding.bind(itemView)
 
         fun bindData(genreFilter: Genre, genres: List<Genre>){
-            binding.genreTitle.text = genreFilter.name
+            binding.filterTitle.text = genreFilter.name
             binding.checkbox.isChecked = genreFilter.isChecked
             itemView.setOnClickListener {
                 if (genreFilter.isChecked){

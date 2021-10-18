@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
-        android:id="@+id/genre_title"
+        android:id="@+id/filter_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="10dp"

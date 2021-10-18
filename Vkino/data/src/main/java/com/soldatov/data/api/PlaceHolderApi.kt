@@ -3,6 +3,7 @@ package com.soldatov.data.api
 import com.soldatov.data.models.film.FilmResponse
 import com.soldatov.data.models.film.SliderResponse
 import com.soldatov.data.models.filter.CategoriesResponse
+import com.soldatov.data.models.filter.CountiesResponse
 import com.soldatov.data.models.filter.GenresResponse
 import com.soldatov.data.models.filter.YearResponse
 import com.soldatov.data.models.home.HomePageFilmsResponse
@@ -38,4 +39,10 @@ interface PlaceHolderApi {
 
     @GET("filter/year")
     suspend fun getYears(): YearResponse
+
+    @GET("filter/countries")
+    suspend fun getCountries(
+        @Query("search") searchQuery: String,
+        @Query("page") page: Int
+    ): CountiesResponse
 }

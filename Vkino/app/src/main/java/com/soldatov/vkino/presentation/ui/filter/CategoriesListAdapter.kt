@@ -41,7 +41,7 @@ class CategoriesListAdapter: RecyclerView.Adapter<CategoriesListAdapter.Categori
         private val binding = ItemFilterListBinding.bind(itemView)
 
         fun bindData(category: Category){
-            binding.genreTitle.text = category.name
+            binding.filterTitle.text = category.name
             binding.checkbox.isChecked = category.isChecked
             itemView.setOnClickListener {
                 if (category.isChecked){
