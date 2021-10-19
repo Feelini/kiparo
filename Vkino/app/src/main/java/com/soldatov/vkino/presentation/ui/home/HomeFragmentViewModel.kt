@@ -1,6 +1,7 @@
 package com.soldatov.vkino.presentation.ui.home
 
 import androidx.lifecycle.*
+import com.soldatov.domain.models.FilterParams
 import com.soldatov.domain.models.result.FilmsResult
 import com.soldatov.domain.models.result.FilmsSliderResult
 import com.soldatov.domain.usecase.GetHomeFilmsUseCase
@@ -13,7 +14,7 @@ class HomeFragmentViewModel(
     private val getHomeFilmsUseCase: GetHomeFilmsUseCase
 ) : ViewModel() {
 
-    private var page = MutableLiveData(1)
+    private var filterParams = MutableLiveData(FilterParams())
 
     val topSliderInfo = liveData(Dispatchers.IO) {
         emit(FilmsSliderResult.Loading)
@@ -24,11 +25,11 @@ class HomeFragmentViewModel(
         }
     }
 
-    val homePageFilms = Transformations.switchMap(page) { page ->
+    val homePageFilms = Transformations.switchMap(filterParams) { filterParams ->
         liveData(Dispatchers.IO) {
             emit(FilmsSliderResult.Loading)
             try {
-                emit(FilmsResult.Success(data = getHomeFilmsUseCase.execute(page)))
+                emit(FilmsResult.Success(data = getHomeFilmsUseCase.execute(filterParams)))
             } catch (exception: Exception) {
                 emit(FilmsResult.Error(message = exception.message ?: "Error Occurred"))
             }
@@ -36,6 +37,12 @@ class HomeFragmentViewModel(
     }
 
     fun nextPage(){
-        page.value = page.value?.plus(1)
+        val currentParams = filterParams.value
+        currentParams?.page = currentParams?.page?.plus(1) ?: 1
+        filterParams.postValue(currentParams)
+    }
+
+    fun setFilterParams(newFilterParams: FilterParams){
+        filterParams.value = newFilterParams
     }
 }

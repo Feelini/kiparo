@@ -220,6 +220,17 @@ class FilterFragmentViewModel(
         setActorsSearchQuery("")
     }
 
+    fun getFilterParams(): FilterParams{
+        return FilterParams(
+            chosenCategories = chosenCategories.value?.toList() ?: emptyList(),
+            chosenGenres = chosenGenres.value?.toList() ?: emptyList(),
+            chosenCountries = chosenCountries.value?.toList() ?: emptyList(),
+            chosenActors = chosenActors.value?.toList() ?: emptyList(),
+            chosenQualities = chosenQualities.value?.toList() ?: emptyList(),
+            chosenYears = chosenYears.value
+        )
+    }
+
     private class SearchParams(
         private var searchQuery: String = "",
         private var page: Int = 1

@@ -17,7 +17,15 @@ interface PlaceHolderApi {
     suspend fun getFilmById(@Path("filmId") filmId: Long): FilmResponse
 
     @GET("films/filter")
-    suspend fun getHomePageFilms(@Query("page") page: Int): HomePageFilmsResponse
+    suspend fun getHomePageFilms(
+        @Query("page") page: Int,
+        @Query("actor") actors: String?,
+        @Query("country") countries: String?,
+        @Query("genre") genres: String?,
+        @Query("quality") qualities: String?,
+        @Query("cat_id") categories: String?,
+        @Query("year") years: String?
+    ): HomePageFilmsResponse
 
     @GET("films/similar")
     suspend fun getSimilarFilmsInfo(@Query("film_id") filmId: Long): SliderResponse

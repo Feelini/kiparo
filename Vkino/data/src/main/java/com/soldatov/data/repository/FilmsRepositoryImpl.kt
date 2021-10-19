@@ -31,9 +31,18 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
         return lastSlider
     }
 
-    override suspend fun getHomePageFilms(page: Int): FilmsList {
-        val homePageFilmsInfo = placeHolderApi.getHomePageFilms(page)
-        if (page == 1){
+    override suspend fun getHomePageFilms(filterParams: FilterParams): FilmsList {
+        val dataFilterParams = filterParams.toData()
+        val homePageFilmsInfo = placeHolderApi.getHomePageFilms(
+            page = dataFilterParams.page,
+            actors = dataFilterParams.chosenActors,
+            countries = dataFilterParams.chosenCountries,
+            genres = dataFilterParams.chosenGenres,
+            qualities = dataFilterParams.chosenQualities,
+            categories = dataFilterParams.chosenCategories,
+            years = dataFilterParams.chosenYears
+        )
+        if (filterParams.page == 1){
             homePageFilms.clear()
             homePageFilms.addAll(homePageFilmsInfo.data.films.map { it.toDomain() })
         } else {

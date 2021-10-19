@@ -4,7 +4,7 @@ import com.soldatov.domain.models.*
 
 interface FilmsRepository {
     suspend fun getTopSliderInfo(): List<FilmInfo>
-    suspend fun getHomePageFilms(page: Int): FilmsList
+    suspend fun getHomePageFilms(filterParams: FilterParams): FilmsList
     suspend fun getSimilarFilmsInfo(filmId: Long): List<FilmInfo>
     suspend fun getById(filmId: Long, mode: String): FilmInfo
     suspend fun getSearchFilms(searchQuery: String, page: Int): FilmsList

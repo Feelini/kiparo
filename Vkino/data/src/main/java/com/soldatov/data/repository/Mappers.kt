@@ -4,6 +4,7 @@ import com.soldatov.data.models.film.FilmData
 import com.soldatov.data.models.film.TranslationData
 import com.soldatov.data.models.film.YearData
 import com.soldatov.data.models.filter.*
+import com.soldatov.data.models.home.HomePageFilmsParams
 import com.soldatov.domain.models.*
 
 fun FilmData.toDomain(): FilmInfo {
@@ -62,6 +63,59 @@ fun TotalActorsData.toDomain(): ActorsList{
 
 fun TotalQualitiesData.toDomain(): List<Quality>{
     return items.map { Quality(it.ID, it.name, false) }
+}
+
+fun FilterParams.toData(): HomePageFilmsParams{
+    var result = ""
+    if (chosenCategories.isNotEmpty()){
+        chosenCategories.forEach {
+            result += "${it.id},"
+        }
+        result = result.substring(0, result.length - 1)
+    }
+    val categories = if (result.isEmpty()) null else result
+    result = ""
+    if (chosenGenres.isNotEmpty()){
+        chosenGenres.forEach {
+            result += "${it.id},"
+        }
+        result = result.substring(0, result.length - 1)
+    }
+    val genres = if (result.isEmpty()) null else result
+    result = ""
+    if (chosenCountries.isNotEmpty()){
+        chosenCountries.forEach {
+            result += "${it.id},"
+        }
+        result = result.substring(0, result.length - 1)
+    }
+    val countries = if (result.isEmpty()) null else result
+    result = ""
+    if (chosenActors.isNotEmpty()){
+        chosenActors.forEach {
+            result += "${it.id},"
+        }
+        result = result.substring(0, result.length - 1)
+    }
+    val actors = if (result.isEmpty()) null else result
+    result = ""
+    if (chosenQualities.isNotEmpty()){
+        chosenQualities.forEach {
+            result += "${it.id},"
+        }
+        result = result.substring(0, result.length - 1)
+    }
+    val qualities = if (result.isEmpty()) null else result
+    val years = if (chosenYears == null) null else "${chosenYears!!.min},${chosenYears!!.max}"
+    return HomePageFilmsParams(
+        chosenCategories = categories,
+        chosenGenres = genres,
+        chosenCountries = countries,
+        chosenActors = actors,
+        chosenQualities = qualities,
+        chosenYears = years,
+        page = page
+    )
 }
 
 private fun getFilmName(ruTitle: String?, enTitle: String?, origTitle: String?): String {
