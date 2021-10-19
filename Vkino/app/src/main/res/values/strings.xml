@@ -30,5 +30,6 @@
     <string name="categoryName">Категории</string>
     <string name="genreName">Жанры</string>
     <string name="countriesName">Страны</string>
+    <string name="actorsName">Актеры</string>
     <integer name="min_year_id">1</integer>
 </resources>

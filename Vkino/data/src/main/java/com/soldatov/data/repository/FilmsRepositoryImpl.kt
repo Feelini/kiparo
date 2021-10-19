@@ -15,6 +15,7 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
     private val homePageFilms = ArrayList<FilmInfo>()
     private val searchFilms = ArrayList<FilmInfo>()
     private val searchCountries = ArrayList<Country>()
+    private val searchActors = ArrayList<Actor>()
 
     override suspend fun getTopSliderInfo(): List<FilmInfo> {
         val topSliderInfo = placeHolderApi.getTopSliderInfo()
@@ -94,5 +95,16 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
             searchCountries.addAll(countries.countries)
         }
         return CountriesList(countries.hasMore, searchCountries)
+    }
+
+    override suspend fun getActors(searchQuery: String, page: Int): ActorsList {
+        val actors = placeHolderApi.getActors(searchQuery, page).data.toDomain()
+        if (page == 1){
+            searchActors.clear()
+            searchActors.addAll(actors.actors)
+        } else {
+            searchActors.addAll(actors.actors)
+        }
+        return ActorsList(actors.hasMore, searchActors)
     }
 }

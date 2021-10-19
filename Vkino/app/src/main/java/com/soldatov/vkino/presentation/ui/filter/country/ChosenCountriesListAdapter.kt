@@ -1,4 +1,4 @@
-package com.soldatov.vkino.presentation.ui.filter
+package com.soldatov.vkino.presentation.ui.filter.country
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater

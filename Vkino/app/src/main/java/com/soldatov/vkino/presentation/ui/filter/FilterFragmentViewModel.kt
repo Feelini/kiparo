@@ -5,14 +5,8 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.soldatov.domain.models.*
-import com.soldatov.domain.models.result.GenresResult
-import com.soldatov.domain.models.result.YearsResult
-import com.soldatov.domain.models.result.CategoriesResult
-import com.soldatov.domain.models.result.CountriesResult
-import com.soldatov.domain.usecase.filter.GetCategoriesUseCase
-import com.soldatov.domain.usecase.filter.GetCountriesUseCase
-import com.soldatov.domain.usecase.filter.GetGenresUseCase
-import com.soldatov.domain.usecase.filter.GetYearsUseCase
+import com.soldatov.domain.models.result.*
+import com.soldatov.domain.usecase.filter.*
 import kotlinx.coroutines.Dispatchers
 import java.util.*
 import kotlin.Exception
@@ -22,7 +16,8 @@ class FilterFragmentViewModel(
     private val getGenresUseCase: GetGenresUseCase,
     private val getYearsUseCase: GetYearsUseCase,
     private val getCategoriesUseCase: GetCategoriesUseCase,
-    private val getCountriesUseCase: GetCountriesUseCase
+    private val getCountriesUseCase: GetCountriesUseCase,
+    private val getActorsUseCase: GetActorsUseCase
 ): ViewModel() {
 
     val chosenGenres = MutableLiveData<ArrayList<Genre>>(arrayListOf())
@@ -30,6 +25,8 @@ class FilterFragmentViewModel(
     val chosenYears = MutableLiveData<Years>()
     val chosenCountries = MutableLiveData<ArrayList<Country>>(arrayListOf())
     private val countriesSearchParams = MutableLiveData(SearchParams())
+    val chosenActors = MutableLiveData<ArrayList<Actor>>(arrayListOf())
+    private val actorsSearchParams = MutableLiveData(SearchParams())
 
     val genres = liveData(Dispatchers.IO) {
         emit(GenresResult.Loading)
@@ -68,6 +65,20 @@ class FilterFragmentViewModel(
                 )))
             } catch (exception: Exception){
                 emit(CountriesResult.Error(message = exception.message ?: "Error Occurred"))
+            }
+        }
+    }
+
+    val searchActors = Transformations.switchMap(actorsSearchParams) { params ->
+        liveData(Dispatchers.IO){
+            emit(ActorsResult.Loading)
+            try{
+                emit(ActorsResult.Success(data = getActorsUseCase.execute(
+                    params.getSearchQuery(),
+                    params.getPage()
+                )))
+            } catch (exception: Exception){
+                emit(ActorsResult.Error(message = exception.message ?: "Error Occurred"))
             }
         }
     }
@@ -116,7 +127,7 @@ class FilterFragmentViewModel(
         return chosenCountries.value ?: emptyList()
     }
 
-    fun removeChosenCountries(country: Country){
+    fun removeChosenCountry(country: Country){
         val currentCountries = chosenCountries.value
         currentCountries?.remove(country)
         chosenCountries.postValue(currentCountries ?: arrayListOf())
@@ -138,6 +149,38 @@ class FilterFragmentViewModel(
         val update = countriesSearchParams.value!!
         update.nextPage()
         countriesSearchParams.value = update
+    }
+
+    fun setChosenActors(actors: List<Actor>){
+        chosenActors.value = ArrayList(actors)
+    }
+
+    fun getChosenActors(): List<Actor>{
+        return chosenActors.value ?: emptyList()
+    }
+
+    fun removeChosenActor(actor: Actor){
+        val currentActor = chosenActors.value
+        currentActor?.remove(actor)
+        chosenActors.postValue(currentActor ?: arrayListOf())
+    }
+
+    fun setActorsSearchQuery(searchQuery: String){
+        val update = SearchParams(searchQuery)
+        if (Objects.equals(actorsSearchParams.value, update)){
+            return
+        }
+        actorsSearchParams.value = update
+    }
+
+    fun getActorsSearchQuery(): String{
+        return actorsSearchParams.value!!.getSearchQuery()
+    }
+
+    fun actorsNextPage(){
+        val update = actorsSearchParams.value!!
+        update.nextPage()
+        actorsSearchParams.value = update
     }
 
     private class SearchParams(

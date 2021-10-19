@@ -1,4 +1,4 @@
-package com.soldatov.vkino.presentation.ui.filter
+package com.soldatov.vkino.presentation.ui.filter.actor
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,15 +9,16 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.soldatov.domain.models.Country
-import com.soldatov.domain.models.result.CountriesResult
-import com.soldatov.vkino.databinding.FragmentChooseCountryBinding
+import com.soldatov.domain.models.Actor
+import com.soldatov.domain.models.result.ActorsResult
+import com.soldatov.vkino.databinding.FragmentChooseActorBinding
+import com.soldatov.vkino.presentation.ui.filter.FilterFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class ChooseCountryFragment : Fragment() {
+class ChooseActorFragment: Fragment() {
 
-    private lateinit var binding: FragmentChooseCountryBinding
-    private val countriesListAdapter = CountriesListAdapter()
+    private lateinit var binding: FragmentChooseActorBinding
+    private val actorsListAdapter = ActorsListAdapter()
     private val viewModel by sharedViewModel<FilterFragmentViewModel>()
     private var loading = true
 
@@ -26,42 +27,40 @@ class ChooseCountryFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentChooseCountryBinding.inflate(inflater, container, false)
+        binding = FragmentChooseActorBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.countriesList.adapter = countriesListAdapter
+        binding.actorsList.adapter = actorsListAdapter
         val layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        binding.countriesList.layoutManager =layoutManager
+        binding.actorsList.layoutManager = layoutManager
 
-        binding.searchCountry.setQuery(viewModel.getCountriesSearchQuery(), false)
-
-        binding.searchCountry.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+        binding.searchActor.setQuery(viewModel.getActorsSearchQuery(), false)
+        binding.searchActor.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
-                binding.searchCountry.clearFocus()
-                val searchQuery = binding.searchCountry.query.toString()
-                val chosenCountries = viewModel.getChosenCountries()
-                viewModel.setCountriesSearchQuery(searchQuery)
-                countriesListAdapter.setSearchCountries(emptyList(), chosenCountries)
+                binding.searchActor.clearFocus()
+                val searchQuery = binding.searchActor.query.toString()
+                val chosenActors = viewModel.getChosenActors()
+                viewModel.setActorsSearchQuery(searchQuery)
+                actorsListAdapter.setSearchActors(emptyList(), chosenActors)
                 binding.preloadLayout.visibility = View.VISIBLE
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText == ""){
-                    val chosenCountries = viewModel.getChosenCountries()
-                    viewModel.setCountriesSearchQuery("")
-                    countriesListAdapter.setSearchCountries(emptyList(), chosenCountries)
+                    val chosenActors = viewModel.getChosenActors()
+                    viewModel.setActorsSearchQuery("")
+                    actorsListAdapter.setSearchActors(emptyList(), chosenActors)
                     binding.preloadLayout.visibility = View.VISIBLE
                 }
                 return true
             }
-
         })
 
-        binding.countriesList.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+        binding.actorsList.addOnScrollListener(object : RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (dy > 0){
                     val visibleItemCount = layoutManager.childCount
@@ -70,31 +69,31 @@ class ChooseCountryFragment : Fragment() {
 
                     if (loading && ((visibleItemCount + pastVisibleItems) >= totalItemCount)){
                         loading = false
-                        viewModel.countriesNextPage()
+                        viewModel.actorsNextPage()
                     }
                 }
             }
         })
 
         binding.submit.setOnClickListener {
-            val chosenCountries = countriesListAdapter.getChosenCountries()
-            viewModel.setChosenCountries(chosenCountries)
+            val chosenActors = actorsListAdapter.getChosenActors()
+            viewModel.setChosenActors(chosenActors)
             findNavController().popBackStack()
         }
 
         setupObservers()
     }
 
-    private fun setupObservers(){
-        viewModel.searchCounties.observe(viewLifecycleOwner, {
+    private fun setupObservers() {
+        viewModel.searchActors.observe(viewLifecycleOwner, {
             when (it){
-                is CountriesResult.Success -> {
-                    showCountriesList(it.data.countries)
+                is ActorsResult.Success -> {
+                    showActorsList(it.data.actors)
                     if (it.data.hasMore){
-                        countriesListAdapter.addProgress()
+                        actorsListAdapter.addProgress()
                         loading = true
                     } else {
-                        countriesListAdapter.removeProgress()
+                        actorsListAdapter.removeProgress()
                     }
                     binding.preloadLayout.visibility = View.INVISIBLE
                 }
@@ -102,8 +101,8 @@ class ChooseCountryFragment : Fragment() {
         })
     }
 
-    private fun showCountriesList(countries: List<Country>){
-        val chosenCountries = viewModel.getChosenCountries()
-        countriesListAdapter.setSearchCountries(countries, chosenCountries)
+    private fun showActorsList(actors: List<Actor>) {
+        val chosenActors = viewModel.getChosenActors()
+        actorsListAdapter.setSearchActors(actors, chosenActors)
     }
 }

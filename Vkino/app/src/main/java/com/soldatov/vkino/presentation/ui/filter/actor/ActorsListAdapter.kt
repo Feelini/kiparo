@@ -1,55 +1,55 @@
-package com.soldatov.vkino.presentation.ui.filter
+package com.soldatov.vkino.presentation.ui.filter.actor
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.soldatov.domain.models.Country
+import com.soldatov.domain.models.Actor
 import com.soldatov.vkino.databinding.ItemFilterListBinding
 import com.soldatov.vkino.databinding.ItemProgressBarBinding
 
-class CountriesListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ActorsListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var countriesList: List<Country> = listOf()
-    private var chosenCountries: ArrayList<Country> = arrayListOf()
+    private var actorsList: List<Actor> = listOf()
+    private var chosenActors: ArrayList<Actor> = arrayListOf()
     private val VIEW_ITEM = 1
     private val VIEW_PROG = 0
     private var isProgress = true
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setSearchCountries(countryList: List<Country>, newChosenCountries: List<Country>) {
-        countriesList = countryList
-        chosenCountries = newChosenCountries as ArrayList<Country>
+    fun setSearchActors(actorList: List<Actor>, newChosenActors: List<Actor>){
+        actorsList = actorList
+        chosenActors = newChosenActors as ArrayList<Actor>
         notifyDataSetChanged()
     }
 
-    fun addProgress() {
+    fun addProgress(){
         isProgress = true
     }
 
-    fun removeProgress() {
+    fun removeProgress(){
         isProgress = false
     }
 
-    fun getChosenCountries(): List<Country> {
-        return chosenCountries.toList()
+    fun getChosenActors(): List<Actor>{
+        return chosenActors.toList()
     }
 
-    private val addChosenCountry: (Country) -> Unit = {
-        chosenCountries.add(it)
+    private val addChosenActor: (Actor) -> Unit = {
+        chosenActors.add(it)
     }
 
-    private val removeChosenCountry: (Country) -> Unit = {
-        chosenCountries.remove(it)
+    private val removeChosenActor: (Actor) -> Unit = {
+        chosenActors.remove(it)
     }
 
-    private val isCheckedCountry: (Country) -> Boolean = {
-        chosenCountries.contains(it)
+    private val isCheckedActor: (Actor) -> Boolean = {
+        chosenActors.contains(it)
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == countriesList.size) VIEW_PROG else VIEW_ITEM
+        return if (position == actorsList.size) VIEW_PROG else VIEW_ITEM
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -57,7 +57,7 @@ class CountriesListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val inflater = LayoutInflater.from(parent.context)
         viewHolder = if (viewType == VIEW_ITEM) {
             val binding = ItemFilterListBinding.inflate(inflater, parent, false)
-            SearchCountriesViewHolder(binding.root)
+            SearchActorsViewHolder(binding.root)
         } else {
             val binding = ItemProgressBarBinding.inflate(inflater, parent, false)
             ProgressBarViewHolder(binding.root)
@@ -66,12 +66,12 @@ class CountriesListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is SearchCountriesViewHolder) {
+        if (holder is SearchActorsViewHolder) {
             holder.bindData(
-                countriesList[position],
-                isCheckedCountry,
-                addChosenCountry,
-                removeChosenCountry
+                actorsList[position],
+                isCheckedActor,
+                addChosenActor,
+                removeChosenActor
             )
         } else {
             (holder as ProgressBarViewHolder).bindData()
@@ -79,31 +79,31 @@ class CountriesListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return if (isProgress) {
-            if (countriesList.isEmpty()) 0 else countriesList.size + 1
+        return if (isProgress){
+            if (actorsList.isEmpty()) 0 else actorsList.size + 1
         } else {
-            countriesList.size
+            actorsList.size
         }
     }
 
-    class SearchCountriesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class SearchActorsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
 
         private val binding = ItemFilterListBinding.bind(itemView)
 
         fun bindData(
-            country: Country,
-            isChecked: (Country) -> Boolean,
-            addCountry: (Country) -> Unit,
-            removeCountry: (Country) -> Unit
+            actor: Actor,
+            isChecked: (Actor) -> Boolean,
+            addActor: (Actor) -> Unit,
+            removeActor: (Actor) -> Unit
         ) {
-            binding.filterTitle.text = country.name
-            binding.checkbox.isChecked = isChecked(country)
+            binding.filterTitle.text = actor.name
+            binding.checkbox.isChecked = isChecked(actor)
             itemView.setOnClickListener {
-                if (isChecked(country)) {
-                    removeCountry(country)
+                if (isChecked(actor)) {
+                    removeActor(actor)
                     binding.checkbox.isChecked = false
                 } else {
-                    addCountry(country)
+                    addActor(actor)
                     binding.checkbox.isChecked = true
                 }
             }

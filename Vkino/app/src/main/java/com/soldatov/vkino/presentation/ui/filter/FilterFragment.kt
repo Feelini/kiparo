@@ -10,25 +10,27 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.slider.RangeSlider
-import com.soldatov.domain.models.Category
-import com.soldatov.domain.models.Country
+import com.soldatov.domain.models.*
 import com.soldatov.domain.models.result.YearsResult
-import com.soldatov.domain.models.Genre
-import com.soldatov.domain.models.Years
 import com.soldatov.vkino.R
 import com.soldatov.vkino.databinding.FragmentFilterBinding
+import com.soldatov.vkino.presentation.ui.filter.actor.ChosenActorsListAdapter
+import com.soldatov.vkino.presentation.ui.filter.category.ChosenCategoryListAdapter
+import com.soldatov.vkino.presentation.ui.filter.country.ChosenCountriesListAdapter
+import com.soldatov.vkino.presentation.ui.filter.genre.ChosenGenresListAdapter
 import com.soldatov.vkino.presentation.ui.home.HomeFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import java.time.Year
 
 class FilterFragment : Fragment(), ChosenGenresListAdapter.OnRemoveChosenGenreListener,
     ChosenCategoryListAdapter.OnRemoveChosenCategoryListener,
-    ChosenCountriesListAdapter.OnRemoveChosenCountryListener {
+    ChosenCountriesListAdapter.OnRemoveChosenCountryListener,
+    ChosenActorsListAdapter.OnRemoveChosenActorListener {
 
     private lateinit var binding: FragmentFilterBinding
     private val chosenGenresListAdapter = ChosenGenresListAdapter()
     private val chosenCategoriesListAdapter = ChosenCategoryListAdapter()
     private val chosenCountriesListAdapter = ChosenCountriesListAdapter()
+    private val chosenActorsListAdapter = ChosenActorsListAdapter()
     private val homeFragmentViewModel by sharedViewModel<HomeFragmentViewModel>()
     private val filterFragmentViewModel by sharedViewModel<FilterFragmentViewModel>()
 
@@ -140,6 +142,9 @@ class FilterFragment : Fragment(), ChosenGenresListAdapter.OnRemoveChosenGenreLi
         binding.country.setOnClickListener {
             findNavController().navigate(R.id.action_filterFragment_to_chooseCountryFragment)
         }
+        binding.actor.setOnClickListener {
+            findNavController().navigate(R.id.action_filterFragment_to_chooseActorFragment)
+        }
 
         binding.chosenGenresList.adapter = chosenGenresListAdapter
         binding.chosenGenresList.layoutManager =
@@ -151,6 +156,10 @@ class FilterFragment : Fragment(), ChosenGenresListAdapter.OnRemoveChosenGenreLi
 
         binding.chosenCountriesList.adapter = chosenCountriesListAdapter
         binding.chosenCountriesList.layoutManager =
+            LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+
+        binding.chosenActorsList.adapter = chosenActorsListAdapter
+        binding.chosenActorsList.layoutManager =
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)
     }
 
@@ -173,6 +182,9 @@ class FilterFragment : Fragment(), ChosenGenresListAdapter.OnRemoveChosenGenreLi
         })
         filterFragmentViewModel.chosenCountries.observe(viewLifecycleOwner, {
             showChosenCountriesList(it)
+        })
+        filterFragmentViewModel.chosenActors.observe(viewLifecycleOwner, {
+            showChosenActorsList(it)
         })
     }
 
@@ -220,6 +232,15 @@ class FilterFragment : Fragment(), ChosenGenresListAdapter.OnRemoveChosenGenreLi
         }
     }
 
+    private fun showChosenActorsList(actors: List<Actor>) {
+        if (actors.isEmpty()) {
+            binding.chosenActorsLayout.visibility = View.GONE
+        } else {
+            binding.chosenActorsLayout.visibility = View.VISIBLE
+            chosenActorsListAdapter.setChosenActors(actors, this)
+        }
+    }
+
     override fun onRemoveChosenGenre(genre: Genre) {
         filterFragmentViewModel.removeChosenGenre(genre)
     }
@@ -229,6 +250,10 @@ class FilterFragment : Fragment(), ChosenGenresListAdapter.OnRemoveChosenGenreLi
     }
 
     override fun onRemoveChosenCountry(country: Country) {
-        filterFragmentViewModel.removeChosenCountries(country)
+        filterFragmentViewModel.removeChosenCountry(country)
+    }
+
+    override fun onRemoveChosenActor(actor: Actor) {
+        filterFragmentViewModel.removeChosenActor(actor)
     }
 }

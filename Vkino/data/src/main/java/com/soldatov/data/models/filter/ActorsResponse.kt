@@ -5,5 +5,5 @@ import com.soldatov.data.models.ErrorData
 data class ActorsResponse(
     val status: String,
     val error: ErrorData,
-    val data: TotalGenresData
+    val data: TotalActorsData
 )

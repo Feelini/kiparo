@@ -1,4 +1,4 @@
-package com.soldatov.vkino.presentation.ui.filter
+package com.soldatov.vkino.presentation.ui.filter.category
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.soldatov.domain.models.Category
 import com.soldatov.domain.models.result.CategoriesResult
 import com.soldatov.vkino.databinding.FragmentChooseCategoryBinding
+import com.soldatov.vkino.presentation.ui.filter.FilterFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class ChooseCategoryFragment : Fragment() {

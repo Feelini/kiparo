@@ -1,4 +1,4 @@
-package com.soldatov.vkino.presentation.ui.filter
+package com.soldatov.vkino.presentation.ui.filter.genre
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.soldatov.domain.models.result.GenresResult
 import com.soldatov.domain.models.GenresList
 import com.soldatov.vkino.databinding.FragmentChooseGenreBinding
+import com.soldatov.vkino.presentation.ui.filter.FilterFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class ChooseGenreFragment : Fragment() {

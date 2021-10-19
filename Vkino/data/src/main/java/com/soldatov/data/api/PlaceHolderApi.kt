@@ -2,10 +2,7 @@ package com.soldatov.data.api
 
 import com.soldatov.data.models.film.FilmResponse
 import com.soldatov.data.models.film.SliderResponse
-import com.soldatov.data.models.filter.CategoriesResponse
-import com.soldatov.data.models.filter.CountiesResponse
-import com.soldatov.data.models.filter.GenresResponse
-import com.soldatov.data.models.filter.YearResponse
+import com.soldatov.data.models.filter.*
 import com.soldatov.data.models.home.HomePageFilmsResponse
 import com.soldatov.data.models.search.SearchResponse
 import retrofit2.http.GET
@@ -45,4 +42,10 @@ interface PlaceHolderApi {
         @Query("search") searchQuery: String,
         @Query("page") page: Int
     ): CountiesResponse
+
+    @GET("filter/actors")
+    suspend fun getActors(
+        @Query("search") searchQuery: String,
+        @Query("page") page: Int
+    ): ActorsResponse
 }
