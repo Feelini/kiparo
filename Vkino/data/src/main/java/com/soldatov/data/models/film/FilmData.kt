@@ -2,6 +2,7 @@ package com.soldatov.data.models.film
 
 import com.soldatov.data.models.filter.ActorData
 import com.soldatov.data.models.filter.GenreData
+import com.soldatov.data.models.filter.QualityData
 
 data class FilmData(
     val film_id: Long,

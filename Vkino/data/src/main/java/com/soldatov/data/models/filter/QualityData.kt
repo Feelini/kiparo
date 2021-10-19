@@ -1,7 +1,7 @@
-package com.soldatov.data.models.film
+package com.soldatov.data.models.filter
 
 data class QualityData(
-    val id: Long,
+    val ID: Long,
     val name: String,
     val slug: String
 )

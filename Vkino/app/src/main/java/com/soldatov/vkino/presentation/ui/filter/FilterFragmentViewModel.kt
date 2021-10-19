@@ -17,7 +17,8 @@ class FilterFragmentViewModel(
     private val getYearsUseCase: GetYearsUseCase,
     private val getCategoriesUseCase: GetCategoriesUseCase,
     private val getCountriesUseCase: GetCountriesUseCase,
-    private val getActorsUseCase: GetActorsUseCase
+    private val getActorsUseCase: GetActorsUseCase,
+    private val getQualitiesUseCase: GetQualitiesUseCase
 ): ViewModel() {
 
     val chosenGenres = MutableLiveData<ArrayList<Genre>>(arrayListOf())
@@ -27,6 +28,7 @@ class FilterFragmentViewModel(
     private val countriesSearchParams = MutableLiveData(SearchParams())
     val chosenActors = MutableLiveData<ArrayList<Actor>>(arrayListOf())
     private val actorsSearchParams = MutableLiveData(SearchParams())
+    val chosenQualities = MutableLiveData<ArrayList<Quality>>(arrayListOf())
 
     val genres = liveData(Dispatchers.IO) {
         emit(GenresResult.Loading)
@@ -83,6 +85,15 @@ class FilterFragmentViewModel(
         }
     }
 
+    val qualities = liveData(Dispatchers.IO){
+        emit(QualitiesResult.Loading)
+        try {
+            emit(QualitiesResult.Success(data = getQualitiesUseCase.execute()))
+        } catch (exception: Exception){
+            emit(QualitiesResult.Error(message = exception.message ?: "Error Occurred"))
+        }
+    }
+
     fun getYears(): Years{
         return (years.value as YearsResult.Success).data
     }
@@ -109,7 +120,7 @@ class FilterFragmentViewModel(
         return chosenCategories.value ?: emptyList()
     }
 
-    fun removeChosenCategories(category: Category){
+    fun removeChosenCategory(category: Category){
         val currentCategories = chosenCategories.value
         currentCategories?.remove(category)
         chosenCategories.postValue(currentCategories ?: arrayListOf())
@@ -181,6 +192,20 @@ class FilterFragmentViewModel(
         val update = actorsSearchParams.value!!
         update.nextPage()
         actorsSearchParams.value = update
+    }
+
+    fun setChosenQualities(qualities: List<Quality>){
+        chosenQualities.value = qualities as ArrayList<Quality>
+    }
+
+    fun getChosenQualities(): List<Quality>{
+        return chosenQualities.value ?: emptyList()
+    }
+
+    fun removeChosenQuality(quality: Quality){
+        val currentQualities = chosenQualities.value
+        currentQualities?.remove(quality)
+        chosenQualities.postValue(currentQualities ?: arrayListOf())
     }
 
     private class SearchParams(

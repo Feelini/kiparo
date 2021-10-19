@@ -47,6 +47,9 @@
         <action
             android:id="@+id/action_filterFragment_to_chooseActorFragment"
             app:destination="@id/chooseActorFragment" />
+        <action
+            android:id="@+id/action_filterFragment_to_chooseQualityFragment"
+            app:destination="@id/chooseQualityFragment" />
     </fragment>
     <fragment
         android:id="@+id/filmFragment"
@@ -72,4 +75,8 @@
         android:id="@+id/chooseActorFragment"
         android:name="com.soldatov.vkino.presentation.ui.filter.actor.ChooseActorFragment"
         android:label="ChooseActorFragment" />
+    <fragment
+        android:id="@+id/chooseQualityFragment"
+        android:name="com.soldatov.vkino.presentation.ui.filter.quality.ChooseQualityFragment"
+        android:label="ChooseQualityFragment" />
 </navigation>

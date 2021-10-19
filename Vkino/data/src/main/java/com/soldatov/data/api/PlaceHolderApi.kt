@@ -48,4 +48,7 @@ interface PlaceHolderApi {
         @Query("search") searchQuery: String,
         @Query("page") page: Int
     ): ActorsResponse
+
+    @GET("filter/qualities")
+    suspend fun getQualities(): QualitiesResponse
 }

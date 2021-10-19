@@ -18,19 +18,22 @@ import com.soldatov.vkino.presentation.ui.filter.actor.ChosenActorsListAdapter
 import com.soldatov.vkino.presentation.ui.filter.category.ChosenCategoryListAdapter
 import com.soldatov.vkino.presentation.ui.filter.country.ChosenCountriesListAdapter
 import com.soldatov.vkino.presentation.ui.filter.genre.ChosenGenresListAdapter
+import com.soldatov.vkino.presentation.ui.filter.quality.ChosenQualitiesListAdapter
 import com.soldatov.vkino.presentation.ui.home.HomeFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class FilterFragment : Fragment(), ChosenGenresListAdapter.OnRemoveChosenGenreListener,
     ChosenCategoryListAdapter.OnRemoveChosenCategoryListener,
     ChosenCountriesListAdapter.OnRemoveChosenCountryListener,
-    ChosenActorsListAdapter.OnRemoveChosenActorListener {
+    ChosenActorsListAdapter.OnRemoveChosenActorListener,
+    ChosenQualitiesListAdapter.OnRemoveChosenQualityListener {
 
     private lateinit var binding: FragmentFilterBinding
     private val chosenGenresListAdapter = ChosenGenresListAdapter()
     private val chosenCategoriesListAdapter = ChosenCategoryListAdapter()
     private val chosenCountriesListAdapter = ChosenCountriesListAdapter()
     private val chosenActorsListAdapter = ChosenActorsListAdapter()
+    private val chosenQualitiesListAdapter = ChosenQualitiesListAdapter()
     private val homeFragmentViewModel by sharedViewModel<HomeFragmentViewModel>()
     private val filterFragmentViewModel by sharedViewModel<FilterFragmentViewModel>()
 
@@ -145,6 +148,9 @@ class FilterFragment : Fragment(), ChosenGenresListAdapter.OnRemoveChosenGenreLi
         binding.actor.setOnClickListener {
             findNavController().navigate(R.id.action_filterFragment_to_chooseActorFragment)
         }
+        binding.quality.setOnClickListener {
+            findNavController().navigate(R.id.action_filterFragment_to_chooseQualityFragment)
+        }
 
         binding.chosenGenresList.adapter = chosenGenresListAdapter
         binding.chosenGenresList.layoutManager =
@@ -160,6 +166,10 @@ class FilterFragment : Fragment(), ChosenGenresListAdapter.OnRemoveChosenGenreLi
 
         binding.chosenActorsList.adapter = chosenActorsListAdapter
         binding.chosenActorsList.layoutManager =
+            LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+
+        binding.chosenQualitiesList.adapter = chosenQualitiesListAdapter
+        binding.chosenQualitiesList.layoutManager =
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)
     }
 
@@ -185,6 +195,9 @@ class FilterFragment : Fragment(), ChosenGenresListAdapter.OnRemoveChosenGenreLi
         })
         filterFragmentViewModel.chosenActors.observe(viewLifecycleOwner, {
             showChosenActorsList(it)
+        })
+        filterFragmentViewModel.chosenQualities.observe(viewLifecycleOwner, {
+            showChosenQualitiesList(it)
         })
     }
 
@@ -241,12 +254,21 @@ class FilterFragment : Fragment(), ChosenGenresListAdapter.OnRemoveChosenGenreLi
         }
     }
 
+    private fun showChosenQualitiesList(qualities: List<Quality>) {
+        if (qualities.isEmpty()) {
+            binding.chosenQualitiesLayout.visibility = View.GONE
+        } else {
+            binding.chosenQualitiesLayout.visibility = View.VISIBLE
+            chosenQualitiesListAdapter.setChosenQualities(qualities, this)
+        }
+    }
+
     override fun onRemoveChosenGenre(genre: Genre) {
         filterFragmentViewModel.removeChosenGenre(genre)
     }
 
     override fun onRemoveChosenCategory(category: Category) {
-        filterFragmentViewModel.removeChosenCategories(category)
+        filterFragmentViewModel.removeChosenCategory(category)
     }
 
     override fun onRemoveChosenCountry(country: Country) {
@@ -255,5 +277,9 @@ class FilterFragment : Fragment(), ChosenGenresListAdapter.OnRemoveChosenGenreLi
 
     override fun onRemoveChosenActor(actor: Actor) {
         filterFragmentViewModel.removeChosenActor(actor)
+    }
+
+    override fun onRemoveChosenQuality(quality: Quality) {
+        filterFragmentViewModel.removeChosenQuality(quality)
     }
 }

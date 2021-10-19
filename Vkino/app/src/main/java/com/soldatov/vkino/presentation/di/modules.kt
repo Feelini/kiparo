@@ -27,6 +27,7 @@ val domainModule = module {
     factory { GetCategoriesUseCase(filmsRepository = get()) }
     factory { GetCountriesUseCase(filmsRepository = get()) }
     factory { GetActorsUseCase(filmsRepository = get()) }
+    factory { GetQualitiesUseCase(filmsRepository = get()) }
 }
 
 val appModule = module {
@@ -39,7 +40,8 @@ val appModule = module {
             getYearsUseCase = get(),
             getCategoriesUseCase = get(),
             getCountriesUseCase = get(),
-            getActorsUseCase = get()
+            getActorsUseCase = get(),
+            getQualitiesUseCase = get()
         )
     }
 }

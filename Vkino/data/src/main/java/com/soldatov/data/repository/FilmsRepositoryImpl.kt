@@ -107,4 +107,8 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
         }
         return ActorsList(actors.hasMore, searchActors)
     }
+
+    override suspend fun getQualities(): List<Quality> {
+        return placeHolderApi.getQualities().data.toDomain()
+    }
 }
