@@ -208,6 +208,18 @@ class FilterFragmentViewModel(
         chosenQualities.postValue(currentQualities ?: arrayListOf())
     }
 
+    fun clearFilter(){
+        val years = getYears()
+        chosenGenres.value = arrayListOf()
+        chosenCategories.value = arrayListOf()
+        chosenYears.value = years
+        chosenCountries.value = arrayListOf()
+        chosenActors.value = arrayListOf()
+        chosenQualities.value = arrayListOf()
+        setCountriesSearchQuery("")
+        setActorsSearchQuery("")
+    }
+
     private class SearchParams(
         private var searchQuery: String = "",
         private var page: Int = 1

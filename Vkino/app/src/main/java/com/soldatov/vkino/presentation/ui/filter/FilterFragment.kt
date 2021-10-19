@@ -152,6 +152,10 @@ class FilterFragment : Fragment(), ChosenGenresListAdapter.OnRemoveChosenGenreLi
             findNavController().navigate(R.id.action_filterFragment_to_chooseQualityFragment)
         }
 
+        binding.clear.setOnClickListener {
+            filterFragmentViewModel.clearFilter()
+        }
+
         binding.chosenGenresList.adapter = chosenGenresListAdapter
         binding.chosenGenresList.layoutManager =
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)
