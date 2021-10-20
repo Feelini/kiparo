@@ -71,8 +71,8 @@ class HomeFragment : Fragment(), TopSliderAdapter.OnFilmClickListener,
         val currentOrderBy = viewModel.getCurrentOrderBy()
 
         binding.orderBy.adapter = arrayAdapter
-        binding.orderBy.setSelection(arrayAdapter.getPosition(currentOrderBy))
-        binding.orderBy.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+        binding.orderBy.setSelection(arrayAdapter.getPosition(currentOrderBy), true)
+        binding.orderBy.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
                 view: View?,
@@ -89,7 +89,7 @@ class HomeFragment : Fragment(), TopSliderAdapter.OnFilmClickListener,
             }
         }
 
-        if (order == "DESC"){
+        if (order == "DESC") {
             binding.orderBtn.setImageResource(R.drawable.sort_desc)
             binding.orderBtn.tag = R.drawable.sort_desc
         } else {
@@ -98,7 +98,7 @@ class HomeFragment : Fragment(), TopSliderAdapter.OnFilmClickListener,
         }
 
         binding.orderBtn.setOnClickListener {
-            if (it.tag == R.drawable.sort_desc){
+            if (it.tag == R.drawable.sort_desc) {
                 binding.orderBtn.setImageResource(R.drawable.sort_asc)
                 binding.orderBtn.tag = R.drawable.sort_asc
             } else {
