@@ -16,6 +16,7 @@ class SearchFragmentViewModel(
 ) : ViewModel() {
 
     private val searchParams = MutableLiveData<SearchParams>()
+    private var listPosition: ListPosition? = null
 
     val searchFilms = Transformations.switchMap(searchParams) { params ->
         liveData(Dispatchers.IO) {
@@ -57,6 +58,14 @@ class SearchFragmentViewModel(
         searchParams.value = update!!
     }
 
+    fun getListPosition(): ListPosition?{
+        return listPosition
+    }
+
+    fun setListPosition(position: ListPosition){
+        listPosition = position
+    }
+
     private class SearchParams(
         private var searchQuery: String,
         private var page: Int = 1
@@ -73,4 +82,6 @@ class SearchFragmentViewModel(
             page += 1
         }
     }
+
+    class ListPosition(val positionIndex: Int, val topView: Int)
 }

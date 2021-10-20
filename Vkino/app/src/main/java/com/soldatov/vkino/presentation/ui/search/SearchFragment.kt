@@ -77,6 +77,29 @@ class SearchFragment : Fragment(), SearchFilmsAdapter.OnFilmClickListener {
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        val listPosition = viewModel.getListPosition()
+        if (listPosition != null) {
+            val layoutManager: LinearLayoutManager =
+                binding.searchFilmsList.layoutManager as LinearLayoutManager
+            layoutManager.scrollToPositionWithOffset(
+                listPosition.positionIndex,
+                listPosition.topView
+            )
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val layoutManager: LinearLayoutManager =
+            binding.searchFilmsList.layoutManager as LinearLayoutManager
+        val positionIndex = layoutManager.findFirstVisibleItemPosition()
+        val startView = binding.searchFilmsList.getChildAt(0)
+        val topView =
+            if (startView == null) 0 else (startView.top - binding.searchFilmsList.paddingTop)
+        viewModel.setListPosition(SearchFragmentViewModel.ListPosition(positionIndex, topView))
+    }
 
     @SuppressLint("SetTextI18n")
     private fun setupObservers() {
@@ -84,7 +107,7 @@ class SearchFragment : Fragment(), SearchFilmsAdapter.OnFilmClickListener {
             when (it) {
                 is FilmsResult.Success -> {
                     showSearchFilms(it.data.films)
-                    if (!it.data.hasMore){
+                    if (!it.data.hasMore) {
                         searchFilmsAdapter.removeProgress()
                     } else {
                         searchFilmsAdapter.addProgress()
