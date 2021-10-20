@@ -24,7 +24,9 @@ interface PlaceHolderApi {
         @Query("genre") genres: String?,
         @Query("quality") qualities: String?,
         @Query("cat_id") categories: String?,
-        @Query("year") years: String?
+        @Query("year") years: String?,
+        @Query("orderby") orderBy: String,
+        @Query("order") order: String
     ): HomePageFilmsResponse
 
     @GET("films/similar")

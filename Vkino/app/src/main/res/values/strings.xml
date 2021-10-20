@@ -32,5 +32,7 @@
     <string name="countriesName">Страны</string>
     <string name="actorsName">Актеры</string>
     <string name="qualitiesName">Качество</string>
+    <string name="sort_by_text">Сортировать по</string>
+    <string name="desc">desc</string>
     <integer name="min_year_id">1</integer>
 </resources>

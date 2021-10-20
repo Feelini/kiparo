@@ -7,5 +7,7 @@ data class FilterParams(
     val chosenActors: List<Actor> = emptyList(),
     val chosenQualities: List<Quality> = emptyList(),
     val chosenYears: Years? = null,
-    var page: Int = 1
+    var page: Int = 1,
+    var orderBy: String = OrderBy.ID.value,
+    var order: String = Order.DESC.name
 )

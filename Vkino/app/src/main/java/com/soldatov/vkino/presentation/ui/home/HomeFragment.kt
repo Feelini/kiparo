@@ -5,6 +5,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.ImageView
 import androidx.core.os.bundleOf
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
@@ -53,11 +56,59 @@ class HomeFragment : Fragment(), TopSliderAdapter.OnFilmClickListener,
 
         binding.nestedScroll.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
             if (scrollY == (v.getChildAt(v.childCount - 1).measuredHeight - v.measuredHeight)) {
-                Log.i("TAG", "BOTTOM SCROLL")
                 loading = false
                 viewModel.nextPage()
             }
         })
+
+        showOrderBy(viewModel.getCurrentOrder())
+    }
+
+    private fun showOrderBy(order: String) {
+        val orderBy = viewModel.getOrderByData()
+        val arrayAdapter =
+            ArrayAdapter(requireContext(), R.layout.item_spinner, orderBy)
+        val currentOrderBy = viewModel.getCurrentOrderBy()
+
+        binding.orderBy.adapter = arrayAdapter
+        binding.orderBy.setSelection(arrayAdapter.getPosition(currentOrderBy))
+        binding.orderBy.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                viewModel.setOrderBy(orderBy[position])
+                showHomePageFilms(emptyList())
+                binding.filmsProgress.visibility = View.VISIBLE
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+        }
+
+        if (order == "DESC"){
+            binding.orderBtn.setImageResource(R.drawable.sort_desc)
+            binding.orderBtn.tag = R.drawable.sort_desc
+        } else {
+            binding.orderBtn.setImageResource(R.drawable.sort_asc)
+            binding.orderBtn.tag = R.drawable.sort_asc
+        }
+
+        binding.orderBtn.setOnClickListener {
+            if (it.tag == R.drawable.sort_desc){
+                binding.orderBtn.setImageResource(R.drawable.sort_asc)
+                binding.orderBtn.tag = R.drawable.sort_asc
+            } else {
+                binding.orderBtn.setImageResource(R.drawable.sort_desc)
+                binding.orderBtn.tag = R.drawable.sort_desc
+            }
+            showHomePageFilms(emptyList())
+            viewModel.switchOrder()
+            binding.filmsProgress.visibility = View.VISIBLE
+        }
     }
 
     private fun setupObservers() {
@@ -77,6 +128,7 @@ class HomeFragment : Fragment(), TopSliderAdapter.OnFilmClickListener,
         viewModel.homePageFilms.observe(viewLifecycleOwner, {
             when (it) {
                 is FilmsResult.Success -> {
+                    binding.filmsProgress.visibility = View.INVISIBLE
                     showHomePageFilms(it.data.films)
                     if (!it.data.hasMore) {
                         homePageFilmsAdapter.removeProgress()
@@ -89,7 +141,7 @@ class HomeFragment : Fragment(), TopSliderAdapter.OnFilmClickListener,
 
                 }
                 FilmsResult.Loading -> {
-
+                    binding.filmsProgress.visibility = View.VISIBLE
                 }
             }
         })

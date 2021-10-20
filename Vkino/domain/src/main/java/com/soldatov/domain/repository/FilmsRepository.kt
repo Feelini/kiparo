@@ -14,4 +14,5 @@ interface FilmsRepository {
     suspend fun getCountries(searchQuery: String, page: Int): CountriesList
     suspend fun getActors(searchQuery: String, page: Int): ActorsList
     suspend fun getQualities(): List<Quality>
+    fun getOrderByData(): List<String>
 }

@@ -40,7 +40,9 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
             genres = dataFilterParams.chosenGenres,
             qualities = dataFilterParams.chosenQualities,
             categories = dataFilterParams.chosenCategories,
-            years = dataFilterParams.chosenYears
+            years = dataFilterParams.chosenYears,
+            orderBy = dataFilterParams.orderBy,
+            order = dataFilterParams.order
         )
         if (filterParams.page == 1){
             homePageFilms.clear()
@@ -119,5 +121,9 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
 
     override suspend fun getQualities(): List<Quality> {
         return placeHolderApi.getQualities().data.toDomain()
+    }
+
+    override fun getOrderByData(): List<String> {
+        return OrderBy.values().map { it.orderName }
     }
 }

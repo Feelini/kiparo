@@ -114,7 +114,9 @@ fun FilterParams.toData(): HomePageFilmsParams{
         chosenActors = actors,
         chosenQualities = qualities,
         chosenYears = years,
-        page = page
+        page = page,
+        orderBy = orderBy,
+        order = order
     )
 }
 

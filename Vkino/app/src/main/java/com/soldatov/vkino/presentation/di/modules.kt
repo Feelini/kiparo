@@ -28,10 +28,17 @@ val domainModule = module {
     factory { GetCountriesUseCase(filmsRepository = get()) }
     factory { GetActorsUseCase(filmsRepository = get()) }
     factory { GetQualitiesUseCase(filmsRepository = get()) }
+    factory { GetOrderByUseCase(filmsRepository = get()) }
 }
 
 val appModule = module {
-    viewModel { HomeFragmentViewModel(getTopSliderUseCase = get(), getHomeFilmsUseCase = get()) }
+    viewModel {
+        HomeFragmentViewModel(
+            getTopSliderUseCase = get(),
+            getHomeFilmsUseCase = get(),
+            getOrderByUseCase = get()
+        )
+    }
     viewModel { FilmFragmentViewModel(getSimilarFilmsUseCase = get(), getFilmByIdUseCase = get()) }
     viewModel { SearchFragmentViewModel(getFilmsForSearchUseCase = get()) }
     viewModel {

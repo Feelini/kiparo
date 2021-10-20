@@ -7,5 +7,7 @@ data class HomePageFilmsParams(
     val chosenActors: String?,
     val chosenQualities: String?,
     val chosenYears: String?,
-    val page: Int = 1
+    val page: Int = 1,
+    val orderBy: String,
+    val order: String
 )
