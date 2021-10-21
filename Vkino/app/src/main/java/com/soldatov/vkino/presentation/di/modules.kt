@@ -5,9 +5,11 @@ import com.soldatov.data.repository.FilmsRepositoryImpl
 import com.soldatov.domain.repository.FilmsRepository
 import com.soldatov.domain.usecase.*
 import com.soldatov.domain.usecase.filter.*
+import com.soldatov.domain.usecase.profile.LoginUserUseCase
 import com.soldatov.vkino.presentation.ui.film.FilmFragmentViewModel
 import com.soldatov.vkino.presentation.ui.filter.FilterFragmentViewModel
 import com.soldatov.vkino.presentation.ui.home.HomeFragmentViewModel
+import com.soldatov.vkino.presentation.ui.profile.ProfileViewModel
 import com.soldatov.vkino.presentation.ui.search.SearchFragmentViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -29,6 +31,7 @@ val domainModule = module {
     factory { GetActorsUseCase(filmsRepository = get()) }
     factory { GetQualitiesUseCase(filmsRepository = get()) }
     factory { GetOrderByUseCase(filmsRepository = get()) }
+    factory { LoginUserUseCase(filmsRepository = get()) }
 }
 
 val appModule = module {
@@ -51,4 +54,5 @@ val appModule = module {
             getQualitiesUseCase = get()
         )
     }
+    viewModel { ProfileViewModel(loginUserUseCase = get()) }
 }

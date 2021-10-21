@@ -5,7 +5,9 @@ import com.soldatov.data.models.film.TranslationData
 import com.soldatov.data.models.film.YearData
 import com.soldatov.data.models.filter.*
 import com.soldatov.data.models.home.HomePageFilmsParams
+import com.soldatov.data.models.profile.LoginUser
 import com.soldatov.domain.models.*
+import com.soldatov.domain.models.profile.LoginData
 
 fun FilmData.toDomain(): FilmInfo {
     return FilmInfo(
@@ -117,6 +119,13 @@ fun FilterParams.toData(): HomePageFilmsParams{
         page = page,
         orderBy = orderBy,
         order = order
+    )
+}
+
+fun LoginData.toData(): LoginUser{
+    return LoginUser(
+        login = login,
+        password = password
     )
 }
 

@@ -34,5 +34,10 @@
     <string name="qualitiesName">Качество</string>
     <string name="sort_by_text">Сортировать по</string>
     <string name="desc">desc</string>
-    <integer name="min_year_id">1</integer>
+    <string name="login">Логин</string>
+    <string name="password">Пароль</string>
+    <string name="forgot_pass"><u>Забыли пароль?</u></string>
+    <string name="submit_auth">Войти</string>
+    <string name="email">E-mail</string>
+    <string name="repeat_password">Повторите пароль</string>
 </resources>

@@ -4,10 +4,10 @@ import com.soldatov.data.models.film.FilmResponse
 import com.soldatov.data.models.film.SliderResponse
 import com.soldatov.data.models.filter.*
 import com.soldatov.data.models.home.HomePageFilmsResponse
+import com.soldatov.data.models.profile.LoginResponse
+import com.soldatov.data.models.profile.LoginUser
 import com.soldatov.data.models.search.SearchResponse
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface PlaceHolderApi {
     @GET("films/top-slider")
@@ -61,4 +61,7 @@ interface PlaceHolderApi {
 
     @GET("filter/qualities")
     suspend fun getQualities(): QualitiesResponse
+
+    @POST("user/login")
+    suspend fun loginUser(@Body loginUser: LoginUser): LoginResponse
 }

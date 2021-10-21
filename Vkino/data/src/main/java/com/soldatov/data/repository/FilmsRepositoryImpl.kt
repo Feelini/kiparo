@@ -1,8 +1,11 @@
 package com.soldatov.data.repository
 
+import android.util.Log
 import com.soldatov.data.api.PlaceHolderApi
 import com.soldatov.domain.models.*
+import com.soldatov.domain.models.profile.LoginData
 import com.soldatov.domain.repository.FilmsRepository
+import retrofit2.HttpException
 import java.lang.Exception
 
 const val FILM_HOME_MODE = "com.soldatov.vkino.data.repository.FILM_HOME_MODE"
@@ -125,5 +128,16 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
 
     override fun getOrderByData(): List<String> {
         return OrderBy.values().map { it.orderName }
+    }
+
+    override suspend fun loginUser(loginData: LoginData): String? {
+        try {
+            return placeHolderApi.loginUser(loginData.toData()).data.token
+        } catch (exception: HttpException){
+            if (exception.code() == 401){
+                return null
+            }
+        }
+        return null
     }
 }
