@@ -15,7 +15,11 @@
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.soldatov.vkino.presentation.ui.profile.ProfileFragment"
-        android:label="ProfileFragment" />
+        android:label="ProfileFragment" >
+        <action
+            android:id="@+id/action_profileFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
         android:name="com.soldatov.vkino.presentation.ui.favorite.FavoriteFragment"
@@ -79,4 +83,8 @@
         android:id="@+id/chooseQualityFragment"
         android:name="com.soldatov.vkino.presentation.ui.filter.quality.ChooseQualityFragment"
         android:label="ChooseQualityFragment" />
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="com.soldatov.vkino.presentation.ui.profile.UserProfileFragment"
+        android:label="UserProfileFragment" />
 </navigation>

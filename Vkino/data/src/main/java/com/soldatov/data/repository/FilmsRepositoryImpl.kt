@@ -1,24 +1,29 @@
 package com.soldatov.data.repository
 
-import android.util.Log
+import android.content.Context
 import com.soldatov.data.api.PlaceHolderApi
 import com.soldatov.domain.models.*
 import com.soldatov.domain.models.profile.LoginData
+import com.soldatov.domain.models.profile.UserInfoResult
 import com.soldatov.domain.repository.FilmsRepository
 import retrofit2.HttpException
-import java.lang.Exception
+import kotlin.Exception
 
 const val FILM_HOME_MODE = "com.soldatov.vkino.data.repository.FILM_HOME_MODE"
 const val FILM_SLIDER_MODE = "com.soldatov.vkino.data.repository.FILM_SLIDER_MODE"
 const val FILM_SEARCH_MODE = "com.soldatov.vkino.data.repository.FILM_SEARCH_MODE"
+const val APP_PREFERENCES = "PREFERENCES_SETTINGS"
+const val APP_PREFERENCES_TOKEN = "PREFERENCES_TOKEN"
 
-class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRepository {
+class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi, private val context: Context) :
+    FilmsRepository {
 
     private val lastSlider = ArrayList<FilmInfo>()
     private val homePageFilms = ArrayList<FilmInfo>()
     private val searchFilms = ArrayList<FilmInfo>()
     private val searchCountries = ArrayList<Country>()
     private val searchActors = ArrayList<Actor>()
+    private val sharedPreferences = context.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
 
     override suspend fun getTopSliderInfo(): List<FilmInfo> {
         val topSliderInfo = placeHolderApi.getTopSliderInfo()
@@ -47,7 +52,7 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
             orderBy = dataFilterParams.orderBy,
             order = dataFilterParams.order
         )
-        if (filterParams.page == 1){
+        if (filterParams.page == 1) {
             homePageFilms.clear()
             homePageFilms.addAll(homePageFilmsInfo.data.films.map { it.toDomain() })
         } else {
@@ -70,7 +75,7 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
                     searchFilms.filter { it.filmId == filmId }[0]
                 }
             }
-        } catch (e: Exception){
+        } catch (e: Exception) {
             val filmInfo = placeHolderApi.getFilmById(filmId)
             filmInfo.data.toDomain()
         }
@@ -78,7 +83,7 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
 
     override suspend fun getSearchFilms(searchQuery: String, page: Int): FilmsList {
         val searchFilmsInfo = placeHolderApi.getSearchFilmsInfo(searchQuery, page)
-        if (page == 1){
+        if (page == 1) {
             searchFilms.clear()
             searchFilms.addAll(searchFilmsInfo.data.films.map { it.toDomain() })
         } else {
@@ -102,7 +107,7 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
 
     override suspend fun getCountries(searchQuery: String, page: Int): CountriesList {
         val countries = placeHolderApi.getCountries(searchQuery, page).data.toDomain()
-        if (page == 1){
+        if (page == 1) {
             searchCountries.clear()
             searchCountries.addAll(countries.countries)
         } else {
@@ -113,7 +118,7 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
 
     override suspend fun getActors(searchQuery: String, page: Int): ActorsList {
         val actors = placeHolderApi.getActors(searchQuery, page).data.toDomain()
-        if (page == 1){
+        if (page == 1) {
             searchActors.clear()
             searchActors.addAll(actors.actors)
         } else {
@@ -133,11 +138,31 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi) : FilmsRep
     override suspend fun loginUser(loginData: LoginData): String? {
         try {
             return placeHolderApi.loginUser(loginData.toData()).data.token
-        } catch (exception: HttpException){
-            if (exception.code() == 401){
+        } catch (exception: HttpException) {
+            if (exception.code() == 401) {
                 return null
             }
         }
         return null
+    }
+
+    override fun saveUserToken(token: String) {
+        sharedPreferences.edit().putString(APP_PREFERENCES_TOKEN, token).apply()
+    }
+
+    override fun getUserToken(): String {
+        return sharedPreferences.getString(APP_PREFERENCES_TOKEN, "")!!
+    }
+
+    override suspend fun getUserInfo(): UserInfoResult {
+        return try {
+            UserInfoResult.Success(data = placeHolderApi.getUserInfo(getUserToken()).data.toDomain())
+        } catch (exception: Exception){
+            UserInfoResult.Error(message = exception.message?: "Error occurred")
+        }
+    }
+
+    override fun quitProfile() {
+        sharedPreferences.edit().putString(APP_PREFERENCES_TOKEN, null).apply()
     }
 }

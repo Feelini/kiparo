@@ -5,17 +5,23 @@ import com.soldatov.data.repository.FilmsRepositoryImpl
 import com.soldatov.domain.repository.FilmsRepository
 import com.soldatov.domain.usecase.*
 import com.soldatov.domain.usecase.filter.*
-import com.soldatov.domain.usecase.profile.LoginUserUseCase
+import com.soldatov.domain.usecase.profile.*
 import com.soldatov.vkino.presentation.ui.film.FilmFragmentViewModel
 import com.soldatov.vkino.presentation.ui.filter.FilterFragmentViewModel
 import com.soldatov.vkino.presentation.ui.home.HomeFragmentViewModel
 import com.soldatov.vkino.presentation.ui.profile.ProfileViewModel
 import com.soldatov.vkino.presentation.ui.search.SearchFragmentViewModel
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
+val appContext = module {
+    single(named("context")) { androidContext() }
+}
+
 val dataModule = module {
-    single<FilmsRepository> { FilmsRepositoryImpl(NetworkService.apiService) }
+    single<FilmsRepository> { FilmsRepositoryImpl(NetworkService.apiService, context = get()) }
 }
 
 val domainModule = module {
@@ -32,6 +38,10 @@ val domainModule = module {
     factory { GetQualitiesUseCase(filmsRepository = get()) }
     factory { GetOrderByUseCase(filmsRepository = get()) }
     factory { LoginUserUseCase(filmsRepository = get()) }
+    factory { SetUserTokenUseCase(filmsRepository = get()) }
+    factory { GetUserTokenUseCase(filmsRepository = get()) }
+    factory { GetUserInfoUseCase(filmsRepository = get()) }
+    factory { QuitProfileUseCase(filmsRepository = get()) }
 }
 
 val appModule = module {
@@ -54,5 +64,13 @@ val appModule = module {
             getQualitiesUseCase = get()
         )
     }
-    viewModel { ProfileViewModel(loginUserUseCase = get()) }
+    viewModel {
+        ProfileViewModel(
+            loginUserUseCase = get(),
+            saveUserTokenUseCase = get(),
+            getUserTokenUseCase = get(),
+            getUserInfoUseCase = get(),
+            quitProfileUseCase = get()
+        )
+    }
 }

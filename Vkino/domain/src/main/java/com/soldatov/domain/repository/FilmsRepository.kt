@@ -2,6 +2,7 @@ package com.soldatov.domain.repository
 
 import com.soldatov.domain.models.*
 import com.soldatov.domain.models.profile.LoginData
+import com.soldatov.domain.models.profile.UserInfoResult
 
 interface FilmsRepository {
     suspend fun getTopSliderInfo(): List<FilmInfo>
@@ -17,4 +18,8 @@ interface FilmsRepository {
     suspend fun getQualities(): List<Quality>
     fun getOrderByData(): List<String>
     suspend fun loginUser(loginData: LoginData): String?
+    fun saveUserToken(token: String)
+    fun getUserToken(): String
+    suspend fun getUserInfo(): UserInfoResult
+    fun quitProfile()
 }

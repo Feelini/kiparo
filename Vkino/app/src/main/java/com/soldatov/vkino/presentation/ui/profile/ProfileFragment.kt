@@ -5,12 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
+import com.soldatov.vkino.R
 import com.soldatov.vkino.databinding.FragmentProfileBinding
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class ProfileFragment: Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
+    private val viewModel by sharedViewModel<ProfileViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,7 +27,18 @@ class ProfileFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        showTabs()
+
+        setupObservers()
+    }
+
+    private fun setupObservers() {
+        viewModel.isLoggedIn().observe(viewLifecycleOwner, {
+            if (it){
+                findNavController().navigate(R.id.action_profileFragment_to_userProfileFragment)
+            } else {
+                showTabs()
+            }
+        })
     }
 
     private fun showTabs() {
