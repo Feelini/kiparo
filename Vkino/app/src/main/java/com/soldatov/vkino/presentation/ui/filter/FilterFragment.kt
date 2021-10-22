@@ -238,11 +238,18 @@ class FilterFragment : Fragment(), ChosenGenresListAdapter.OnRemoveChosenGenreLi
         }
     }
 
-    private fun setChosenYears(years: Years) {
-        binding.editYearFrom.setText(years.min.toString())
-        binding.editYearTo.setText(years.max.toString())
+    private fun setChosenYears(years: Years?) {
+        if (years == null){
+            val yearsAll = filterFragmentViewModel.getYears()
+            binding.editYearFrom.setText(yearsAll.min.toString())
+            binding.editYearTo.setText(yearsAll.max.toString())
+            binding.yearRange.values = listOf(yearsAll.min.toFloat(), yearsAll.max.toFloat())
+        } else {
+            binding.editYearFrom.setText(years.min.toString())
+            binding.editYearTo.setText(years.max.toString())
 
-        binding.yearRange.values = listOf(years.min.toFloat(), years.max.toFloat())
+            binding.yearRange.values = listOf(years.min.toFloat(), years.max.toFloat())
+        }
     }
 
     private fun showChosenCountriesList(countries: List<Country>) {

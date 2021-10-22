@@ -9,10 +9,13 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.soldatov.vkino.R
 import com.soldatov.vkino.databinding.FragmentRootBinding
+import com.soldatov.vkino.presentation.ui.home.HomeFragmentViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class RootFragment : Fragment(R.layout.fragment_root) {
+class RootFragment : Fragment() {
 
     private lateinit var binding: FragmentRootBinding
+    private val viewModel by sharedViewModel<HomeFragmentViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,5 +32,31 @@ class RootFragment : Fragment(R.layout.fragment_root) {
         val navController =
             (childFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment).navController
         NavigationUI.setupWithNavController(binding.bottomNavView, navController)
+
+        setupObservers()
+    }
+
+    private fun setupObservers() {
+        viewModel.getFilterParams().observe(viewLifecycleOwner, {
+            var counter = 0
+            if (it.chosenCategories.isNotEmpty()) counter += 1
+            if (it.chosenGenres.isNotEmpty()) counter += 1
+            if (it.chosenCountries.isNotEmpty()) counter += 1
+            if (it.chosenActors.isNotEmpty()) counter += 1
+            if (it.chosenQualities.isNotEmpty()) counter += 1
+            if (it.chosenYears != null) counter += 1
+
+            if (counter != 0) {
+                val badge = binding.bottomNavView.getOrCreateBadge(R.id.filterFragment)
+                badge.isVisible = true
+                badge.number = counter
+            } else {
+                val badge = binding.bottomNavView.getBadge(R.id.filterFragment)
+                if (badge != null) {
+                    badge.isVisible = false
+                    badge.clearNumber()
+                }
+            }
+        })
     }
 }

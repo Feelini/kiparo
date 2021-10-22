@@ -74,4 +74,8 @@ class HomeFragmentViewModel(
     fun setFilterParams(newFilterParams: FilterParams){
         filterParams.value = newFilterParams
     }
+
+    fun getFilterParams(): LiveData<FilterParams>{
+        return filterParams
+    }
 }

@@ -23,7 +23,7 @@ class FilterFragmentViewModel(
 
     val chosenGenres = MutableLiveData<ArrayList<Genre>>(arrayListOf())
     val chosenCategories = MutableLiveData<ArrayList<Category>>(arrayListOf())
-    val chosenYears = MutableLiveData<Years>()
+    val chosenYears = MutableLiveData<Years?>()
     val chosenCountries = MutableLiveData<ArrayList<Country>>(arrayListOf())
     private val countriesSearchParams = MutableLiveData(SearchParams())
     val chosenActors = MutableLiveData<ArrayList<Actor>>(arrayListOf())
@@ -209,10 +209,9 @@ class FilterFragmentViewModel(
     }
 
     fun clearFilter(){
-        val years = getYears()
         chosenGenres.value = arrayListOf()
         chosenCategories.value = arrayListOf()
-        chosenYears.value = years
+        chosenYears.value = null
         chosenCountries.value = arrayListOf()
         chosenActors.value = arrayListOf()
         chosenQualities.value = arrayListOf()
