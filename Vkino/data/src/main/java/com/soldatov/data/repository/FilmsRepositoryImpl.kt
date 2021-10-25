@@ -1,9 +1,15 @@
 package com.soldatov.data.repository
 
 import android.content.Context
+import android.util.Log
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.soldatov.data.api.PlaceHolderApi
+import com.soldatov.data.models.profile.RegisterError
 import com.soldatov.domain.models.*
 import com.soldatov.domain.models.profile.LoginData
+import com.soldatov.domain.models.profile.RegisterData
+import com.soldatov.domain.models.profile.RegisterResult
 import com.soldatov.domain.models.profile.UserInfoResult
 import com.soldatov.domain.repository.FilmsRepository
 import retrofit2.HttpException
@@ -15,7 +21,10 @@ const val FILM_SEARCH_MODE = "com.soldatov.vkino.data.repository.FILM_SEARCH_MOD
 const val APP_PREFERENCES = "PREFERENCES_SETTINGS"
 const val APP_PREFERENCES_TOKEN = "PREFERENCES_TOKEN"
 
-class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi, private val context: Context) :
+class FilmsRepositoryImpl(
+    private val placeHolderApi: PlaceHolderApi,
+    private val context: Context
+) :
     FilmsRepository {
 
     private val lastSlider = ArrayList<FilmInfo>()
@@ -23,7 +32,8 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi, private va
     private val searchFilms = ArrayList<FilmInfo>()
     private val searchCountries = ArrayList<Country>()
     private val searchActors = ArrayList<Actor>()
-    private val sharedPreferences = context.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
+    private val sharedPreferences =
+        context.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
 
     override suspend fun getTopSliderInfo(): List<FilmInfo> {
         val topSliderInfo = placeHolderApi.getTopSliderInfo()
@@ -157,12 +167,23 @@ class FilmsRepositoryImpl(private val placeHolderApi: PlaceHolderApi, private va
     override suspend fun getUserInfo(): UserInfoResult {
         return try {
             UserInfoResult.Success(data = placeHolderApi.getUserInfo(getUserToken()).data.toDomain())
-        } catch (exception: Exception){
-            UserInfoResult.Error(message = exception.message?: "Error occurred")
+        } catch (exception: Exception) {
+            UserInfoResult.Error(message = exception.message ?: "Error occurred")
         }
     }
 
     override fun quitProfile() {
         sharedPreferences.edit().putString(APP_PREFERENCES_TOKEN, null).apply()
+    }
+
+    override suspend fun registerUser(registerData: RegisterData): RegisterResult {
+        return try {
+            RegisterResult.Success(token = placeHolderApi.registerUser(registerData.toData()).data.token)
+        } catch (exception: HttpException) {
+            val gson = GsonBuilder().create()
+            val raw = exception.response()?.errorBody()?.string()
+            val error = gson.fromJson(raw, RegisterError::class.java)
+            RegisterResult.Error(message = error.error.msg)
+        }
     }
 }

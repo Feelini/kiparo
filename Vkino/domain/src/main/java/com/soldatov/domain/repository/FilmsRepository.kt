@@ -2,6 +2,8 @@ package com.soldatov.domain.repository
 
 import com.soldatov.domain.models.*
 import com.soldatov.domain.models.profile.LoginData
+import com.soldatov.domain.models.profile.RegisterData
+import com.soldatov.domain.models.profile.RegisterResult
 import com.soldatov.domain.models.profile.UserInfoResult
 
 interface FilmsRepository {
@@ -22,4 +24,5 @@ interface FilmsRepository {
     fun getUserToken(): String
     suspend fun getUserInfo(): UserInfoResult
     fun quitProfile()
+    suspend fun registerUser(registerData: RegisterData): RegisterResult
 }

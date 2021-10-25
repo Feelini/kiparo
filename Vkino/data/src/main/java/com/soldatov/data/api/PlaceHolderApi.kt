@@ -6,6 +6,7 @@ import com.soldatov.data.models.filter.*
 import com.soldatov.data.models.home.HomePageFilmsResponse
 import com.soldatov.data.models.profile.LoginResponse
 import com.soldatov.data.models.profile.LoginUser
+import com.soldatov.data.models.profile.RegisterRequest
 import com.soldatov.data.models.profile.UserInfoResponse
 import com.soldatov.data.models.search.SearchResponse
 import retrofit2.http.*
@@ -68,4 +69,7 @@ interface PlaceHolderApi {
 
     @GET("user/profile")
     suspend fun getUserInfo(@Header("User-Token") token: String): UserInfoResponse
+
+    @POST("user/register")
+    suspend fun registerUser(@Body registerUser: RegisterRequest): LoginResponse
 }

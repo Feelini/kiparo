@@ -42,6 +42,7 @@ val domainModule = module {
     factory { GetUserTokenUseCase(filmsRepository = get()) }
     factory { GetUserInfoUseCase(filmsRepository = get()) }
     factory { QuitProfileUseCase(filmsRepository = get()) }
+    factory { RegisterUserUseCase(filmsRepository = get()) }
 }
 
 val appModule = module {
@@ -70,7 +71,8 @@ val appModule = module {
             saveUserTokenUseCase = get(),
             getUserTokenUseCase = get(),
             getUserInfoUseCase = get(),
-            quitProfileUseCase = get()
+            quitProfileUseCase = get(),
+            registerUserUseCase = get()
         )
     }
 }
