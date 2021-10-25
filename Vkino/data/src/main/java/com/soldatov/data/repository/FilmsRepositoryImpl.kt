@@ -164,9 +164,9 @@ class FilmsRepositoryImpl(
         return sharedPreferences.getString(APP_PREFERENCES_TOKEN, "")!!
     }
 
-    override suspend fun getUserInfo(): UserInfoResult {
+    override suspend fun getUserInfo(userToken: String): UserInfoResult {
         return try {
-            UserInfoResult.Success(data = placeHolderApi.getUserInfo(getUserToken()).data.toDomain())
+            UserInfoResult.Success(data = placeHolderApi.getUserInfo(userToken).data.toDomain())
         } catch (exception: Exception) {
             UserInfoResult.Error(message = exception.message ?: "Error occurred")
         }

@@ -17,15 +17,19 @@ class ProfileViewModel(
     private val registerUserUseCase: RegisterUserUseCase
 ) : ViewModel() {
 
+    private val userToken = MutableLiveData("")
     private val isLogIn = MutableLiveData(false).apply {
         val token = getUserToken()
         if (token != ""){
+            userToken.value = token
             this.value = true
         }
     }
 
-    val userInfo = liveData {
-        emit(getUserInfoUseCase.execute())
+    val userInfo = Transformations.switchMap(userToken){ token ->
+        liveData(Dispatchers.IO){
+            emit(getUserInfoUseCase.execute(token))
+        }
     }
 
     fun sendLoginRequest(loginData: LoginData): LiveData<String?> {
@@ -36,6 +40,7 @@ class ProfileViewModel(
 
     fun setUserToken(token: String) {
         saveUserTokenUseCase.execute(token)
+        userToken.value = token
         isLogIn.value = true
     }
 
@@ -49,6 +54,7 @@ class ProfileViewModel(
 
     fun quitProfile(){
         quitProfileUseCase.execute()
+        userToken.value = ""
         isLogIn.value = false
     }
 

@@ -22,7 +22,7 @@ interface FilmsRepository {
     suspend fun loginUser(loginData: LoginData): String?
     fun saveUserToken(token: String)
     fun getUserToken(): String
-    suspend fun getUserInfo(): UserInfoResult
+    suspend fun getUserInfo(userToken: String): UserInfoResult
     fun quitProfile()
     suspend fun registerUser(registerData: RegisterData): RegisterResult
 }

@@ -5,7 +5,7 @@ import com.soldatov.domain.repository.FilmsRepository
 
 class GetUserInfoUseCase(private val filmsRepository: FilmsRepository) {
 
-    suspend fun execute(): UserInfoResult{
-        return filmsRepository.getUserInfo()
+    suspend fun execute(token: String): UserInfoResult{
+        return filmsRepository.getUserInfo(token)
     }
 }
