@@ -7,10 +7,7 @@ import com.google.gson.GsonBuilder
 import com.soldatov.data.api.PlaceHolderApi
 import com.soldatov.data.models.profile.RegisterError
 import com.soldatov.domain.models.*
-import com.soldatov.domain.models.profile.LoginData
-import com.soldatov.domain.models.profile.RegisterData
-import com.soldatov.domain.models.profile.RegisterResult
-import com.soldatov.domain.models.profile.UserInfoResult
+import com.soldatov.domain.models.profile.*
 import com.soldatov.domain.repository.FilmsRepository
 import retrofit2.HttpException
 import kotlin.Exception
@@ -184,6 +181,22 @@ class FilmsRepositoryImpl(
             val raw = exception.response()?.errorBody()?.string()
             val error = gson.fromJson(raw, RegisterError::class.java)
             RegisterResult.Error(message = error.error.msg)
+        }
+    }
+
+    override suspend fun updateProfile(userInfo: UserInfo, token: String): UserInfoResult {
+        return try {
+            UserInfoResult.Success(
+                data = placeHolderApi.updateProfile(
+                    userInfo.toData(),
+                    token
+                ).data.toDomain()
+            )
+        } catch (exception: HttpException){
+            val gson = GsonBuilder().create()
+            val raw = exception.response()?.errorBody()?.string()
+            val error = gson.fromJson(raw, RegisterError::class.java)
+            UserInfoResult.Error(message = error.error.msg)
         }
     }
 }

@@ -1,12 +1,10 @@
 package com.soldatov.vkino.presentation.ui.profile
 
 import androidx.lifecycle.*
-import com.soldatov.domain.models.profile.LoginData
-import com.soldatov.domain.models.profile.RegisterData
-import com.soldatov.domain.models.profile.RegisterResult
-import com.soldatov.domain.models.profile.UserInfo
+import com.soldatov.domain.models.profile.*
 import com.soldatov.domain.usecase.profile.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ProfileViewModel(
     private val loginUserUseCase: LoginUserUseCase,
@@ -14,7 +12,8 @@ class ProfileViewModel(
     private val getUserTokenUseCase: GetUserTokenUseCase,
     private val getUserInfoUseCase: GetUserInfoUseCase,
     private val quitProfileUseCase: QuitProfileUseCase,
-    private val registerUserUseCase: RegisterUserUseCase
+    private val registerUserUseCase: RegisterUserUseCase,
+    private val updateProfileUseCase: UpdateProfileUseCase
 ) : ViewModel() {
 
     private val userToken = MutableLiveData("")
@@ -29,6 +28,12 @@ class ProfileViewModel(
     val userInfo = Transformations.switchMap(userToken){ token ->
         liveData(Dispatchers.IO){
             emit(getUserInfoUseCase.execute(token))
+        }
+    } as MutableLiveData
+
+    fun updateUserInfo(userProfileInfo: UserInfo){
+        viewModelScope.launch {
+            userInfo.postValue(updateProfileUseCase.execute(userProfileInfo, getUserToken()))
         }
     }
 

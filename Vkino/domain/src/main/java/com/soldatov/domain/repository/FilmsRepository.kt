@@ -1,10 +1,7 @@
 package com.soldatov.domain.repository
 
 import com.soldatov.domain.models.*
-import com.soldatov.domain.models.profile.LoginData
-import com.soldatov.domain.models.profile.RegisterData
-import com.soldatov.domain.models.profile.RegisterResult
-import com.soldatov.domain.models.profile.UserInfoResult
+import com.soldatov.domain.models.profile.*
 
 interface FilmsRepository {
     suspend fun getTopSliderInfo(): List<FilmInfo>
@@ -25,4 +22,5 @@ interface FilmsRepository {
     suspend fun getUserInfo(userToken: String): UserInfoResult
     fun quitProfile()
     suspend fun registerUser(registerData: RegisterData): RegisterResult
+    suspend fun updateProfile(userInfo: UserInfo, token: String): UserInfoResult
 }

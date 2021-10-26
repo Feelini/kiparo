@@ -6,6 +6,7 @@ import com.soldatov.data.models.film.YearData
 import com.soldatov.data.models.filter.*
 import com.soldatov.data.models.home.HomePageFilmsParams
 import com.soldatov.data.models.profile.LoginUser
+import com.soldatov.data.models.profile.Profile
 import com.soldatov.data.models.profile.RegisterRequest
 import com.soldatov.data.models.profile.UserInfoTotalData
 import com.soldatov.domain.models.*
@@ -148,12 +149,30 @@ fun UserInfoTotalData.toDomain(): UserInfo{
         id = profile.ID,
         login = profile.login,
         email = profile.email,
+        pendingEmail = profile.pendingEmail ?: "",
         firstName = profile.firstName,
         lastName = profile.lastName,
         about = profile.about,
         gender = if (profile.gender == "f") Gender.FEMALE else Gender.MALE,
         fullName = profile.fullName,
-        birthday = profile.birthday
+        birthday = profile.birthday,
+        image = profile.image
+    )
+}
+
+fun UserInfo.toData(): Profile{
+    return Profile(
+        ID = id,
+        login = login,
+        email = email,
+        pendingEmail = pendingEmail,
+        firstName = firstName,
+        lastName = lastName,
+        about = about,
+        gender = if (gender.name == Gender.FEMALE.name) "f" else "m",
+        fullName = fullName,
+        birthday = birthday,
+        image = image
     )
 }
 

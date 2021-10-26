@@ -24,14 +24,13 @@
 
         <ImageView
             android:id="@+id/user_photo"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_marginTop="10dp"
-            android:src="@drawable/person"
+            android:scaleType="fitCenter"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/quit_profile"
-            app:tint="@color/white" />
+            app:layout_constraintTop_toBottomOf="@id/quit_profile" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/name_field"
@@ -114,6 +113,8 @@
             android:hint="@string/email"
             android:textColorHint="@color/white"
             app:boxStrokeColor="@color/white"
+            app:helperTextEnabled="true"
+            app:helperTextTextColor="@color/white"
             app:hintTextColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -169,8 +170,12 @@
                 android:id="@+id/bd_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
+                android:inputType="numberDecimal"
                 android:textColor="@color/white"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:textCursorDrawable="@null" />
 
         </com.google.android.material.textfield.TextInputLayout>

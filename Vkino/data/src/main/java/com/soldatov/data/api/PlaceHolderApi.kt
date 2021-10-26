@@ -4,10 +4,7 @@ import com.soldatov.data.models.film.FilmResponse
 import com.soldatov.data.models.film.SliderResponse
 import com.soldatov.data.models.filter.*
 import com.soldatov.data.models.home.HomePageFilmsResponse
-import com.soldatov.data.models.profile.LoginResponse
-import com.soldatov.data.models.profile.LoginUser
-import com.soldatov.data.models.profile.RegisterRequest
-import com.soldatov.data.models.profile.UserInfoResponse
+import com.soldatov.data.models.profile.*
 import com.soldatov.data.models.search.SearchResponse
 import retrofit2.http.*
 
@@ -72,4 +69,10 @@ interface PlaceHolderApi {
 
     @POST("user/register")
     suspend fun registerUser(@Body registerUser: RegisterRequest): LoginResponse
+
+    @PUT("user/profile")
+    suspend fun updateProfile(
+        @Body profile: Profile,
+        @Header("User-Token") token: String
+    ): UserInfoResponse
 }
