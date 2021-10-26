@@ -24,6 +24,7 @@ class UserProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentUserProfileBinding
     private val viewModel by sharedViewModel<ProfileViewModel>()
+    private var isUpdated = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,6 +45,10 @@ class UserProfileFragment : Fragment() {
             when (it) {
                 is UserInfoResult.Success -> {
                     showUserInfo(it.data)
+                    if (isUpdated){
+                        Snackbar.make(requireView(), "Данные обновлены", Snackbar.LENGTH_LONG).show()
+                        isUpdated = false
+                    }
                 }
                 is UserInfoResult.Error -> {
                     Snackbar.make(requireView(), it.message, Snackbar.LENGTH_LONG).show()
@@ -105,7 +110,7 @@ class UserProfileFragment : Fragment() {
                 image = ""
             )
             viewModel.updateUserInfo(userInfo)
-            Snackbar.make(requireView(), "Данные обновлены", Snackbar.LENGTH_LONG).show()
+            isUpdated = true
         }
     }
 }
