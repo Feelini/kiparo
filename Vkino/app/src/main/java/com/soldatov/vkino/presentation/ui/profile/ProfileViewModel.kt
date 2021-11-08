@@ -9,31 +9,26 @@ import kotlinx.coroutines.launch
 class ProfileViewModel(
     private val loginUserUseCase: LoginUserUseCase,
     private val saveUserTokenUseCase: SetUserTokenUseCase,
-    private val getUserTokenUseCase: GetUserTokenUseCase,
     private val getUserInfoUseCase: GetUserInfoUseCase,
     private val quitProfileUseCase: QuitProfileUseCase,
     private val registerUserUseCase: RegisterUserUseCase,
-    private val updateProfileUseCase: UpdateProfileUseCase
+    private val updateProfileUseCase: UpdateProfileUseCase,
+    private val isLogInUseCase: IsLogInUseCase
 ) : ViewModel() {
 
-    private val userToken = MutableLiveData("")
     private val isLogIn = MutableLiveData(false).apply {
-        val token = getUserToken()
-        if (token != ""){
-            userToken.value = token
-            this.value = true
-        }
+        this.value = isLogInUseCase.execute()
     }
 
-    val userInfo = Transformations.switchMap(userToken){ token ->
+    val userInfo = Transformations.switchMap(isLogIn){
         liveData(Dispatchers.IO){
-            emit(getUserInfoUseCase.execute(token))
+            emit(getUserInfoUseCase.execute())
         }
     } as MutableLiveData
 
     fun updateUserInfo(userProfileInfo: UserInfo){
         viewModelScope.launch {
-            userInfo.postValue(updateProfileUseCase.execute(userProfileInfo, getUserToken()))
+            userInfo.postValue(updateProfileUseCase.execute(userProfileInfo))
         }
     }
 
@@ -45,12 +40,7 @@ class ProfileViewModel(
 
     fun setUserToken(token: String) {
         saveUserTokenUseCase.execute(token)
-        userToken.value = token
         isLogIn.value = true
-    }
-
-    fun getUserToken(): String{
-        return getUserTokenUseCase.execute()
     }
 
     fun isLoggedIn(): LiveData<Boolean>{
@@ -59,7 +49,6 @@ class ProfileViewModel(
 
     fun quitProfile(){
         quitProfileUseCase.execute()
-        userToken.value = ""
         isLogIn.value = false
     }
 

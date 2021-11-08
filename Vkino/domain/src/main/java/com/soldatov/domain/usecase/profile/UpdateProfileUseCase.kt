@@ -6,7 +6,7 @@ import com.soldatov.domain.repository.FilmsRepository
 
 class UpdateProfileUseCase(private val filmsRepository: FilmsRepository) {
 
-    suspend fun execute(userInfo: UserInfo, token: String): UserInfoResult{
-        return filmsRepository.updateProfile(userInfo, token)
+    suspend fun execute(userInfo: UserInfo): UserInfoResult{
+        return filmsRepository.updateProfile(userInfo)
     }
 }

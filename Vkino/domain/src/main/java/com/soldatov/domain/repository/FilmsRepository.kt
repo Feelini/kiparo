@@ -18,9 +18,9 @@ interface FilmsRepository {
     fun getOrderByData(): List<String>
     suspend fun loginUser(loginData: LoginData): String?
     fun saveUserToken(token: String)
-    fun getUserToken(): String
-    suspend fun getUserInfo(userToken: String): UserInfoResult
+    fun isLogInUser(): Boolean
+    suspend fun getUserInfo(): UserInfoResult
     fun quitProfile()
     suspend fun registerUser(registerData: RegisterData): RegisterResult
-    suspend fun updateProfile(userInfo: UserInfo, token: String): UserInfoResult
+    suspend fun updateProfile(userInfo: UserInfo): UserInfoResult
 }

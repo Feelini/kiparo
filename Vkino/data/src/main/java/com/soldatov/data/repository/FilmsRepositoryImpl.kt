@@ -20,7 +20,8 @@ const val APP_PREFERENCES_TOKEN = "PREFERENCES_TOKEN"
 
 class FilmsRepositoryImpl(
     private val placeHolderApi: PlaceHolderApi,
-    private val context: Context
+    context: Context,
+    private val gson: Gson
 ) :
     FilmsRepository {
 
@@ -73,13 +74,13 @@ class FilmsRepositoryImpl(
         return try {
             when (mode) {
                 FILM_SLIDER_MODE -> {
-                    lastSlider.filter { it.filmId == filmId }[0]
+                    lastSlider.first { it.filmId == filmId }
                 }
                 FILM_HOME_MODE -> {
-                    homePageFilms.filter { it.filmId == filmId }[0]
+                    homePageFilms.first { it.filmId == filmId }
                 }
                 else -> {
-                    searchFilms.filter { it.filmId == filmId }[0]
+                    searchFilms.first { it.filmId == filmId }
                 }
             }
         } catch (e: Exception) {
@@ -157,14 +158,21 @@ class FilmsRepositoryImpl(
         sharedPreferences.edit().putString(APP_PREFERENCES_TOKEN, token).apply()
     }
 
-    override fun getUserToken(): String {
+    override fun isLogInUser(): Boolean {
+        val token = getUserToken()
+        return token != ""
+    }
+
+    private fun getUserToken(): String {
         return sharedPreferences.getString(APP_PREFERENCES_TOKEN, "")!!
     }
 
-    override suspend fun getUserInfo(userToken: String): UserInfoResult {
+    override suspend fun getUserInfo(): UserInfoResult {
         return try {
-            UserInfoResult.Success(data = placeHolderApi.getUserInfo(userToken).data.toDomain())
+            val token = getUserToken()
+            UserInfoResult.Success(data = placeHolderApi.getUserInfo(token).data.toDomain())
         } catch (exception: Exception) {
+            quitProfile()
             UserInfoResult.Error(message = exception.message ?: "Error occurred")
         }
     }
@@ -177,23 +185,21 @@ class FilmsRepositoryImpl(
         return try {
             RegisterResult.Success(token = placeHolderApi.registerUser(registerData.toData()).data.token)
         } catch (exception: HttpException) {
-            val gson = GsonBuilder().create()
             val raw = exception.response()?.errorBody()?.string()
             val error = gson.fromJson(raw, RegisterError::class.java)
             RegisterResult.Error(message = error.error.msg)
         }
     }
 
-    override suspend fun updateProfile(userInfo: UserInfo, token: String): UserInfoResult {
+    override suspend fun updateProfile(userInfo: UserInfo): UserInfoResult {
         return try {
             UserInfoResult.Success(
                 data = placeHolderApi.updateProfile(
                     userInfo.toData(),
-                    token
+                    getUserToken()
                 ).data.toDomain()
             )
         } catch (exception: HttpException){
-            val gson = GsonBuilder().create()
             val raw = exception.response()?.errorBody()?.string()
             val error = gson.fromJson(raw, RegisterError::class.java)
             UserInfoResult.Error(message = error.error.msg)

@@ -1,5 +1,6 @@
 package com.soldatov.vkino.presentation.di
 
+import com.google.gson.GsonBuilder
 import com.soldatov.data.api.NetworkService
 import com.soldatov.data.repository.FilmsRepositoryImpl
 import com.soldatov.domain.repository.FilmsRepository
@@ -11,17 +12,17 @@ import com.soldatov.vkino.presentation.ui.filter.FilterFragmentViewModel
 import com.soldatov.vkino.presentation.ui.home.HomeFragmentViewModel
 import com.soldatov.vkino.presentation.ui.profile.ProfileViewModel
 import com.soldatov.vkino.presentation.ui.search.SearchFragmentViewModel
-import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-val appContext = module {
-    single(named("context")) { androidContext() }
-}
-
 val dataModule = module {
-    single<FilmsRepository> { FilmsRepositoryImpl(NetworkService.apiService, context = get()) }
+    single<FilmsRepository> {
+        FilmsRepositoryImpl(
+            NetworkService.apiService,
+            context = get(),
+            gson = GsonBuilder().create()
+        )
+    }
 }
 
 val domainModule = module {
@@ -39,11 +40,11 @@ val domainModule = module {
     factory { GetOrderByUseCase(filmsRepository = get()) }
     factory { LoginUserUseCase(filmsRepository = get()) }
     factory { SetUserTokenUseCase(filmsRepository = get()) }
-    factory { GetUserTokenUseCase(filmsRepository = get()) }
     factory { GetUserInfoUseCase(filmsRepository = get()) }
     factory { QuitProfileUseCase(filmsRepository = get()) }
     factory { RegisterUserUseCase(filmsRepository = get()) }
     factory { UpdateProfileUseCase(filmsRepository = get()) }
+    factory { IsLogInUseCase(filmsRepository = get()) }
 }
 
 val appModule = module {
@@ -70,11 +71,11 @@ val appModule = module {
         ProfileViewModel(
             loginUserUseCase = get(),
             saveUserTokenUseCase = get(),
-            getUserTokenUseCase = get(),
             getUserInfoUseCase = get(),
             quitProfileUseCase = get(),
             registerUserUseCase = get(),
-            updateProfileUseCase = get()
+            updateProfileUseCase = get(),
+            isLogInUseCase = get()
         )
     }
 }

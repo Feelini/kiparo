@@ -150,12 +150,12 @@ fun UserInfoTotalData.toDomain(): UserInfo{
         login = profile.login,
         email = profile.email,
         pendingEmail = profile.pendingEmail ?: "",
-        firstName = profile.firstName,
-        lastName = profile.lastName,
-        about = profile.about,
+        firstName = profile.firstName ?: "",
+        lastName = profile.lastName ?: "",
+        about = profile.about ?: "",
         gender = if (profile.gender == "f") Gender.FEMALE else Gender.MALE,
         fullName = profile.fullName,
-        birthday = profile.birthday,
+        birthday = profile.birthday ?: "",
         image = profile.image
     )
 }
