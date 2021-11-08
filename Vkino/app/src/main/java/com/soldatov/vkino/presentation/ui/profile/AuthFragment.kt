@@ -33,9 +33,9 @@ class AuthFragment: Fragment() {
 
             viewModel.sendLoginRequest(LoginData(login, password)).observe(viewLifecycleOwner, {
                 if (it == null){
-                    Snackbar.make(requireView(), "Ошибка авторизации", Snackbar.LENGTH_LONG).show()
+                    viewModel.logInUser()
                 } else {
-                    viewModel.setUserToken(it)
+                    Snackbar.make(requireView(), it, Snackbar.LENGTH_LONG).show()
                 }
             })
         }

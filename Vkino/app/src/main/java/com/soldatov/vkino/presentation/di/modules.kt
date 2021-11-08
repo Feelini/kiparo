@@ -39,7 +39,6 @@ val domainModule = module {
     factory { GetQualitiesUseCase(filmsRepository = get()) }
     factory { GetOrderByUseCase(filmsRepository = get()) }
     factory { LoginUserUseCase(filmsRepository = get()) }
-    factory { SetUserTokenUseCase(filmsRepository = get()) }
     factory { GetUserInfoUseCase(filmsRepository = get()) }
     factory { QuitProfileUseCase(filmsRepository = get()) }
     factory { RegisterUserUseCase(filmsRepository = get()) }
@@ -70,7 +69,6 @@ val appModule = module {
     viewModel {
         ProfileViewModel(
             loginUserUseCase = get(),
-            saveUserTokenUseCase = get(),
             getUserInfoUseCase = get(),
             quitProfileUseCase = get(),
             registerUserUseCase = get(),

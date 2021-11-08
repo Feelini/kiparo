@@ -1,11 +1,9 @@
 package com.soldatov.data.repository
 
 import android.content.Context
-import android.util.Log
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.soldatov.data.api.PlaceHolderApi
-import com.soldatov.data.models.profile.RegisterError
+import com.soldatov.data.models.profile.Error
 import com.soldatov.domain.models.*
 import com.soldatov.domain.models.profile.*
 import com.soldatov.domain.repository.FilmsRepository
@@ -144,23 +142,24 @@ class FilmsRepositoryImpl(
     }
 
     override suspend fun loginUser(loginData: LoginData): String? {
-        try {
-            return placeHolderApi.loginUser(loginData.toData()).data.token
+        return try {
+            val token = placeHolderApi.loginUser(loginData.toData()).data.token
+            saveUserToken(token)
+            null
         } catch (exception: HttpException) {
-            if (exception.code() == 401) {
-                return null
-            }
+            val raw = exception.response()?.errorBody()?.string()
+            val error = gson.fromJson(raw, Error::class.java)
+            error.error.msg
         }
-        return null
-    }
-
-    override fun saveUserToken(token: String) {
-        sharedPreferences.edit().putString(APP_PREFERENCES_TOKEN, token).apply()
     }
 
     override fun isLogInUser(): Boolean {
         val token = getUserToken()
         return token != ""
+    }
+
+    private fun saveUserToken(token: String) {
+        sharedPreferences.edit().putString(APP_PREFERENCES_TOKEN, token).apply()
     }
 
     private fun getUserToken(): String {
@@ -183,10 +182,12 @@ class FilmsRepositoryImpl(
 
     override suspend fun registerUser(registerData: RegisterData): RegisterResult {
         return try {
-            RegisterResult.Success(token = placeHolderApi.registerUser(registerData.toData()).data.token)
+            val token = placeHolderApi.registerUser(registerData.toData()).data.token
+            saveUserToken(token)
+            RegisterResult.Success
         } catch (exception: HttpException) {
             val raw = exception.response()?.errorBody()?.string()
-            val error = gson.fromJson(raw, RegisterError::class.java)
+            val error = gson.fromJson(raw, Error::class.java)
             RegisterResult.Error(message = error.error.msg)
         }
     }
@@ -201,7 +202,7 @@ class FilmsRepositoryImpl(
             )
         } catch (exception: HttpException){
             val raw = exception.response()?.errorBody()?.string()
-            val error = gson.fromJson(raw, RegisterError::class.java)
+            val error = gson.fromJson(raw, Error::class.java)
             UserInfoResult.Error(message = error.error.msg)
         }
     }

@@ -8,7 +8,6 @@ import kotlinx.coroutines.launch
 
 class ProfileViewModel(
     private val loginUserUseCase: LoginUserUseCase,
-    private val saveUserTokenUseCase: SetUserTokenUseCase,
     private val getUserInfoUseCase: GetUserInfoUseCase,
     private val quitProfileUseCase: QuitProfileUseCase,
     private val registerUserUseCase: RegisterUserUseCase,
@@ -38,8 +37,7 @@ class ProfileViewModel(
         }
     }
 
-    fun setUserToken(token: String) {
-        saveUserTokenUseCase.execute(token)
+    fun logInUser() {
         isLogIn.value = true
     }
 

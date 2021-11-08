@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
-import com.soldatov.domain.models.profile.LoginData
 import com.soldatov.domain.models.profile.RegisterData
 import com.soldatov.domain.models.profile.RegisterResult
 import com.soldatov.vkino.databinding.FragmentRegistrBinding
@@ -44,8 +43,8 @@ class RegistrationFragment: Fragment() {
 
             viewModel.sendRegisterRequest(registerData).observe(viewLifecycleOwner, {
                 when(it){
-                    is RegisterResult.Success -> {
-                        viewModel.setUserToken(it.token)
+                    RegisterResult.Success -> {
+                        viewModel.logInUser()
                     }
                     is RegisterResult.Error -> {
                         Snackbar.make(requireView(), it.message, Snackbar.LENGTH_LONG).show()
