@@ -1,5 +1,6 @@
 package com.soldatov.data.api
 
+import com.soldatov.data.models.favourite.FavouriteResponse
 import com.soldatov.data.models.film.FilmResponse
 import com.soldatov.data.models.film.SliderResponse
 import com.soldatov.data.models.filter.*
@@ -75,4 +76,14 @@ interface PlaceHolderApi {
         @Body profile: Profile,
         @Header("User-Token") token: String
     ): UserInfoResponse
+
+    @GET("user/fav-cats")
+    suspend fun getFavCats(@Header("User-Token") token: String): FavCatsResponse
+
+    @GET("user/favorite")
+    suspend fun getFavByCat(
+        @Header("User-Token") token: String,
+        @Query("cat_id") catId: Int,
+        @Query("page") page: Int
+    ): FavouriteResponse
 }

@@ -5,8 +5,11 @@ import com.soldatov.data.api.NetworkService
 import com.soldatov.data.repository.FilmsRepositoryImpl
 import com.soldatov.domain.repository.FilmsRepository
 import com.soldatov.domain.usecase.*
+import com.soldatov.domain.usecase.favourite.GetFavByCatUseCase
+import com.soldatov.domain.usecase.favourite.GetFavCatsUseCase
 import com.soldatov.domain.usecase.filter.*
 import com.soldatov.domain.usecase.profile.*
+import com.soldatov.vkino.presentation.ui.favorite.FavouriteViewModel
 import com.soldatov.vkino.presentation.ui.film.FilmFragmentViewModel
 import com.soldatov.vkino.presentation.ui.filter.FilterFragmentViewModel
 import com.soldatov.vkino.presentation.ui.home.HomeFragmentViewModel
@@ -44,6 +47,8 @@ val domainModule = module {
     factory { RegisterUserUseCase(filmsRepository = get()) }
     factory { UpdateProfileUseCase(filmsRepository = get()) }
     factory { IsLogInUseCase(filmsRepository = get()) }
+    factory { GetFavCatsUseCase(filmsRepository = get()) }
+    factory { GetFavByCatUseCase(filmsRepository = get()) }
 }
 
 val appModule = module {
@@ -74,6 +79,12 @@ val appModule = module {
             registerUserUseCase = get(),
             updateProfileUseCase = get(),
             isLogInUseCase = get()
+        )
+    }
+    viewModel {
+        FavouriteViewModel(
+            getFavCatsUseCase = get(),
+            getFavByCatUseCase = get()
         )
     }
 }

@@ -10,6 +10,7 @@ import com.soldatov.data.models.profile.Profile
 import com.soldatov.data.models.profile.RegisterRequest
 import com.soldatov.data.models.profile.UserInfoTotalData
 import com.soldatov.domain.models.*
+import com.soldatov.domain.models.favourite.Categories
 import com.soldatov.domain.models.profile.Gender
 import com.soldatov.domain.models.profile.LoginData
 import com.soldatov.domain.models.profile.RegisterData
@@ -142,6 +143,10 @@ fun RegisterData.toData(): RegisterRequest{
         password = password,
         repeatPassword = repeatPassword
     )
+}
+
+fun CategoryData.toDomain(): Categories{
+    return Categories.getCategoryByName(this.namePlural)
 }
 
 fun UserInfoTotalData.toDomain(): UserInfo{

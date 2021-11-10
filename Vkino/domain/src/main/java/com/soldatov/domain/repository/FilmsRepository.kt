@@ -1,6 +1,8 @@
 package com.soldatov.domain.repository
 
 import com.soldatov.domain.models.*
+import com.soldatov.domain.models.favourite.Categories
+import com.soldatov.domain.models.favourite.FavouriteResult
 import com.soldatov.domain.models.profile.*
 
 interface FilmsRepository {
@@ -22,4 +24,6 @@ interface FilmsRepository {
     fun quitProfile()
     suspend fun registerUser(registerData: RegisterData): RegisterResult
     suspend fun updateProfile(userInfo: UserInfo): UserInfoResult
+    suspend fun getFavCats(): List<Categories>
+    suspend fun getFavByCat(catId: Int, page: Int): FavouriteResult
 }
