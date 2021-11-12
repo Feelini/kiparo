@@ -1,19 +1,18 @@
 package com.soldatov.vkino.presentation.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.ImageView
 import androidx.core.os.bundleOf
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.soldatov.domain.models.result.FilmsResult
 import com.soldatov.domain.models.result.FilmsSliderResult
 import com.soldatov.data.repository.FILM_HOME_MODE
@@ -21,17 +20,19 @@ import com.soldatov.data.repository.FILM_SLIDER_MODE
 import com.soldatov.domain.models.FilmInfo
 import com.soldatov.vkino.R
 import com.soldatov.vkino.databinding.FragmentHomeBinding
+import com.soldatov.vkino.presentation.ui.favorite.FavoriteViewModel
 import com.soldatov.vkino.presentation.ui.film.FILM_ID_KEY
 import com.soldatov.vkino.presentation.ui.film.FILM_MODE_KEY
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class HomeFragment : Fragment(), TopSliderAdapter.OnFilmClickListener,
-    HomePageFilmsAdapter.OnFilmClickListener {
+    HomePageFilmsAdapter.OnFilmClickListener, HomePageFilmsAdapter.OnAddToFavouriteClickListener {
 
     private lateinit var binding: FragmentHomeBinding
     private val topSliderAdapter = TopSliderAdapter()
     private val homePageFilmsAdapter = HomePageFilmsAdapter()
     private val viewModel by sharedViewModel<HomeFragmentViewModel>()
+    private val favoriteViewModel by sharedViewModel<FavoriteViewModel>()
     private var loading = true
 
     override fun onCreateView(
@@ -152,7 +153,7 @@ class HomeFragment : Fragment(), TopSliderAdapter.OnFilmClickListener,
     }
 
     private fun showHomePageFilms(filmInfo: List<FilmInfo>) {
-        homePageFilmsAdapter.setHomePageFilms(filmInfo, this)
+        homePageFilmsAdapter.setHomePageFilms(filmInfo, this, this)
     }
 
     override fun onSliderFilmClick(filmId: Long) {
@@ -167,5 +168,20 @@ class HomeFragment : Fragment(), TopSliderAdapter.OnFilmClickListener,
             R.id.action_homeFragment_to_filmFragment,
             bundleOf(FILM_ID_KEY to filmId, FILM_MODE_KEY to FILM_HOME_MODE)
         )
+    }
+
+    override fun onAddToFavoriteClick(filmId: Long, itemPosition: Int, category: String) {
+        viewModel.addToFavorite(filmId).observe(viewLifecycleOwner, {
+            if (it) {
+                homePageFilmsAdapter.addToFavorite(itemPosition)
+                favoriteViewModel.reloadCategory(category)
+            } else {
+                Snackbar.make(
+                    requireView(),
+                    "Не удалось добавить фильм в избранное",
+                    Snackbar.LENGTH_LONG
+                ).show()
+            }
+        })
     }
 }

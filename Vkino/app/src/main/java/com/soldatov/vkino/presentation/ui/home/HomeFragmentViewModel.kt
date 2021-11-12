@@ -9,13 +9,15 @@ import com.soldatov.domain.models.result.FilmsSliderResult
 import com.soldatov.domain.usecase.GetHomeFilmsUseCase
 import com.soldatov.domain.usecase.GetOrderByUseCase
 import com.soldatov.domain.usecase.GetTopSliderUseCase
+import com.soldatov.domain.usecase.favourite.AddFavoriteUseCase
 import kotlinx.coroutines.Dispatchers
 import java.lang.Exception
 
 class HomeFragmentViewModel(
     private val getTopSliderUseCase: GetTopSliderUseCase,
     private val getHomeFilmsUseCase: GetHomeFilmsUseCase,
-    private val getOrderByUseCase: GetOrderByUseCase
+    private val getOrderByUseCase: GetOrderByUseCase,
+    private val addFavoriteUseCase: AddFavoriteUseCase
 ) : ViewModel() {
 
     private var filterParams = MutableLiveData(FilterParams())
@@ -77,5 +79,11 @@ class HomeFragmentViewModel(
 
     fun getFilterParams(): LiveData<FilterParams>{
         return filterParams
+    }
+
+    fun addToFavorite(filmId: Long): LiveData<Boolean>{
+        return liveData(Dispatchers.IO) {
+            emit(addFavoriteUseCase.execute(filmId))
+        }
     }
 }

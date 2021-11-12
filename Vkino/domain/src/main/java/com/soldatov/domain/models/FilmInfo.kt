@@ -12,6 +12,7 @@ data class FilmInfo(
     val translations: List<String>,
     val countries: List<String>,
     val duration: String,
+    var isFavourite: Boolean,
 
     val actors: List<String>,
     val composers: List<String>,

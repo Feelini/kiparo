@@ -1,13 +1,14 @@
 package com.soldatov.data.repository
 
 import android.content.Context
+import android.util.Log
 import com.google.gson.Gson
 import com.soldatov.data.api.PlaceHolderApi
-import com.soldatov.data.models.film.FilmData
+import com.soldatov.data.models.favorite.FavoriteRequest
 import com.soldatov.data.models.profile.Error
 import com.soldatov.domain.models.*
-import com.soldatov.domain.models.favourite.Categories
-import com.soldatov.domain.models.favourite.FavouriteResult
+import com.soldatov.domain.models.favorite.Categories
+import com.soldatov.domain.models.favorite.FavoriteResult
 import com.soldatov.domain.models.profile.*
 import com.soldatov.domain.repository.FilmsRepository
 import retrofit2.HttpException
@@ -244,7 +245,7 @@ class FilmsRepositoryImpl(
         }
     }
 
-    override suspend fun getFavByCat(catId: Int, page: Int): FavouriteResult {
+    override suspend fun getFavByCat(catId: Int, page: Int): FavoriteResult {
         return try {
             val token = getUserToken()
             val data = placeHolderApi.getFavByCat(token, catId, page).data
@@ -278,7 +279,7 @@ class FilmsRepositoryImpl(
                     }
                 }
             } else {
-                when (catId){
+                when (catId) {
                     Categories.FILMS.id -> {
                         favFilms.addAll(data.films.map { it.toDomain() })
                         result = favFilms
@@ -301,14 +302,21 @@ class FilmsRepositoryImpl(
                     }
                 }
             }
-            FavouriteResult.Success(
+            FavoriteResult.Success(
                 data = result,
                 hasMore = (data.filmsPerPage * data.page < data.totalRows)
             )
         } catch (exception: HttpException) {
             val raw = exception.response()?.errorBody()?.string()
             val error = gson.fromJson(raw, Error::class.java)
-            FavouriteResult.Error(message = error.error.msg)
+            FavoriteResult.Error(message = error.error.msg)
         }
+    }
+
+    override suspend fun addFavourite(filmId: Long): Boolean {
+        val token = getUserToken()
+        val favourite = FavoriteRequest(listOf(filmId))
+        val request = placeHolderApi.addFavorite(token, favourite)
+        return request.data.favorite.contains(filmId)
     }
 }

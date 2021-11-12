@@ -1,8 +1,8 @@
-package com.soldatov.data.models.favourite
+package com.soldatov.data.models.favorite
 
 import com.soldatov.data.models.film.FilmData
 
-data class TotalFavouriteData(
+data class TotalFavoriteData(
     val page: Int,
     val totalRows: Int,
     val filmsPerPage: Int,

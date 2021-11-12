@@ -1,4 +1,4 @@
-package com.soldatov.domain.models.favourite
+package com.soldatov.domain.models.favorite
 
 enum class Categories(val id: Int, val value: String) {
     FILMS(1, "Фильмы"),

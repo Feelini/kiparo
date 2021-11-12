@@ -11,7 +11,7 @@ import com.soldatov.vkino.databinding.ItemProgressBarBinding
 import com.soldatov.vkino.presentation.utils.getFilmTitle
 import com.squareup.picasso.Picasso
 
-class FavouriteAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class FavoriteAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var filmsList: List<FilmInfo> = ArrayList()
     private lateinit var onFilmClickListener: OnFilmClickListener

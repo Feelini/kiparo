@@ -11,18 +11,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.soldatov.data.repository.FAV_ANIME_SERIALS_MODE
 import com.soldatov.domain.models.FilmInfo
-import com.soldatov.domain.models.favourite.FavouriteResult
+import com.soldatov.domain.models.favorite.FavoriteResult
 import com.soldatov.vkino.R
 import com.soldatov.vkino.databinding.FragmentFavListBinding
 import com.soldatov.vkino.presentation.ui.film.FILM_ID_KEY
 import com.soldatov.vkino.presentation.ui.film.FILM_MODE_KEY
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class ViewFavAnimeSerialsFragment: Fragment(), FavouriteAdapter.OnFilmClickListener {
+class ViewFavAnimeSerialsFragment: Fragment(), FavoriteAdapter.OnFilmClickListener {
 
     private lateinit var binding: FragmentFavListBinding
-    private val favouriteAdapter = FavouriteAdapter()
-    private val viewModel by sharedViewModel<FavouriteViewModel>()
+    private val favouriteAdapter = FavoriteAdapter()
+    private val viewModel by sharedViewModel<FavoriteViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,7 +61,7 @@ class ViewFavAnimeSerialsFragment: Fragment(), FavouriteAdapter.OnFilmClickListe
     private fun setupObservers() {
         viewModel.favAnimeSerials.observe(viewLifecycleOwner, {
             when (it) {
-                is FavouriteResult.Success -> {
+                is FavoriteResult.Success -> {
                     showList(it.data)
                     if (!it.hasMore) {
                         favouriteAdapter.removeProgress()
@@ -71,7 +71,7 @@ class ViewFavAnimeSerialsFragment: Fragment(), FavouriteAdapter.OnFilmClickListe
                     }
                     binding.preloadLayout.visibility = View.INVISIBLE
                 }
-                is FavouriteResult.Error -> {
+                is FavoriteResult.Error -> {
 
                 }
             }

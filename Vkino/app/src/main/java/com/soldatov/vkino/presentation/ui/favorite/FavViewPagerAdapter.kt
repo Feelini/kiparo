@@ -2,7 +2,7 @@ package com.soldatov.vkino.presentation.ui.favorite
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.soldatov.domain.models.favourite.Categories
+import com.soldatov.domain.models.favorite.Categories
 
 class FavViewPagerAdapter(fragment: Fragment): FragmentStateAdapter(fragment) {
 

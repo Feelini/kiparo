@@ -1,6 +1,8 @@
 package com.soldatov.data.api
 
-import com.soldatov.data.models.favourite.FavouriteResponse
+import com.soldatov.data.models.favorite.FavoriteRequest
+import com.soldatov.data.models.favorite.FavoriteResponse
+import com.soldatov.data.models.favorite.AddFavoriteResponse
 import com.soldatov.data.models.film.FilmResponse
 import com.soldatov.data.models.film.SliderResponse
 import com.soldatov.data.models.filter.*
@@ -85,5 +87,11 @@ interface PlaceHolderApi {
         @Header("User-Token") token: String,
         @Query("cat_id") catId: Int,
         @Query("page") page: Int
-    ): FavouriteResponse
+    ): FavoriteResponse
+
+    @PUT("user/favorite")
+    suspend fun addFavorite(
+        @Header("User-Token") token: String,
+        @Body films: FavoriteRequest
+    ): AddFavoriteResponse
 }

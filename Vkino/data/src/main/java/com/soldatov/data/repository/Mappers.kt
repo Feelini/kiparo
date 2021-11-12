@@ -10,7 +10,7 @@ import com.soldatov.data.models.profile.Profile
 import com.soldatov.data.models.profile.RegisterRequest
 import com.soldatov.data.models.profile.UserInfoTotalData
 import com.soldatov.domain.models.*
-import com.soldatov.domain.models.favourite.Categories
+import com.soldatov.domain.models.favorite.Categories
 import com.soldatov.domain.models.profile.Gender
 import com.soldatov.domain.models.profile.LoginData
 import com.soldatov.domain.models.profile.RegisterData
@@ -34,7 +34,8 @@ fun FilmData.toDomain(): FilmInfo {
         directors = directors.map { it.name },
         description = description ?: "",
         iframeSrc = iframe_src,
-        trailer = trailer ?: ""
+        trailer = trailer ?: "",
+        isFavourite = false
     )
 }
 

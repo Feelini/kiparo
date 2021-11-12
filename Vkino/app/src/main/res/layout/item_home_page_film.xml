@@ -32,8 +32,7 @@
         android:layout_marginStart="10dp"
         android:src="@drawable/favorite_border"
         app:layout_constraintStart_toEndOf="@id/filmPoster"
-        app:layout_constraintTop_toTopOf="@id/filmPoster"
-        app:tint="@color/white" />
+        app:layout_constraintTop_toTopOf="@id/filmPoster" />
 
     <ImageView
         android:id="@+id/filmRatingImage"

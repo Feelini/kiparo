@@ -6,16 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
-import com.soldatov.domain.models.Category
-import com.soldatov.domain.models.favourite.Categories
+import com.soldatov.domain.models.favorite.Categories
 import com.soldatov.vkino.databinding.FragmentFavoritesBinding
-import com.soldatov.vkino.presentation.ui.profile.ViewPagerAdapter
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class FavoriteFragment: Fragment() {
 
     private lateinit var binding: FragmentFavoritesBinding
-    private val viewModel by sharedViewModel<FavouriteViewModel>()
+    private val viewModel by sharedViewModel<FavoriteViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,7 +31,7 @@ class FavoriteFragment: Fragment() {
     }
 
     private fun setupObservers() {
-        viewModel.favCats.observe(viewLifecycleOwner, {
+        viewModel.getFavCats().observe(viewLifecycleOwner, {
             showTabs(it)
         })
     }
